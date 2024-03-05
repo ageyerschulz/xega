@@ -1,0 +1,40 @@
+Package: xega 
+Title: E(x)tended (e)volutionary and (g)enetic algorithms
+Version: 0.0.2.0
+Authors@R: 
+    person(given = "Andreas",
+           family = "Geyer-Schulz",
+           role = c("aut", "cre"),
+           email = "Andreas.Geyer-Schulz@kit.edu",
+           comment = c(ORCID = "0009-0000-5237-3579"))
+Description:
+        Implementation of a scalable, highly configurable, 
+        and extendible architecture for evolutionary and genetic algorithms.
+        Multiple representations (binary, real-coded, permutation, and 
+        derivation-tree), a rich collection of genetic operators, 
+        as well as an extended processing pipeline are provided 
+        for genetic algorithms, differential evolution, 
+        simulated annealing, grammar-based genetic programming, and grammatical 
+        evolution. All algorithms reuse basic adaptive mechanisms
+        for performance optimization.
+        Sequential or parallel execution (on multi-core machines, 
+        local clusters, and high performance computing environments) 
+        is available for all algorithms. 
+License: MIT + file LICENSE
+URL: <https://github.com/ageyerschulz/xega>
+Encoding: UTF-8
+LazyData: false
+RoxygenNote: 7.2.3
+Depends: R (>= 3.5.0), parallelly
+Imports:
+	xegaSelectGene,
+	xegaBNF,
+	xegaDerivationTrees,
+	xegaGaGene,
+	xegaGpGene,
+	xegaGeGene,
+	xegaDfGene,
+	xegaPermGene,
+        xegaPopulation
+Suggests: 
+        testthat (>= 3.0.0)

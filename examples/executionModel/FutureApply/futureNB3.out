@@ -1,0 +1,32 @@
+FutureApply Benchmark Examples (Notebook).
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 3 : OR(D1,D2) 3.027778 
+       (FS) : 3 : AND(NOT(D1),D2) 3.012346 
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+      (FMS) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+(FCcluster) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 4 popsize: 64 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)        0.4482276 1.0000000 0.04795885 1.0000000 0.3778579 1.0000000
+(FS)       0.3067434 0.6843473 0.02635884 0.5496137 0.2586834 0.6846051
+(FMC)      0.3884311 0.8665933 0.03763032 0.7846376 0.3283358 0.8689397
+(FMS)      2.2882388 5.1050817 0.02632928 0.5489973 2.2400968 5.9284103
+(FCallr)   1.8960593 4.2301257 0.03414965 0.7120614 1.8409462 4.8720593
+(FCluster) 2.4058630 5.3675026 0.02782202 0.5801227 2.3538454 6.2294455
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE

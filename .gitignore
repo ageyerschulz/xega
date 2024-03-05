@@ -1,0 +1,4 @@
+xegaEvalLog*.rds
+xegaResult*.rds
+/man/
+/doc/*.pdf

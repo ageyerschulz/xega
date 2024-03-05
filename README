@@ -1,0 +1,74 @@
+# The R script xega.R
+
+The directory xega contains the implementation 
+of the functions of the main program layer of a binary coded 
+genetic algorithm. 
+
+
+The easiest installation is by using install.packages from R.
+
+1. Linux:
+Start R in the directory where you have stored xega_0.0.0.1.tar.gz
+
+> install.packages("xega_0.0.0.1.tar.gz")
+
+1. Windows:
+Start R in the directory where you have stored xega_0.0.0.1.zip
+
+
+
+The R script xega.R generates
+
+1. the man pages of the package.
+2. the pdf documentation of the package.
+3. the compilation and installation of the package.
+   (You  must adapt the variables path and pName
+    in the script xega.R:
+
+    path<-"~/dev/iaa/genetic/xega/"
+    pName<-"xega"
+
+    to the directory where you copy the package.
+
+You need to install the R-package devtools for this R script.
+
+There are two ways to use the code:
+
+1. Change into the R directory which contains the code, start R and load all code files:
+
+source("xega.R")
+
+Note that the package xega provides the functions
+of the main programs of the binary coded 
+genetic algorithm sga of the family sgX.
+
+Use the pdf-Manual! 
+
+2. Adapt the path in xega.R and install the library xega:
+
+Rscript xega.R
+
+Restart R and
+
+library(xega)
+
+You get all elements of the package by
+
+xega::
+
+and pressing the tabulator.
+
+You get the man page by e.g 
+
+?RunGA
+
+or 
+
+help(RunGA)
+
+All examples given on a man page can be executed by
+
+example(RunGA)
+
+Note that man pages and examples are only available, if you install 
+the package as a library.

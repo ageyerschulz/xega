@@ -1,0 +1,1337 @@
+#
+# (c) 2021 Andreas Geyer-Schulz
+#          Simple Genetic Algorithm in R. V 0.1
+#          Layer: Top-level main programs.     
+#          Package: xega
+#
+
+#' Run an evolutionary or genetic algorithm for a problem environment 
+#' which contains a function to optimize. 
+#'
+#' @description \code{Run} runs an evolutionary or genetic algorithm 
+#'        whose type is selected by \code{algorithm}. Available
+#'        algorithms are:
+#'        \enumerate{
+#'        \item \code{"sga"}:    Genetic algorithm with binary genes.
+#'        \item \code{"sgde"}:   Differential evolution with real genes.
+#'        \item \code{"sgperm"}: Genetic algorithm with permutation genes. 
+#'        \item \code{"sgp"}:    Grammar-based genetic programming with 
+#'                               derivation-tree genes.
+#'        \item \code{"sge"}:    Grammatical evolution (genetic algorithm 
+#'                               with binary genes and a grammar-driven
+#'                               decoder.
+#'        }
+#'   
+#'       The choice of the algorithm determines the gene-dependent 
+#'       configuration options.
+#'
+#' @details  The algorithm expects a problem environment \code{penv} which is a 
+#'           named list with at least the following functions:
+#'         \itemize{
+#'      \item \code{$name()}:      The name of the problem environment.
+#'      \item \code{$f(parm, gene=0, lF=0)}:   The function to optimize.
+#'                                  The parameters gene and lF are provided
+#'                                  for future extensions.
+#'         }
+#'   
+#'      Additional parameters needed depend on the algorithm 
+#'      and the problem environment. 
+#'      For example, for binary genes for function optimization,    
+#'      additional elements must be provided:
+#'
+#'         \itemize{
+#'      \item \code{$bitlength()}: The vector of the 
+#'                                 bitlengths of the parameters.  
+#'      \item \code{$genelength()}: The number of bits of a gene.  
+#'      \item \code{$lb()}:         The vector of lower bounds 
+#'                                 of the parameters. 
+#'      \item \code{$ub()}:  The vector of upper bounds of the parameters. 
+#'          }
+#'
+#' @section Problem Specification:
+#'
+#' The problem specification consists of 
+#' \itemize{ 
+#' \item \code{penv}: The problem environment. 
+#' \item \code{max}:  Maximize? Boolean. Default: \code{TRUE}.
+#' \item \code{grammar}: A grammar object. For the algorithms \code{"sgp"} and \code{"sga"}.   
+#' }
+#'
+#' @section Basic Parameters:
+#'
+#' The main parameters of a ``standard'' genetic algorithm are:
+#'    \itemize{
+#'      \item \code{popsize}:     Population size.
+#'      \item \code{generations}: Number of generations.
+#'      \item \code{crossrate}:   Constant probability of one-point crossover.
+#'      \item \code{mutrate}:     Constant probability of mutation.
+#'          }
+#'
+#'  \code{crossrate} and \code{mutrate} specify the probability of 
+#'  applying the genetic operators crossover and mutation to a gene.
+#'
+#' @section Global and Local Parameters:
+#'
+#' However, when using uniform crossover instead of one-point crossover, 
+#' an additional parameter which specifies the probability of taking a bit 
+#' from the first parent becomes necessary. 
+#' Therefore, we distinguish between global and local operator parameters:
+#' \enumerate{
+#' \item Global operator parameters: 
+#'            The probabilities of applying a crossover (\code{crossrate}) or 
+#'            a mutation operator (\code{mutrate}) to a gene.
+#' \item Local operator parameters: 
+#'       E.g. the per bit probability of mutation or the probability
+#'       of taking a bit from parent 1 for the uniform crossover operator.
+#'       Local operator parameters affect only 
+#'       the genetic operator which needs them.
+#' }
+#'
+#' There exist several advantages of this classification of parameters:
+#' \itemize{
+#' \item For the formal analysis of the behavior of the algorithms, 
+#'       we achieve a division in two parts: The equations of the 
+#'       global parameters with operator specific expressions as plug-ins. 
+#' \item For empirically finding parameterizations for problem classes, 
+#'       we propose to fix local parameters at reasonable values
+#'       (e.g. based on biological evidence) and 
+#'       and conditional on this optimize the (few) remaining global 
+#'       parameters.
+#' \item For parallelization specialized 
+#' gene processing pipelines can be built and more efficiently executed, 
+#' because the global parameters \code{crossrate} and \code{mutrate} decide 
+#' which genes survive 
+#' \enumerate{
+#'    \item unchanged, 
+#'    \item mutated, 
+#'    \item crossed, and 
+#'    \item crossed as well as mutated. 
+#' }}
+#' 
+#' To mimic a classic genetic algorithm with crossover and bit mutation rate, 
+#' the probability of applying the mutation operator to a gene 
+#' should be set to \code{1}.
+#'
+#' @section Global Adaptive Mechanisms:
+#'
+#' The adaptive mechanisms described in the following are based on threshold
+#' rules which determine how a parameter of the genetic operator is adapted.
+#' The threshold conditions are based on population statistics: 
+#' For scaling, on thresholds of a dispersion measure. For the global
+#' crossover and mutation rates on a comparison of a gene's fitness with 
+#' a population statistic. 
+#'
+#' \strong{Scaling.} 
+#' 
+#' \strong{Mutation and Crossover Probabilities}
+#'
+#' @section Distributed and Parallel Processing:
+#'
+#' In general, distributed and parallel processing requires a sequence of three steps:  
+#' \enumerate{
+#' \item Configure and start the distributed or parallel infrastructure.
+#' \item Distribute processing and collect results. 
+#'       In a evolutionary or genetic algorithm the architectural pattern used for implementation 
+#'       coarse-grained parallelism by parallel evaluation of the fitness of the genes of a population
+#'       is the master/worker pattern. In principle, the \code{lapply()}-function for evaluating a population 
+#'       of genes is replaced by a parallel version. 
+#' \item Stop the distributed or parallel infrastructure.
+#' }
+#' 
+#' For evolutionary and genetic algorithm, the second step is controlled by two parameters, 
+#' namely \code{executionModel} and \code{uParApply}:
+#' \enumerate{
+#' \item If \code{uParApply=NULL}, then \code{executionModel} provides four ways of evaluating the 
+#'       fitness of a population of genes:
+#'       \enumerate{
+#'       \item \code{executionModel="Sequential"}: The apply function used is \code{base::lapply()}. (Default).
+#'       \item \code{executionModel="MultiCore"}:  The apply function used is \code{parallel::mclapply()}.
+#'             If the number of cores is not specied by \code{cores}, the number of available cores 
+#'             is determined by \code{parallelly::availableCores()}. 
+#'       \item \code{executionModel="FutureApply"}:  The apply function used is \code{future.apply::future_lapply()}.
+#'             The parallel/distributed model depends on a proper \code{future::plan()} statement. 
+#'       \item \code{executionModel="Cluster"}:  The apply function used is \code{parallel::parLapply()}.
+#'             The information about the configuration of the computing cluster (master, port, list of workers)
+#'             must be provided by \code{Cluster=cl} where 
+#'             \code{cl<-parallel::makeClusterPSOCK( rep(localhost, 5))}
+#'             generates the cluster object and starts the R processes (of 5 workers in the same machine).  
+#'       }
+#' \item Some user-defined parallel apply function has been defined and e.g. called \code{UPARAPPLY}. 
+#'       By setting \code{uParApply=UPARAPPLY}, the apply function used is \code{UPARAPPLY}. 
+#'       This overrides the specification by \code{executionModel}. For example,
+#'       parallelization via the MPI interface can be achieved by providing a user-defined parallel 
+#'       apply function which is implemented by user-defined function whose function body 
+#'       is the line \code{Rmpi::mpi.parLapply( pop, FUN=EvalGene, lF=lF)}.
+#' }
+#'
+#' @section Reporting:
+#'
+#' \itemize{ 
+#'  \item \code{verbose} controls the information reported on the screen. 
+#'  If \code{verbose} is \code{1}, then one dot is printed per generation to the console.
+#'  \item \code{reportEvalErrors=TRUE} reports the output of errors of fitness function evaluations 
+#'        to the console. Grammatical evolution (algorithm "sge") routinely attempts to evaluate 
+#'        incomplete derivation trees. This leads to an evaluation error of the fitness function. 
+#'  \item \code{profile=TRUE} measures the time spent in executing the main blocks of the algorithm:
+#'        \code{InitPopulation()}, \code{NextPopulation()}, \code{EvalPopulation()}, 
+#'        \code{ObservePopulation()}, and \code{SummaryPopulation()}. The measurements are stored in the
+#'        named list \code{$timer} of the result object of the algorithm. 
+#'  \item \code{allSolutions=TRUE} collects all solutions with the same fitness value. 
+#'        The lists of the genotypes and phenotypes of these solutions are stored 
+#'        in \code{$solution$allgenotypes} and \code{$allphenotypes} of the result object of the algorithm.
+#'  \item \code{batch=TRUE} writes the result object and \code{logevals=TRUE} writes a list of all evaluated genes
+#'        to a \code{rds}-file in the current directory. \code{path} allows to write the \code{rds}-files  
+#'        into another directory. The existence of the directory specified by \code{path} is not checked.
+#'        \code{batch=TRUE} combined with \code{verbose=TRUE} should be used in batch environments on 
+#'        HPC environments.
+#'  }
+#'
+#' @param penv        Problem environment.
+#'
+#' @param grammar     A compiled grammar object. Default: NULL.
+#'                    Example: \code{compileBNF(booleanGrammar())}              
+#'
+#' @param maxdepth    The maximal depth of a derivation tree. Default: 7.
+#' @param maxtrials   Maximal number of trials of finding subtrees with same root symbol.
+#'                    Default: 5.
+#'
+#' @param codons      The maximal number of codons of derivations on a gene. 
+#'                    For grammatical evolution. Default: 25.
+#' @param codonBits   The number of bits of a codon.
+#'                    For grammatical evolution. Default: 0.
+#' @param codonPrecision Specify the method to set the number of bits of a
+#'                    codon:  
+#'                    \itemize{
+#'                    \item "Min": Sufficient to code the maximal number 
+#'                                 of choices of production rules for 
+#'                                 a non-terminal.
+#'                    \item "LCM": Contains the least common multiple 
+#'                                 of the prime factors of the number of 
+#'                                 choices of production rules for all 
+#'                                 non-terminals.
+#'                    \item "MaxPBias": The computed precision guarantees
+#'                                 that the choice rule bias for a non-terminal
+#'                                 is below \code{maxPBias}. 
+#'                    }
+#' @param maxPBias    The threshold of the choice rule bias. 
+#'                    Default: \code{0.01}.
+#'
+#' @param max         If \code{TRUE} then Maximize! Default: TRUE.
+#'                    Used in package xegaSelectGene functions
+#'                    \code{EvalGeneDet},
+#'                    \code{EvalGeneStoch},
+#'                    \code{EvalGeneU}.
+#'
+#' @param evalmethod  Specifies the method of function evaluation:
+#'          \itemize{ 
+#'          \item  "EvalGeneU": The function is always evaluated. (Default)
+#'          \item  "EvalGeneR": The function is always evaluated. 
+#'                              Repairs of the gene by the decoder are 
+#'                              possible. 
+#'          \item  "Deterministic": The function is evaluated only once.
+#'          \item  "Stochastic": The expected function value and its 
+#'                                  variance are incrementally updated.
+#'      }
+#'          Argument of function factory 
+#'          \code{EvalGeneFactory} in package xegaSelectGene.
+#'     
+#' @param reportEvalErrors  Report errors in the evaluation 
+#'                          of fitness functions. Default: TRUE.
+#'
+#' @param algorithm   Specifies the algorithm class dependend 
+#'                    on gene representation:
+#'                    \itemize{
+#'                    \item "sga": Binary representation (Default).
+#'                    \item "sgde": Real representation. 
+#'                           E.g. Differential evolution.
+#'                    \item "sgperm": Permutation representation.
+#'                    \item "sge": Binary representation. 
+#'                                 Grammatical evolution.    
+#'                                 (Not yet variable length.)
+#'                    \item "sgp": Derivation tree representation. 
+#'                                 Grammar Based Genetic Programming.
+#'                    }
+#'
+#' @param generations Number of generations. Default: 20.
+#' @param popsize     Population size. Default: 100.
+#'
+#' @param genemap     Gene map for decoding. Default: "Bin2Dec".
+#'                    The default value works only for algorithm "sga".
+#'                   
+#'                    Available available options determined by 
+#'                    \code{algorithm}:
+#'                    \itemize{
+#'                    \item "sga": Binary representation (Default).
+#'                    \itemize{
+#'                    \item "Bin2Dec": For real parameter vectors. 
+#'                    \item "Gray2Dec": For real parameter vectors.
+#'                    \item "Identity": For 0/1 parameter vectors.
+#'                    \item "Permutation": For permutations.
+#'                    }
+#'                    See the function factory 
+#'                    \code{xegaGaGeneMapFactory} in package xegaGaGene.
+#'                    \item "sgp": Derivation tree. 
+#'                           Gene map is not used, but must be specified.
+#'                           We use \code{xegaGaGene::xegaGaGeneMapFactory} 
+#'                           with \code{method="Identity"}.
+#'                    \item "sge": Binary representation (Default).
+#'                          How are genes decoded?
+#'                    \itemize{
+#'                    \item "Mod": The modulo rule.
+#'                    \item "Bucket": The bucket rule (with the mLCM). 
+#'                          Problem: Mapping \code{1: 2^k} to \code{1:mLCMG}.
+#'                    }
+#'                    \item "sgde": Real coded gene.
+#'                           We use \code{xegaDfGene::xegaDfGeneMapFactory} 
+#'                           with \code{method="Identity"}.
+#'                           Function used: \code{xegaDfGene::xegaDfGeneMapIdentity}
+#'                    \item "sgperm": Permutation gene.
+#'                           Gene map is not used, but must be specified.
+#'                           We use \code{xegaDfGene::xegaDfGeneMapFactory} 
+#'                           with \code{method="Identity"}.
+#'                           Function used: \code{xegaDfGene::xegaDfGeneMapIdentity}
+#'                           
+#'                    } # end of genemap
+#'
+#' @param crossrate   Crossover rate. Probability of applying
+#'                    crossover operator. Default: 0.20.
+#'                    (Global parameter)
+#'
+#' @param crossrate2  Crossover rate for genes with below 
+#'                    ``average'' fitness. 
+#'                    Probability of applying crossover operator 
+#'                    for genes with a ``below average'' fitness.
+#'                    Default: 0.30. 
+#'                    (Global parameter)
+#'
+#' @param ivcrossrate Specifies the method of determining the crossover rate.
+#'                    \itemize{
+#'                    \item 
+#'                     "Const" Constant crossover rate. 
+#'                     The probability of applying the crossover operator
+#'                     is constant for the whole run of the algorithm.
+#'                     Default: "Const".
+#'                     \item "IV" Individually variable crossover rate.
+#'                     The crossrate of a gene is determined by the following threshold
+#'                     rule: 
+#'                     If the fitness of the gene is higher than 
+#'                     \code{lF$CutoffFit()*} \code{lF$CBestFitness()} then 
+#'                     \code{lF$CrossRate1()} else \code{lF$CrossRate2()}
+#'                     is used.
+#'                     } 
+#'          Argument of function factory 
+#'          \code{CrossRateFactory} in package xegaPopulation.
+#'
+#' @param uCrossSwap  The fraction of positions swapped in the
+#'                    parametrized uniform crossover operator.
+#'                    A local crossover parameter.
+#'                    Default: 0.2. 
+#'                    Used in packages xegaGaGene and xegaDfGene
+#'                    for functions 
+#'                    \code{xegaGaUPCross2Gene},
+#'                    \code{xegaDfUPCross2Gene},
+#'                    \code{xegaGaUPCrossGene}, and
+#'                    \code{xegaDfUPCrossGene}.    
+#'
+#' @param mincrossdepth  minimal depth of exchange nodes (roots of subtrees
+#'                       swapped by crossover). 
+#' @param maxcrossdepth  Maximal depth of exchange nodes (roots of subtrees
+#'                       swapped by crossover). 
+#'                     Used in package xegaGpGene functions 
+#'                      \code{xegaGpCrossGene} and \code{xegaGpCross2Gene}
+#'                     in package xegaGpGene. 
+#'
+#' @param crossover   Crossover method. Default: "CrossGene".
+#'                    The choice of crossover methods depends on the 
+#'                    setting of the argument \code{algorithm}.
+#'                    \itemize{
+#'                    \item \code{algorithm="sga"}:
+#'                    \code{crossover} is  argument of function factory 
+#'                    \code{xegaGaCrossoverFactory} in package xegaGaGene.
+#'                    \itemize{
+#'                    \item Crossover operators with 1 kid:
+#'                    \itemize{
+#'                    \item "CrossGene"  one-point crossover. 
+#'                    \item "UCrossGene" uniform crossover.
+#'                    \item "UPCrossgene" parameterized uniform crossover.
+#'                          Local parameter: \code{uCrossSwap}
+#'                    }
+#'                    \item Crossover operators with 2 kids:
+#'                    \itemize{
+#'                    \item "Cross2Gene"  one-point crossover. 
+#'                    \item "UCross2Gene" uniform crossover.
+#'                    \item "UPCross2gene" parameterized uniform crossover.
+#'                          Local parameter: \code{uCrossSwap}
+#'                    }
+#'                    }
+#'                    \item \code{algorithm="sgp"}:
+#'                    \code{crossover} is  argument of function factory 
+#'                    \code{xegaGpCrossoverFactory} in package xegaGpGene.
+#'                    \itemize{
+#'                    \item Crossover operators with 1 kid:
+#'                    \itemize{
+#'                    \item "CrossGene"  position based one-point crossover. 
+#'                    }
+#'                    \item Crossover operators with 2 kids:
+#'                    \itemize{
+#'                    \item "Cross2Gene" position based one-point crossover. 
+#'                    }
+#'                    }
+#'                    \item \code{algorithm="sge"}:
+#'                    We use the factory \code{xegaGaCrossoverFactory}.
+#'
+#'                    (Adpatation needed for variable-length binary
+#'                    representation.)
+#'
+#'                    \item \code{algorithm="sgde"}:
+#'                    \code{crossover} is  argument of function factory 
+#'                    \code{xegaDfCrossoverFactory} in package xegaDfGene.
+#'                    \itemize{
+#'                    \item Crossover operators with 1 kid:
+#'                    \itemize{
+#'                    \item "CrossGene"  one-point crossover  (of reals)
+#'                    \item "UCrossGene" uniform crossover  (of reals)
+#'                    \item "UPCrossGene" parametrized 
+#'                           uniform crossover  (of reals).
+#'                           Local parameter: \code{uCrossSwap}.
+#'                    }
+#'                    \item Crossover operators with 2 kid: Not implemented.
+#'                    }
+#'
+#'                    \item \code{algorithm="sgperm"}:
+#'                    \code{crossover} is  argument of function factory 
+#'                    \code{xegaPermCrossoverFactory} in package xegaPermGene.
+#'                    \itemize{
+#'                    \item Crossover operators with 1 kid:
+#'                    \itemize{
+#'                    \item "CrossGene"  position based one-point crossover. 
+#'                    }
+#'                    \item Crossover operators with 2 kids:
+#'                    \itemize{
+#'                    \item "Cross2Gene" position based one-point crossover. 
+#'                    }
+#'                    }
+#'                    }
+#'    
+#' @param mutrate     Mutation rate. Default: 1.0.
+#'
+#' @param mutrate2    Mutation rate. Default: 1.0.
+#'
+#' @param ivmutrate "Const" or "IV" (individually variable). 
+#'                     Default: "Const".
+#'
+#' @param bitmutrate     Bit mutation rate. Default: 0.005.
+#'                    A local mutation parameter.
+#'                     Used in package xegaGaGene functions 
+#'                      \code{MutateGene}
+#'                      \code{IVAdaptiveMutateGene}
+#'
+#' @param bitmutrate2    Bit mutation rate for genes
+#'                       with ``below average'' fitness. Default: 0.01.
+#'                    A local mutation parameter.
+#'                     Used in package xegaGaGene functions 
+#'                      \code{IVAdaptiveMutateGene}
+#' 
+#' @param maxmutdepth   Maximal depth of a derivation tree inserted 
+#'                      by mutation. Default: 3.
+#' @param minmutinsertiondepth   Minimal depth at which an insertion tree
+#'                      is inserted. Default: 1.
+#' @param maxmutinsertiondepth   Maximal depth at which an insertion tree
+#'                      is inserted. Default: 7. 
+#'                     Used in package xegaGpGene functions 
+#'                      \code{xegaGpMutateGene}
+#'
+#' @param lambda        Decay rate. Default: 0.05.
+#'                    A local mutation parameter.
+#'                     Used in package xegaPermGene functions 
+#'                      \code{xegaPermMutateGenekInversion}
+#' 
+#' @param max2opt     Maximal number of trials to find  
+#'                    an improvement by a random edge exchange 
+#'                    in a permutation. Default: \code{100}.
+#'                     Used in package xegaPermGene functions 
+#'                      \code{xegaPermMutateGene2Opt}
+#'                    and  \code{xegaPermMutateGeneOptLK}.
+#'
+#' @param scalefactor1  scale factor for differential mutation operator (Default: 0.9)
+#' @param scalefactor2  scale factor for differential mutation operator (Default: 0.2)
+#' @param scalefactor   method for setting scale factor. 
+#'                      \itemize{
+#'                      \item "Const":  constant scale factor. 
+#'                      \item "Uniform": a random scale factor in 0.000001 to 1.0.
+#'                       }
+#' @param cutoffFit   cutoff for fitness.      Default: 0.5. 
+#'                     Used in package xegaGaGene functions 
+#'                      \code{IVAdaptiveMutateGene}
+#'
+#' @param mutation    Label specifies mutation method
+#'                    dependend on \code{algorithm}. Default: "MutateGene".
+#'                    The (global) probability of calling a mutation method
+#'                    is specified by \code{mutrate} and \code{mutrate2}.
+#'       
+#'                    \itemize{
+#'                    \item \code{algorithm="sga"}:
+#'                    \code{mutation} is  argument of function factory 
+#'                    \code{xegaGaMutationFactory} in package xegaGaGene.
+#'                    \itemize{
+#'                    \item "MutateGene": Bitwise mutation. 
+#'                          Local parameter: \code{bitmutrate}.
+#'                          Function used: \code{xegaGaGene::xegaGaMutateGene}.
+#'                    \item "IVM": Invividually variable mutation.
+#'                          Intuitively we know that 
+#'                          bad genes need higher mutation rates.
+#'                          Good genes have a fitness which is 
+#'                          above a threshold fitness. The threshold
+#'                          is determined as a percentage of the 
+#'                          current best fitness in the population.
+#'                          The percentage is set by the parameter 
+#'                          \code{cutoffFit}. 
+#'                          Local parameters: \code{bitmutrate} for good genes.
+#'                          \code{bitmutrate2} for bad genes.
+#'                          \code{bitmutrate2} should be higher then 
+#'                          \code{bitmutrate}.
+#'                    }
+#'                    \item \code{algorithm="sgp"}:
+#'                    \code{mutation} is  argument of function factory 
+#'                    \code{xegaGpMutationFactory} in package xegaGpGene.
+#'
+#'                    \itemize{
+#'                    \item "MutateGene": Random insertion of 
+#'                           a random derivation tree. 
+#'                          Local parameter: \code{maxmutdepth}.
+#'                          Function used: \code{xegaGpGene::xegaGpMutateGene}.
+#'                     }
+#'
+#'                    \item \code{algorithm="sge"}:
+#'                    \code{mutation} is  argument of function factory 
+#'                    \code{xegaGaMutationFactory}.
+#'                    Nothing specific to grammatical evolution implented.
+#'
+#'                    \item \code{algorithm="sgde"}:
+#'                    \code{mutation} is  argument of function factory 
+#'                    \code{xegaDfMutationFactory} in package xegaDfGene.
+#'
+#'                    \itemize{
+#'                    \item "MutateGene": Add the scaled difference 
+#'                          of the parameters of two randomly selected
+#'                          to a gene.
+#'                          Local parameters: Choice of function for 
+#'                                      scalefactor as well as
+#'                                            \code{scalefactor1}  
+#'                                            and \code{scalefactor2}.
+#'                          Function used: \code{xegaDfGene::xegaDfMutateGeneDE}.
+#'                     }
+
+#'
+#'                    \item \code{algorithm="sgperm"}:
+#'                    \code{mutation} is  argument of function factory 
+#'                    \code{xegaPermMutationFactory} in package xegaPermGene.
+#'
+#'        \itemize{
+#'        \item "MutateGene": 
+#'              Function used: \code{sPermGene::xegaPermMutateGeneOrderBased}.
+#'        \item "MutateGeneOrderBased": See "MutateGene". 
+#'        \item "MutateGenekInversion": 
+#'              Function used: \code{sPermGene::xegaPermMutateGenekInversion}.
+#'        \item "MutateGene2Opt": 
+#'              Function used: \code{sPermGene::xegaPermMutateGene2Opt}.
+#'        \item "MutateGenekOptLK": 
+#'              Function used: \code{sPermGene::xegaPermMutateGenekOptLK}.
+#'        \item "MutateGeneGreedy": 
+#'              Function used: \code{sPermGene::xegaPermMutateGeneGreedy}.
+#'        \item "MutateGeneBestGreedy": 
+#'              Function used: \code{sPermGene::xegaPermMutateGeneBestGreedy}.
+#'        \item "MutateGeneMix": 
+#'              Function used: \code{sPermGene::xegaPermMutateMix}.
+#'        }
+#'                    } 
+#'
+#' @param replication "Kid1" or "Kid2". Default: "Kid1".
+#'                    For algorithms "sga", "sgPerm", "sgp", and "sge":
+#'                    "Kid1" means a crossover operator with one kid,
+#'                    "Kid2" means a crossover operator with two kids.
+#'                     
+#'                     For algorithm "sgde", \code{replication} must be 
+#'                     set to "DE".
+#'
+#' @param offset  Offset used in proportional selection. Default: 1. 
+#'            Used in the following functions of package xegaSelectGene: 
+#'            \code{ScaleFitness},
+#'            \code{PropFitOnLn},
+#'            \code{PropFit},
+#'            \code{PropFitM},
+#'            \code{PropFitDiffOnLn},
+#'            \code{PropFitDiff},
+#'            \code{SUS}.
+#'
+##            \code{\link[xegaSelectGene:ScaleFitness]{ScaleFitness}},
+##            \code{\link[xegaSelectGene:PropFitOnLn]{PropFitOnLn}},
+##            \code{\link[xegaSelectGene:PropFit]{PropFit}},
+##            \code{\link[xegaSelectGene:PropFitM]{PropFitM}},
+##            \code{\link[xegaSelectGene:PropFitDiffOnLn]{PropFitDiffOnLn}},
+##            \code{\link[xegaSelectGene:PropFitDiff]{PropFitDiff}},
+##            \code{\link[xegaSelectGene:SUS]{SUS}}.
+#'
+#' @param eps         Epsilon in proportional 
+#'                    fitness difference selection. Default: 0.01.
+#'                    Used in package xegaSelectGene function
+#'                    \code{PropFitDiffM}.
+#'
+##                    \code{\link[xegaSelectGene:PropFitDiffM]{PropFitDiffM}}.
+#'
+#' @param scaling     Scaling method. Default: "NoScaling".
+#'                    Available scaling methods: 
+#'                    \itemize{
+#'                    \item "NoScaling", 
+#'                    \item "ConstantScaling" (Static), 
+#'                    \item "ThresholdScaling" (Dynamic), 
+#'                    \item "ContinuousScaling" (Dynamic).
+#'                    }
+#'                    Argument of function factory 
+#'                    \code{ScalingFactory} in package xegaSelectGene.
+#'
+#' @param scalingExp  Scaling exponent \code{k} in \code{fit^k}.
+#'                    With "ConstantScaling": 0 =< k. 
+#'                    With "ThresholdScaling": 1 < k. (Default: 1)
+#'                    Used in package xegaSelectGene, functions
+#'             \code{ScalingFitness},
+#'             \code{ThresholdScaleFitness}.
+#'
+##             \code{\link[xegaSelectGene:ScalingFitness]{ScalingFitness}},
+##             \code{\link[xegaSelectGene:ThresholdScaleFitness]{ThresholdScaleFitness}}.
+#'
+#' @param scalingExp2 Scaling exponent 
+#'                    for "ThresholdScaling": 0 <= k <1. (Default:1)
+#'                    Used in package xegaSelectGene function
+#'             \code{ThresholdScaleFitness}.
+#'
+##             \code{\link[xegaSelectGene:ThresholdScaleFitness]{ThresholdScaleFitness}}.
+#'
+#' @param scalingThreshold Numerical constant. Default: 0.0.
+#'                    If  ratio of dispersion measures is in 
+#'                    [(1-scalingThreshold), 1+scalingThreshold)], 
+#'                    fitness is not scaled.
+#'                    Used in package xegaSelectGene function
+#'             \code{ThresholdScaleFitness}.
+#'
+##             \code{\link[xegaSelectGene:ThresholdScaleFitness]{ThresholdScaleFitness}}.
+#'
+#' @param rdmWeight   Numerical constant. Default: 1.0. Weight of 
+#'                    ratio of dispersion measures in continuous scaling.
+#'                    Used in package xegaSelectGene function
+#'             \code{ContinuousScaleFitness}.
+#'
+##             \code{\link[xegaSelectGene:ContinuousScaleFitness]{ContinuousScaleFitness}}.
+#'
+#' @param drMin       Minimal allowable dispersion ratio. Default: 0.5.
+#'                    Used in package xegaSelectGene function
+#'             \code{DispersionRatio}.
+##             \code{\link[xegaSelectGene:DispersionRatio]{DispersionRatio}}.
+#'
+#' @param drMax       Maximal allowable dispersion ratio. Default: 2.0.
+#'                    Used in package xegaSelectGene function
+#'             \code{DispersionRatio}.
+##             \code{\link[xegaSelectGene:DispersionRatio]{DispersionRatio}}.
+#'
+#' @param dispersionMeasure  Dispersion measure used for computation of the
+#'                    ratio of dispersion measures for dynamic scaling methods.
+#'                    Default: "var".
+#'                    Available dispersion measures: 
+#'                    "var, "std", "mad", "cv", "range", "iqr".
+#'                    Argument of function factory 
+#'                    \code{DispersionMeasureFactory} in package xegaSelectGene.
+#'
+#' @param scalingDelay The ratio of dispersion measures compares the current
+#'                     population dispersion at t with the population dispersion 
+#'                     at t-scalingdelay. Default: 1.
+#'                    Used in package xegaSelectGene function
+#'             \code{DispersionRatio}.
+##             \code{\link[xegaSelectGene:DispersionRatio]{DispersionRatio}}.
+#'
+#' @param tournamentSize   Tournament size. Default: 2. 
+#'                    Used in package xegaSelectGene functions
+#'                    \code{SelectTournament},
+#'                    \code{SelectSTournament}.
+##                    \code{\link[xegaSelectGene:SelectTournament]{SelectTournament}},
+##                    \code{\link[xegaSelectGene:SelectSTournament]{SelectSTournament}}.
+#'
+#' @param selectionBias   (> 1.0). Controls selection pressure for 
+#'        Whitley's linear rank selection
+#'        with selective pressure. Default: 1.5. Near 1.0: almost
+#'        uniform selection.
+#'                    Used in package xegaSelectGene function
+#'                    \code{SelectLRSelective},
+#'
+#' @param maxTSR    Controls selection pressure for 
+#'                  Grefenstette and Baker's linear rank selection 
+#'                  method. Should be higher than 1.0 and lower equal 2.0.
+#'                  Default: 1.5.
+#'                    Used in package xegaSelectGene function
+#'         \code{SelectLinearRankTSR}.
+##         \code{\link[xegaSelectGene:SelectLinearRankTSR]{SelectLinearRankTSR}},
+#'
+#' @param selection      Selection method for first parent of crossover. 
+#'                       Default: "SUS". 
+#' @param mateselection  Selection method for second parent of crossover. 
+#'                       Default: "SUS". 
+#'
+#' Available selection methods for selection method of a parent:
+#' \itemize{
+#' \item Uniform random selection: "Uniform".
+#' \item Uniform random selection without replacement: "UniformP".
+#' \item Proportional to fitness: 
+#'       "ProportionalOnln" (fastest), "Proportional", "ProportionalM",
+#' \item Proportional to fitness differences: 
+#'       "PropFitDiffOnln" (fastest), "PropfitDiff", "PropfitDiffM",
+#' \item Stochastic universal sampling: "SUS", 
+#' \item Tournament selection: "Duel" (fastest), "Tournament", "STournament",  
+#' \item Rank selection: "LRSelective" (fastest), "LRTSR".
+#' }
+#'                    Argument of function factory 
+#'                    \code{SelectGeneFactory} in package xegaSelectGene.
+#'
+#' @param selectionContinuation   If \code{TRUE}, 
+#'        precomputes selection indices for next generation once and
+#'        transforms selection function to index lookup continuation.
+#'        Default: \code{TRUE}.
+#'        Used in package xegaPopulation function xegaNextPopulation.
+#'
+#' @param accept   acceptance rule for new gene. Default: "All".
+#'        \itemize{
+#'          \item "All"  function \code{AcceptNewGene} 
+#'          \item "Best"  function \code{AcceptBest} 
+#'          \item "Metropolis" function \code{AcceptMetropolis}.
+#'                The behavior of this acceptance rule depends on:
+#'                \enumerate{
+#'                \item The distance between the fitness values.
+#'                      The larger the distance the larger the drop 
+#'                      in acceptance probability.
+#'                \item \code{alpha} is \code{1} minus the discount rate of the cooling
+#'                      schedule. \code{alpha} is in \code{[0, 1]}.
+#'                      The smaller \code{alpha} the faster the drop 
+#'                      in temperatur and thus acceptance probability.
+#'                \item \code{beta} a constant. The larger \code{beta}
+#'                      the faster the drop in acceptance probability.
+#'                \item \code{temperature} the starting value of the 
+#'                      temperature. Must be higher than the number of 
+#'                      generations.
+#'          \item "IVMetropolis" function \code{AcceptIVMetropolis}.
+#'                The behavior of this acceptance rule is qualitatively the same as that 
+#'                of the Metropolis acceptance rule above.
+#'                The acceptance rule is adaptive by a correction of the temperature
+#'                in proportion to the difference between the fitness of the current best and
+#'                the fitness of the gene considered.
+#'                }
+#'            }
+#'                    Argument of function factory 
+#'                    \code{AcceptFactory} in package xegaPopulation.
+#'
+#' @param alpha    \code{1} minus the  discount rate for temperature. (Default: 0.99).
+#'                    (Used in cooling schedule at the end of main GA-loop.)
+#' 
+#' @param beta     constant in Metropolis acceptance rule. (Default: 2.0).
+#'                    (Used in Metroplis acceptance rule.)
+#'
+#' @param temp0    starting value of temperature (Default: 40).
+#'                    (Used in Metroplis acceptance rule. Updated in cooling schedule.)
+#'
+#' @param tempN    final value of temperature (Default: 0.01).
+#'                    (Used in Metroplis acceptance rule. Updated in cooling schedule.)
+#'
+#' @param cooling  cooling schedule for temperature. (Default: "ExponentialMultiplicative")
+#'                 \itemize{
+#'                 \item "ExponentialMultiplicative" calls \code{ExponentialMultiplicativeCooling}
+#'                 \item "LogarithmicMultiplicative" calls \code{LogarithmicMultiplicativeCooling}
+#'                 \item "PowerMultiplicative" calls \code{PowerMultiplicativeCooling}
+#'                 \item "PowerAdditive" calls \code{PowerAdditiveCooling}
+#'                 \item "ExponentialAdditive" calls \code{ExponentialAdditiveCooling}
+#'                 \item "TrigonometricAdditive" calls \code{TrigonometricAdditiveCooling}
+#'                 }
+#'                    Argument of function factory 
+#'                    \code{CoolingFactory} in package xegaPopulation.
+#'
+#' @param coolingPower  exponent for PowerMultiplicative cooling schedule. 
+#'                     (Default: 1. This is called linear multiplicative cooling.)
+#'
+#' @param elitist    If \code{TRUE}, then keep best solution in population.
+#'        Default: \code{TRUE}.
+#'
+#' @param verbose  
+#'        The value of \code{verbose} (Default: 1) controls the
+#'              information displayed:
+#'              \enumerate{
+#'              \item \code{== 0}: Nothing is displayed.
+#'
+#'              \item \code{== 1}: 1 point per generation.
+#'
+#'              \item \code{> 1}: Max(fit), number of solutions, indices.
+#'
+#'              \item \code{> 2}: and population fitness statistics.
+#'
+#'              \item \code{> 3}: and fitness, value of phenotype, 
+#'                                  and phenotype.
+#'              \item \code{> 4}: and str(genotype). 
+#'              }
+#'
+#'
+#' @param logevals
+#'        If \code{TRUE} then log all evaluations and their parameters 
+#'        in the file
+#'        \code{xegaEvalLog<time stamp>.rds}. Default: FALSE.
+#'        
+#'        \code{log<-readRDS(xegaEvalLog<time stamp>.rds)} reads the log.
+#'        The format of a row of \code{log} is <fitness> <parameters>.
+#'
+#' @param allsolutions  If \code{TRUE}, then return all best solutions.
+#'        Default: \code{FALSE}.
+#'
+#' @param early     Boolean. If FALSE (Default), ignore code for 
+#'                  early termination. 
+#'                  See \link{Parabola2DEarly}.
+#' @param terminationEps  Fraction of known optimal solution
+#'                     for computing termination interval. Default: 0.01
+#'                  See \link{Parabola2DEarly}.
+#'
+#' @param replay  If \code{replay>0} then use \code{replay} 
+#'                        as seed of random number generator and  
+#'                        store it for exact repetition of run.
+#'        Default: 0.
+#'
+#' @param cores   Number of cores used for multi core parallel execution.
+#'                (Default: NA. NA means that the number of cores 
+#'                is set by \code{parallelly:availableCores()} 
+#'                if the execution model is "MultiCore".
+#'                  
+#' @param executionModel  Execution model of fitness function evaluation.
+#'        Available:
+#'        \itemize{
+#'        \item "Sequential": \code{base::lapply} is used.
+#'        \item "MultiCore":  \code{parallel::mclapply} is used.
+#'        \item "FutureApply":  
+#'              \code{future.apply::future_lapply} is used.
+#'        \item "Cluster":  Requires a proper configuration of the cluster.
+#'         }
+#'        Default: "Sequential".
+#'        
+#' @param uParApply       A user defined parallel apply function
+#'                        (e.g. for Rmpi). If specified, overrides 
+#'                        settings for \code{executionModel}. 
+#'                        Default: \code{NULL}.    
+#'
+#' @param Cluster         A cluster object generated by 
+#'                        \code{parallel::makeCluster()} or
+#'                        \code{parallelly::makeCluster()}.
+#'                        Default: \code{NULL}.
+#' 
+#' @param profile    
+#'        If \code{TRUE} measures execution time and counts number of executions
+#'        to main components of genetic algorithms. Default: \code{FALSE}.
+#'
+#' @param batch
+#'        If \code{TRUE} then save result in file
+#'        \code{xegaResult<time stamp>.rds}. Default: FALSE
+#'
+#' @param path
+#'        Path. Default: ""
+#'
+#' @return Result object. A named list of 
+#'         \enumerate{
+#'         \item
+#'         \code{$popStat} a matrix with mean, min, Q1, median, Q3, max,
+#'                         variance, and median absolute deviation
+#'                          of population fitness as columns:
+#'                          i-th row for the measures of the i-th generation.
+#'         \item 
+#'         \code{$fit} fitness vector if \code{generations<=1} else: NULL.
+#'         \item
+#'         \code{$solution} with fields 
+#'         \itemize{
+#'         \item
+#'         \code{$solution$name},    name of problem environment. 
+#'         \item
+#'         \code{$solution$fitness}, fitness value of the best solution.
+#'         \item
+#'         \code{$solution$value},   the evaluated best gene.
+#'         \item
+#'         \code{$solution$numberofsolutions}, 
+#'                    number of solutions with the same fitness. 
+#'         \item
+#'         \code{$solution$genotype},     the binary (coded) string.
+#'         \item
+#'         \code{$solution$phenotype},    the decoded string.
+#'         \item
+#'         \code{$solution$phenotypeValue},   the   value of the
+#'                          function of the parameters of the solution.
+#'         \item 
+#'         \code{$solution$evalFail}, number of failures or fitness evaluations
+#'         \item
+#'         and, if configured, 
+#'         \code{$solution$allgenotypes}, as well as 
+#'         \code{$solution$allphenotypes}.
+#'         }
+#'         \item
+#'         \code{$GAconfig} to rerun with \code{ReRunGA}.
+#'         \item
+#'         \code{$GAenv} attribute value list of GAconfig.
+#'         \item \code{$timer} an attribute value list with 
+#'               the time used (in seconds) in the main blocks of the GA:
+#'               tUsed, tInit, tNext, tEval, tObserve, and tSummary.
+#'         }
+#'
+#' @family Main Program
+#'         
+#' @examples
+#' a<-Run(penv=Parabola2D, generations=10, popsize=20, verbose=0)
+#' b<-Run(penv=Parabola2D, algorithm="sga", generations=10, max=FALSE, 
+#'    verbose=1, replay=5, profile=TRUE)
+#' c<-Run(penv=Parabola2D, max=FALSE, algorithm="sgde", 
+#'    popsize=25, generations=100, 
+#'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene", 
+#'    genemap="Identity", replication="DE", 
+#'    selection="UniformP", mateselection="UniformP", accept="Best")
+#' envXOR<-NewEnvXOR()
+#' BG<-compileBNF(booleanGrammar())
+#' d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+#'    generations=10, popsize=20, verbose=0)
+#' e<-Run(penv=envXOR, grammar=BG, algorithm="sge", genemap="Mod",  
+#'    generations=10, popsize=20, reportEvalErrors=FALSE, verbose=1)
+#' f<-Run(penv=lau15, max=FALSE, algorithm="sgperm", 
+#'    genemap="Identity", mutation="MutateGeneMix")
+#' 
+#' @importFrom parallelly availableCores
+#' @importFrom parallelly supportsMulticore
+#' @importFrom xegaSelectGene newCounter
+#' @importFrom xegaSelectGene newTimer
+#' @importFrom xegaSelectGene Timed
+#' @importFrom xegaSelectGene EvalGeneFactory
+#' @importFrom xegaSelectGene SelectGeneFactory
+#' @importFrom xegaSelectGene ScalingFactory
+#' @importFrom xegaSelectGene DispersionMeasureFactory
+#' @importFrom xegaSelectGene DispersionRatio
+#' @importFrom xegaSelectGene parm
+#### TODO
+#' @importFrom xegaGeGene xegaGePrecisionFactory
+#' @importFrom xegaDfGene xegaDfScaleFactorFactory
+#' @importFrom xegaPopulation xegaInitPopulation
+#' @importFrom xegaPopulation xegaEvalPopulation
+#' @importFrom xegaPopulation xegaObservePopulation
+#' @importFrom xegaPopulation xegaSummaryPopulation
+#' @importFrom xegaPopulation xegaNextPopulation
+#' @importFrom xegaPopulation xegaBestInPopulation
+#' @importFrom xegaPopulation xegaConfiguration
+#' @importFrom xegaPopulation ApplyFactory
+#' @importFrom xegaPopulation CrossRateFactory
+#' @importFrom xegaPopulation AcceptFactory
+#' @importFrom xegaPopulation CoolingFactory
+#' @importFrom xegaPopulation xegaLogEvalsPopulation
+##### TODO
+#' @importFrom xegaPopulation MutationRateFactory 
+##### TODO
+#' @export
+Run<-function(penv,                # Problem environment. 
+	      grammar=NULL,        # a grammar object.
+	      maxdepth=7,          # maximal depth of a derivation tree
+	      maxtrials=5,         # maximal of number of trials of 
+                                   # finding subtrees with common root
+              codons=25,           # number of codons (GE)
+              codonBits=0,         # precision of codon in bits
+              codonPrecision="LCM", # Precision methods: 
+                                   # "Min", 
+                                   # "LCM",
+                                   # "MaxPBias".
+              maxPBias=0.01, 
+		 evalmethod="EvalGeneU",  #
+		                     # Evaluation methods:
+		                     # "EvalGeneU", 
+		                     # "EvalGeneR", 
+		                     # "EvalGeneDet", 
+		                     # "EvalGeneStoch".
+                 reportEvalErrors=TRUE, # Report errors in fitness functions.
+		 algorithm="sga",    # "sga", "sgde", "sgperm", "sge", "sgp"
+		 generations=20,     # Number of generations
+		 popsize=100,        # Population size
+		                     #
+		 genemap="Bin2Dec",  # Gene map for decoding.
+		                     #
+		 crossrate=0.2,      # Crossover Rate    
+		                     # (Probability crossover operator is used)
+		 crossrate2=0.3,     # Crossover Rate 2 
+		                     # (Probability crossover operator is used)
+                 ivcrossrate="Const", # "Const" or "IV"
+		 crossover="Cross2Gene", # Crossover operator:
+		    #  1 Kid: "CrossGene", UCrossGene, UPCrossGene
+		    #  2 Kids: "Cross2Gene", UCross2Gene, UPCross2Gene
+		 uCrossSwap=0.2,     # fraction of positions swapped in.
+		                     #
+                 mincrossdepth=1,      # maximal depth of exchange nodes 
+                 maxcrossdepth=7,      # maximal depth of exchange nodes
+                                       # for swapping derivation trees
+                                     # crossover
+                 ivmutrate="Const", # "Const" or "IV"
+		 mutrate=1.0,      # Mutation Rate  
+		                   # (Probability mutation operator is used.)
+		 mutrate2=1.0,      # Mutation Rate 2 
+		                    # (Probability mutation operator is used.)
+		 bitmutrate=0.005,   # bit Mutation Rate
+		 bitmutrate2=0.01,   # bit Mutation Rate 2
+                 maxmutdepth=3,      # maximal depth of a derivation tree 
+                                     # generated by mutation
+                 minmutinsertiondepth=1,  # minimal depth of insertion node
+                 maxmutinsertiondepth=7,  # maximal depth of insertion node 
+		 lambda=0.05,        # decay rate
+		 max2opt=100,        # maximal number of trials xegaPermGene.
+		 scalefactor1=0.9,   # scale factor (differential evolution)
+		 scalefactor2=0.3,   # scale factor (differential evolution)
+		 scalefactor="Const", #  scale factor method label 
+                                     #
+		 cutoffFit=0.5,      # Cutoff percentage for good genes.
+		                     #
+		 mutation="MutateGene", # Mutation operator:
+		                     # "MutateGene" or "IVM"
+		                     #
+		 replication="Kid2", # Replication method.
+		                     #
+		 max=TRUE,           # TRUE: max penv$f; FALSE: min penv$f
+		                     #
+		 offset=1,           # offset in proportional selection
+		 eps=0.01,           # Small number in proportional selection. 
+		 tournamentSize=2,   # size of tournament
+		 selectionBias=1.5,  #  selection pressure for Whitleys
+		                     #    selective rank selection
+		 maxTSR=1.5,         # selection pressure for Grefenstette
+		                     #  and Bakers linear rank selection 
+		                     # method 
+		 selection="SUS", # Selection Method: 
+		 mateselection="SUS", # Selection Method: 
+		            # "Proportional": proportional to fitness
+		            # "PropFitDiff": prop. to fitness diff
+		            # "Uniform": with equal probability
+		            # "Tournament": tournament selection
+		            # "SUS": Baker's stochastic universal selection
+		 selectionContinuation=TRUE,
+		            #
+		 scaling="NoScaling", #  Scaling method: 
+		                      #  "NoScaling"
+		                      #  "ConstantScaling"   (Static)
+		                      #  "ThresholdScaling"  (Dynamic)
+		                      #  "ContinuousScaling" (Dynamic)
+		 scalingThreshold=0.0, #  Ratio of Dispersion Measures (RDM) 
+		                      # in  [1+/-scalingThreshold]: Do not scale!
+		 scalingExp=1,        #   For static and threshold scaling (>1) 
+		 scalingExp2=1,       #   For threshold scaling  (<1)
+		 rdmWeight=1,         #   Weight constant continuous scaling
+		 drMax=2.0,           #   Maximum of dispersion ratio
+		 drMin=0.5,           #   Minimum of dispersion ratio
+		 dispersionMeasure="var",  # Dispersion measure: 
+		                     # "var", "std", "mad", "cv", 
+		                     # "range", "iqr"
+		 scalingDelay=1,     # delay in ratio computation: DM(t)/DM(t-scalingDelay)
+		 accept="All",  # accept new gene
+		       # Options: "All", "Best", "Metropolis"
+		 alpha=0.99,    # Discount rate for temperature.
+		 beta=2,        # Constant (in Boltzmann's formula: 
+		                # k an arbitrary scaling constant). 
+		 cooling="ExponentialMultiplicative",   # accept new gene
+		 coolingPower=1, # power of PowerMultiplicativeCooling. 
+		                 # Default: Linear! 
+		 temp0=40,           # Higher than generations.
+		 tempN=0.01,         # Final temperature.
+		                     #
+		 elitist=TRUE,       # TRUE: Best gene always survives.
+		                     #
+		 verbose=1,          # Maximal output per generation displayed.
+		                     #
+		 logevals=FALSE,     # If TRUE: log evals and parms to file
+		 allsolutions=FALSE, # TRUE: All best solutions are returned.
+		                     #       at the end of the run.
+		 early=FALSE,        # FALSE: Ignore code for early termination.
+		 terminationEps=0.01, # fraction of known optimal solution
+		                      # for termination interval
+		 replay=0,           # replay=0: current seed of random 
+	                             #           number generator.
+                                     # replay>0: use small integer. 
+                                     #           same integer = same seed.	
+                cores=NA,             # Number of cores.
+		executionModel="Sequential", 
+		                     # Execution models are:
+	                             # "Sequential"
+	                             # "MultiCore"
+		                     # "Cluster"
+		                     # needs master, workers, port.
+		                     # default: my minimal configuration.
+                uParApply=NULL,        # user-defined execution model. 
+		Cluster=NULL,          # A cluster object generated by 
+                                     # parallel::makeCluster() or
+                                     # parallelly::makeCluster() or
+		profile=FALSE,       # If TRUE: Measure time spent in
+		                     # main blocks of GA.
+		batch=FALSE,         # If TRUE: save result to file
+                path=""              # path to files.
+		)
+{
+
+# Self description for re-running:
+# eval(parse(text=GAconfig))
+# TODO: More precise reporting on RNG used.
+
+### The following MUST be the first line of the main program.
+GAconfiguration<-xegaPopulation::xegaConfiguration("Run", 
+					       substitute(penv), 
+					       substitute(grammar), 
+					       environment())
+
+#parm<-function(x){function() {return(x)}}
+# Random number generator: TODO. At the moment just for reporting ... 
+# Report RNG 
+RGused<-RNGkind("L'Ecuyer-CMRG")
+if (replay>0) {set.seed(replay)} else {set.seed(NULL)}
+RGseed<-replay
+
+if (executionModel=="MultiCore")
+{ if (parallelly::supportsMulticore()==FALSE) 
+     {stop("Execution model MultiCore not supported")} 
+if (is.na(cores))  {cores<-parallelly::availableCores()} }
+
+### Tentative code!
+if (executionModel=="Cluster")
+{
+if (is.null(Cluster)) 
+     {stop("Execution model Cluster requires a cluster object!")} 
+cluster<-xegaSelectGene::parm(Cluster)                     # nocov
+}
+else
+{cluster<-xegaSelectGene::parm(NULL)}
+
+if (max) {MAX<-xegaSelectGene::parm(1)} else {MAX<-xegaSelectGene::parm(-1)}
+
+if (is.null(uParApply))
+{parApply<-xegaPopulation::ApplyFactory(method=executionModel)}
+else
+{parApply<-uParApply}
+
+### shortest representation with potential bias.
+if ((algorithm=="sge") && (codonBits==0)) 
+{
+Precision<-xegaGeGene::xegaGePrecisionFactory(method=codonPrecision)
+CodonPrecision<-Precision(grammar$PT$LHS, maxPBias) 
+}   
+else 
+{CodonPrecision<-codonBits}
+# We do not check the feasibility of codonPrecision.
+
+bitsOnGene<-codons*CodonPrecision
+
+# Build local configuration (local functions) 
+lF<-list(
+penv=penv,
+Grammar=grammar,
+MaxDepth=xegaSelectGene::parm(maxdepth),
+MaxTrials=xegaSelectGene::parm(maxtrials),
+Codons=xegaSelectGene::parm(codons),
+CodonPrecision=xegaSelectGene::parm(CodonPrecision),
+BitsOnGene=xegaSelectGene::parm(bitsOnGene),
+MutationRate=xegaPopulation::MutationRateFactory(method=ivmutrate),
+MutationRate1=xegaSelectGene::parm(mutrate),
+MutationRate2=xegaSelectGene::parm(mutrate2),
+BitMutationRate1=xegaSelectGene::parm(bitmutrate),
+BitMutationRate2=xegaSelectGene::parm(bitmutrate2),
+MaxMutDepth=xegaSelectGene::parm(maxmutdepth),
+MinMutInsertionDepth=xegaSelectGene::parm(minmutinsertiondepth),
+MaxMutInsertionDepth=xegaSelectGene::parm(maxmutinsertiondepth),
+Lambda=xegaSelectGene::parm(lambda),
+Max2Opt=xegaSelectGene::parm(max2opt),
+ScaleFactor1=xegaSelectGene::parm(scalefactor1),
+ScaleFactor2=xegaSelectGene::parm(scalefactor2),
+ScaleFactor=xegaDfGene::xegaDfScaleFactorFactory(method=scalefactor),
+CutoffFit=xegaSelectGene::parm(cutoffFit),
+CBestFitness=xegaSelectGene::parm(0.0),
+CMeanFitness=xegaSelectGene::parm(0.0),
+CVarFitness=xegaSelectGene::parm(0.0),
+CWorstFitness=xegaSelectGene::parm(0.0),
+CrossRate=xegaPopulation::CrossRateFactory(method=ivcrossrate),
+CrossRate1=xegaSelectGene::parm(crossrate),
+CrossRate2=xegaSelectGene::parm(crossrate2),
+UCrossSwap=xegaSelectGene::parm(uCrossSwap),
+MinCrossDepth=xegaSelectGene::parm(mincrossdepth),
+MaxCrossDepth=xegaSelectGene::parm(maxcrossdepth),
+Max=MAX,
+Offset=xegaSelectGene::parm(offset),
+Eps=xegaSelectGene::parm(eps),
+TerminationEps=xegaSelectGene::parm(terminationEps), 
+Accept=xegaPopulation::AcceptFactory(method=accept),
+Alpha=xegaSelectGene::parm(alpha),
+Beta=xegaSelectGene::parm(beta),
+Cooling=xegaPopulation::CoolingFactory(method=cooling),
+CoolingPower=xegaSelectGene::parm(coolingPower),
+Generations=xegaSelectGene::parm(generations),
+Temp0=xegaSelectGene::parm(temp0),
+TempK=xegaSelectGene::parm(temp0),
+TempN=xegaSelectGene::parm(tempN),
+Elitist=xegaSelectGene::parm(elitist),
+Selection = xegaSelectGene::parm(selection),
+MateSelection = xegaSelectGene::parm(mateselection),
+SelectionContinuation = xegaSelectGene::parm(selectionContinuation),
+ScalingFitness = xegaSelectGene::ScalingFactory(method=scaling),
+ScalingExp = xegaSelectGene::parm(scalingExp),
+ScalingExp2 = xegaSelectGene::parm(scalingExp2),
+DispersionMeasure = xegaSelectGene::DispersionMeasureFactory(method=dispersionMeasure),
+RDM = xegaSelectGene::parm(1.0),
+DRmax = xegaSelectGene::parm(drMax),
+DRmin = xegaSelectGene::parm(drMin),
+RDMWeight = parm(rdmWeight),
+ScalingThreshold = xegaSelectGene::parm(scalingThreshold),
+ScalingDelay = xegaSelectGene::parm(scalingDelay),
+AllSolutions=xegaSelectGene::parm(allsolutions),
+Verbose=xegaSelectGene::parm(verbose),
+TournamentSize=xegaSelectGene::parm(tournamentSize),
+SelectionBias=xegaSelectGene::parm(selectionBias),
+MaxTSR=xegaSelectGene::parm(maxTSR),
+SelectGene=xegaSelectGene::SelectGeneFactory(method=selection),
+SelectMate=xegaSelectGene::SelectGeneFactory(method=mateselection),
+MutateGene=sgXMutationFactory(algorithm=algorithm, method=mutation), # gene dependent
+CrossGene=sgXCrossoverFactory(algorithm=algorithm, method=crossover), # gene dependent
+InitGene=sgXInitGeneFactory(algorithm),  # gene dependent
+DecodeGene=sgXDecodeGeneFactory(algorithm), # gene dependent 
+GeneMap=sgXGeneMapFactory(algorithm=algorithm, method=genemap), # gene dependent
+EvalGene=xegaSelectGene::EvalGeneFactory(method=evalmethod),
+ReportEvalErrors=xegaSelectGene::parm(reportEvalErrors),
+ReplicateGene=sgXReplicationFactory(algorithm=algorithm, method=replication), # gene dependent
+Cores=xegaSelectGene::parm(cores), # number of cores
+lapply=parApply,
+cluster=cluster
+)
+
+# Configure timing.
+# Get timers.
+mainLoopTimer<-xegaSelectGene::newTimer()
+initPopulationTimer<-xegaSelectGene::newTimer()
+evalPopulationTimer<-xegaSelectGene::newTimer()
+observePopulationTimer<-xegaSelectGene::newTimer()
+summaryPopulationTimer<-xegaSelectGene::newTimer()
+nextPopulationTimer<-xegaSelectGene::newTimer()
+
+if (profile==TRUE)
+{
+InitPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaInitPopulation, initPopulationTimer)
+EvalPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaEvalPopulation, evalPopulationTimer)
+ObservePopulation<-xegaSelectGene::Timed(xegaPopulation::xegaObservePopulation, observePopulationTimer)
+SummaryPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaSummaryPopulation, summaryPopulationTimer)
+NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPopulationTimer)
+}
+
+if (profile==FALSE)
+{
+InitPopulation<-xegaPopulation::xegaInitPopulation
+EvalPopulation<-xegaPopulation::xegaEvalPopulation
+ObservePopulation<-xegaPopulation::xegaObservePopulation
+SummaryPopulation<-xegaPopulation::xegaSummaryPopulation
+NextPopulation<-xegaPopulation::xegaNextPopulation
+}
+
+# RunGA Main 
+
+tUsed<-mainLoopTimer()
+
+pop<-InitPopulation(popsize, lF)
+popfit<-EvalPopulation(pop, lF)
+pop<-popfit$pop
+fit<-popfit$fit
+evalFail<-popfit$evalFail
+
+popStat<-ObservePopulation(fit)
+
+if (logevals==TRUE)
+{evallog<-xegaLogEvalsPopulation(pop=pop, evallog=list(), generation=0, lF=lF)} # nocov  
+
+### Tentative.
+# TODO: The interface is too restricted. 
+#       Needs to see e.g. history of solutions, known optima, 
+#                         distance from reference points.
+if (early && ("terminate" %in% names(penv)))
+{ Terminate<-penv$terminate}   # nocov
+else
+{ Terminate<-function(solution, lF) {FALSE} }
+
+if (generations>1)
+{
+for(i in 1:generations)
+{
+	rc<-SummaryPopulation(pop, fit, lF, i)
+	if (scaling %in% c("ThresholdScaling", "ContinuousScaling"))
+	{lF$RDM<-xegaSelectGene::parm(xegaSelectGene::DispersionRatio(
+		matrix(popStat, byrow=TRUE, ncol=8), lF$DispersionMeasure, lF))
+	       # cat("lF$RDM:", lF$RDM(), "\n")
+	       }
+	pop<-NextPopulation(pop, lF$ScalingFitness(fit, lF), lF)
+	popfit<-EvalPopulation(pop, lF)
+	pop<-popfit$pop
+	fit<-popfit$fit
+	evalFail<-evalFail+popfit$evalFail
+	if (length(fit)<popsize) 
+	{return(popfit)} # nocov
+	popStat<-ObservePopulation(fit, popStat)
+if (logevals==TRUE)
+{evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=i, lF=lF)} # nocov  
+
+        if (Terminate(xegaBestInPopulation(pop, fit, lF, FALSE), lF)==TRUE) 
+		{break}    # nocov
+
+	# Cooling schedule for Metropolis acceptance rule. Abstract out?
+#	cat("Temperature:", lF$TempK(), "\n")
+#	cat("new Temperature:", lF$TempK(), "\n")
+	newTemperature<-force(lF$Cooling(i, lF))
+#	cat("new Temperature:", newTemperature, "\n")
+	lF$TempK<-parm(newTemperature)
+}
+}
+
+	rc<-SummaryPopulation(pop, fit, lF, generations)
+
+tUsed<-mainLoopTimer()
+
+	timer=list()
+	timer[["tMainLoop"]]<-mainLoopTimer("TimeUsed")
+	timer[["tInitPopulation"]]<-initPopulationTimer("TimeUsed")
+	timer[["tNextPopulation"]]<-nextPopulationTimer("TimeUsed")
+	timer[["tEvalPopulation"]]<-evalPopulationTimer("TimeUsed")
+	timer[["tObservePopulation"]]<-observePopulationTimer("TimeUsed")
+	timer[["tSummaryPopulation"]]<-summaryPopulationTimer("TimeUsed")
+	timer[["cMainLoop"]]<-mainLoopTimer("Count")
+	timer[["cInitPopulation"]]<-initPopulationTimer("Count")
+	timer[["cNextPopulation"]]<-nextPopulationTimer("Count")
+	timer[["cEvalPopulation"]]<-evalPopulationTimer("Count")
+	timer[["cObservePopulation"]]<-observePopulationTimer("Count")
+	timer[["cSummaryPopulation"]]<-summaryPopulationTimer("Count")
+
+        rc<-xegaBestInPopulation(pop, fit, lF, allsolutions)
+
+	if (generations>1) {fit=NULL}
+
+       result<-list(popStat=matrix(popStat, byrow=TRUE, ncol=8),
+		    fit=fit,
+                    solution=rc,
+		    evalFail=evalFail,
+                    GAconfig=list(GAconfiguration$GAconf),
+                    GAenv=GAconfiguration$GAenv,
+                    timer=timer)
+
+if (lF$Verbose()==1)  {cat("\n")}
+
+if (logevals==TRUE)
+{
+        fn<-paste(path,"xegaEvalLog", Sys.time(), ".rds", sep="") # nocov
+	fn<-chartr(old=" :", new="--", fn)                  # nocov
+        saveRDS(object=evallog, file=fn)                    # nocov
+}
+
+if (batch==TRUE)
+{
+        fn<-paste(path,"xegaResult", Sys.time(), ".rds", sep="") # nocov
+	fn<-chartr(old=" :", new="--", fn)                 # nocov
+        saveRDS(object=result, file=fn)                    # nocov
+}
+
+        return(result)
+
+}
+

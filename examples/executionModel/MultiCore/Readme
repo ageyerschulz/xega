@@ -1,0 +1,12 @@
+
+Execution model "MultiCore". 
+
+Fork processes on a single machine.
+
+Options tested:
+
+excutionModel="MultiCore",
+cores:  1-32.
+
+
+

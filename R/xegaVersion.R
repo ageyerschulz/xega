@@ -1,0 +1,18 @@
+#
+# (c) 2021 Andreas Geyer-Schulz
+#          Simple Genetic Algorithm in R. V 0.1
+#          Layer: Top-level main programs.     
+#          Package: xega
+#
+
+#' About this version
+#'
+#' @examples
+#' xegaVersion()
+#' @export
+xegaVersion<-function()
+{
+	cat('Package xega. Version 1.0. As of 2024/02/29 \n')
+	cat('(c) Andreas Geyer-Schulz\n')
+}
+

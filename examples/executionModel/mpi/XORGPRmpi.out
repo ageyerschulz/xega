@@ -1,0 +1,13 @@
+master (rank 0, comm 1) of size 8 is running on: em-ags-nb1 
+slave1 (rank 1, comm 1) of size 8 is running on: em-ags-nb1 
+slave2 (rank 2, comm 1) of size 8 is running on: em-ags-nb1 
+slave3 (rank 3, comm 1) of size 8 is running on: em-ags-nb1 
+slave4 (rank 4, comm 1) of size 8 is running on: em-ags-nb1 
+slave5 (rank 5, comm 1) of size 8 is running on: em-ags-nb1 
+slave6 (rank 6, comm 1) of size 8 is running on: em-ags-nb1 
+slave7 (rank 7, comm 1) of size 8 is running on: em-ags-nb1 
+Number of Slaves: 8 
+XOR GP Rmpi::mpi.parLapply() 
+...........
+   user  system elapsed 
+ 16.494   0.708  17.196 
