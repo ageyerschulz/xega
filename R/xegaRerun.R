@@ -5,21 +5,21 @@
 #          Package: xega
 #
 
-#' ReRun an evolutionary or genetic algorithm 
-#' with the same configuration as a previous run.
+#' Run an evolutionary or genetic algorithm 
+#' with the same configuration as in the previous run.
 #'
-#' @description \code{ReRun()} runs a simple genetic algorithm with 
+#' @description \code{xegaReRun()} runs a simple genetic algorithm with 
 #'              the same configuration as in the run specified by the 
 #'              list element \code{$GAconfig} of the solution of 
 #'              a simple genetic algorithm.
 #'
-#' @details \code{ReRun()} does not capture the configuration for 
+#' @details \code{xegaReRun()} does not capture the configuration for 
 #'          parallel/distributed processing for the execution model
 #'          "FutureApply", because the user defines the configuration
-#'          before calling \code{Run()}. 
+#'          before calling \code{xegaRun()}. 
 #'
 #' @param  solution  The solution of a 
-#'                   previous run of \code{Run()}.
+#'                   previous run of \code{xegaRun()}.
 #'
 #' @return A list of 
 #'         \enumerate{
@@ -45,10 +45,10 @@
 #' @family Main Program
 #'         
 #' @examples
-#' a<-Run(Parabola2D, max=FALSE, algorithm="sga", generations=10, popsize=20, verbose=1)
-#' b<-ReRun(a)
+#' a<-xegaRun(Parabola2D, max=FALSE, algorithm="sga", generations=10, popsize=20, verbose=1)
+#' b<-xegaReRun(a)
 #'
 #' @export
-ReRun<-function(solution)
+xegaReRun<-function(solution)
 { eval(parse(text=solution$GAconfig)) }
 

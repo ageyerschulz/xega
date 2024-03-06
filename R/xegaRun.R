@@ -117,13 +117,46 @@
 #' The adaptive mechanisms described in the following are based on threshold
 #' rules which determine how a parameter of the genetic operator is adapted.
 #' The threshold conditions are based on population statistics: 
-#' For scaling, on thresholds of a dispersion measure. For the global
-#' crossover and mutation rates on a comparison of a gene's fitness with 
-#' a population statistic. 
+#  For scaling, on thresholds of a ratio of a dispersion measure (RDM) at generation 
+#  \code{k} and a dispersion measure at generation \code{k-1}. For the global
+#  crossover and mutation rates, on a comparison of a gene's fitness with 
+#  a population statistic. 
 #'
-#' \strong{Scaling.} 
-#' 
+#' \strong{Scaling.} For adaptive scaling, select a dynamic scaling method,
+#'                   e.g. \code{scaling="ThresholdScaling"}.
+#' A high selection pressure decreases the dispersion in the population.
+#' The parameter \code{scalingThreshold} is a numerical parameter which defines    
+#' an interval from \code{1-scalingThreshold} to \code{1+scalingThreshold}:
+#' \enumerate{
+#' \item If the RDM is in this interval, the fitness function is not scaled. 
+#' \item If the RDM is larger than the upper bound of the interval, 
+#'       the constant \code{scalingExp} which is higher than \code{1} is chosen for the scaling function.
+#'       This implements the rule: If the dispersion has increased, increase the selection pressure.  
+#' \item If the RDM is smaller than the lower bound of the interval, 
+#'       the constant \code{scalingExp2} which is smaller than \code{1} is chosen for the scaling function.
+#'       This implements the rule: If the dispersion has decreased, increase the selection pressure.  
+#'       }
+#'
+#'  The dispersion measure is computed as ratio of the dispersion measure at \code{t} relative to the 
+#'  dispersion measure at \code{t-scalingDelay}. 
+#'  The default dispersion measure is the variance of the population fitness (\code{dispersionMeasure="var"}). 
+#'  However, other dispersion measures ("std", "mad", "cv", "range", "iqr") can be configured.  
+#'
 #' \strong{Mutation and Crossover Probabilities}
+#'
+#' The rationale of individually variable mutation and crossover rates is that selected genes 
+#' with a low fitness should be changed by a genetic operator with a higher probability. 
+#' This increases the chance of survival of the gene because of a fitness increase through  
+#' crossover or mutation.
+#'
+#' Select an adaptive genetic operator rate:
+#' For the crossover rate, \code{ivcrossrate="IV"}. For the mutation rate, \code{ivmutrate="IV"}.
+#'
+#' If the fitness of a gene is higher than \code{cutoffFit} times the current best fitness, 
+#' the crossover rate is \code{crossrate} else the crossover rate is \code{crossrate2}.
+#'
+#' If the fitness of a gene is higher than \code{cutoffFit} times the current best fitness, 
+#' the mutation rate is \code{mutrate} else the mutation rate is \code{mutrate2}.
 #'
 #' @section Distributed and Parallel Processing:
 #'
@@ -186,11 +219,44 @@
 #'        HPC environments.
 #'  }
 #'
+### Problem Specification
+#'
 #' @param penv        Problem environment.
 #'
 #' @param grammar     A compiled grammar object. Default: NULL.
 #'                    Example: \code{compileBNF(booleanGrammar())}              
 #'
+#' @param max         If \code{TRUE} then Maximize! Default: TRUE.
+#'                    Used in functions \code{EvalGeneDet}, \code{EvalGeneStoch},
+#'                    \code{EvalGeneU}, and \code{EvalGeneR} 
+#'                    of package \code{xegaSelectGene}.
+#'
+### Algorithm 
+#'
+#' @param algorithm   Specifies the algorithm class dependend 
+#'                    on gene representation:
+#'                    \itemize{
+#'                    \item "sga": Binary representation (Default).
+#'                    \item "sgde": Real representation. 
+#'                           E.g. Differential evolution.
+#'                    \item "sgperm": Permutation representation.
+#'                    \item "sge": Binary representation. 
+#'                                 Grammatical evolution.    
+#'                                 (Not yet variable length.)
+#'                    \item "sgp": Derivation tree representation. 
+#'                                 Grammar Based Genetic Programming.
+#'                    }
+#'
+### Basic Parameters
+#'
+#' @param popsize     Population size. Default: 100.
+#' @param generations Number of generations. Default: 20.
+#' @param crossrate   Probability of applying crossover operator. Default: 0.20.
+#'                    (Global parameter)
+#' @param mutrate     Probability of applying mutation operator. Default: 1.0.
+#'                    (Global parameter)
+#'
+###
 #' @param maxdepth    The maximal depth of a derivation tree. Default: 7.
 #' @param maxtrials   Maximal number of trials of finding subtrees with same root symbol.
 #'                    Default: 5.
@@ -216,12 +282,6 @@
 #' @param maxPBias    The threshold of the choice rule bias. 
 #'                    Default: \code{0.01}.
 #'
-#' @param max         If \code{TRUE} then Maximize! Default: TRUE.
-#'                    Used in package xegaSelectGene functions
-#'                    \code{EvalGeneDet},
-#'                    \code{EvalGeneStoch},
-#'                    \code{EvalGeneU}.
-#'
 #' @param evalmethod  Specifies the method of function evaluation:
 #'          \itemize{ 
 #'          \item  "EvalGeneU": The function is always evaluated. (Default)
@@ -237,23 +297,6 @@
 #'     
 #' @param reportEvalErrors  Report errors in the evaluation 
 #'                          of fitness functions. Default: TRUE.
-#'
-#' @param algorithm   Specifies the algorithm class dependend 
-#'                    on gene representation:
-#'                    \itemize{
-#'                    \item "sga": Binary representation (Default).
-#'                    \item "sgde": Real representation. 
-#'                           E.g. Differential evolution.
-#'                    \item "sgperm": Permutation representation.
-#'                    \item "sge": Binary representation. 
-#'                                 Grammatical evolution.    
-#'                                 (Not yet variable length.)
-#'                    \item "sgp": Derivation tree representation. 
-#'                                 Grammar Based Genetic Programming.
-#'                    }
-#'
-#' @param generations Number of generations. Default: 20.
-#' @param popsize     Population size. Default: 100.
 #'
 #' @param genemap     Gene map for decoding. Default: "Bin2Dec".
 #'                    The default value works only for algorithm "sga".
@@ -292,10 +335,6 @@
 #'                           Function used: \code{xegaDfGene::xegaDfGeneMapIdentity}
 #'                           
 #'                    } # end of genemap
-#'
-#' @param crossrate   Crossover rate. Probability of applying
-#'                    crossover operator. Default: 0.20.
-#'                    (Global parameter)
 #'
 #' @param crossrate2  Crossover rate for genes with below 
 #'                    ``average'' fitness. 
@@ -413,8 +452,6 @@
 #'                    }
 #'                    }
 #'    
-#' @param mutrate     Mutation rate. Default: 1.0.
-#'
 #' @param mutrate2    Mutation rate. Default: 1.0.
 #'
 #' @param ivmutrate "Const" or "IV" (individually variable). 
@@ -881,21 +918,21 @@
 #' @family Main Program
 #'         
 #' @examples
-#' a<-Run(penv=Parabola2D, generations=10, popsize=20, verbose=0)
-#' b<-Run(penv=Parabola2D, algorithm="sga", generations=10, max=FALSE, 
+#' a<-xegaRun(penv=Parabola2D, generations=10, popsize=20, verbose=0)
+#' b<-xegaRun(penv=Parabola2D, algorithm="sga", generations=10, max=FALSE, 
 #'    verbose=1, replay=5, profile=TRUE)
-#' c<-Run(penv=Parabola2D, max=FALSE, algorithm="sgde", 
+#' c<-xegaRun(penv=Parabola2D, max=FALSE, algorithm="sgde", 
 #'    popsize=25, generations=100, 
 #'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene", 
 #'    genemap="Identity", replication="DE", 
 #'    selection="UniformP", mateselection="UniformP", accept="Best")
 #' envXOR<-NewEnvXOR()
 #' BG<-compileBNF(booleanGrammar())
-#' d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+#' d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
 #'    generations=10, popsize=20, verbose=0)
-#' e<-Run(penv=envXOR, grammar=BG, algorithm="sge", genemap="Mod",  
+#' e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sge", genemap="Mod",  
 #'    generations=10, popsize=20, reportEvalErrors=FALSE, verbose=1)
-#' f<-Run(penv=lau15, max=FALSE, algorithm="sgperm", 
+#' f<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    genemap="Identity", mutation="MutateGeneMix")
 #' 
 #' @importFrom parallelly availableCores
@@ -928,8 +965,19 @@
 #' @importFrom xegaPopulation MutationRateFactory 
 ##### TODO
 #' @export
-Run<-function(penv,                # Problem environment. 
-	      grammar=NULL,        # a grammar object.
+xegaRun<-function(
+### Problem Specification
+      penv,               # Problem environment. 
+      grammar=NULL,       # a grammar object.
+      max=TRUE,           # TRUE: max penv$f; FALSE: min penv$f
+### Algorithm   
+      algorithm="sga",    # "sga", "sgde", "sgperm", "sge", "sgp"
+### Basic Parameters
+      popsize=100,        # Population size
+      generations=20,     # Number of generations
+      crossrate=0.2,      # (Probability crossover operator is used)
+      mutrate=1.0,        # (Probability mutation operator is used.)
+###
 	      maxdepth=7,          # maximal depth of a derivation tree
 	      maxtrials=5,         # maximal of number of trials of 
                                    # finding subtrees with common root
@@ -947,14 +995,9 @@ Run<-function(penv,                # Problem environment.
 		                     # "EvalGeneDet", 
 		                     # "EvalGeneStoch".
                  reportEvalErrors=TRUE, # Report errors in fitness functions.
-		 algorithm="sga",    # "sga", "sgde", "sgperm", "sge", "sgp"
-		 generations=20,     # Number of generations
-		 popsize=100,        # Population size
 		                     #
 		 genemap="Bin2Dec",  # Gene map for decoding.
 		                     #
-		 crossrate=0.2,      # Crossover Rate    
-		                     # (Probability crossover operator is used)
 		 crossrate2=0.3,     # Crossover Rate 2 
 		                     # (Probability crossover operator is used)
                  ivcrossrate="Const", # "Const" or "IV"
@@ -968,8 +1011,6 @@ Run<-function(penv,                # Problem environment.
                                        # for swapping derivation trees
                                      # crossover
                  ivmutrate="Const", # "Const" or "IV"
-		 mutrate=1.0,      # Mutation Rate  
-		                   # (Probability mutation operator is used.)
 		 mutrate2=1.0,      # Mutation Rate 2 
 		                    # (Probability mutation operator is used.)
 		 bitmutrate=0.005,   # bit Mutation Rate
@@ -990,8 +1031,6 @@ Run<-function(penv,                # Problem environment.
 		                     # "MutateGene" or "IVM"
 		                     #
 		 replication="Kid2", # Replication method.
-		                     #
-		 max=TRUE,           # TRUE: max penv$f; FALSE: min penv$f
 		                     #
 		 offset=1,           # offset in proportional selection
 		 eps=0.01,           # Small number in proportional selection. 
@@ -1075,7 +1114,7 @@ Run<-function(penv,                # Problem environment.
 # TODO: More precise reporting on RNG used.
 
 ### The following MUST be the first line of the main program.
-GAconfiguration<-xegaPopulation::xegaConfiguration("Run", 
+GAconfiguration<-xegaPopulation::xegaConfiguration("xegaRun", 
 					       substitute(penv), 
 					       substitute(grammar), 
 					       environment())
