@@ -1,8 +1,8 @@
 # The R script xega.R
 
 The directory xega contains the implementation 
-of the functions of the main program layer of a binary coded 
-genetic algorithm. 
+of the functions of the main program layer of extended  
+evolutionary and genetic algorithms. 
 
 
 The easiest installation is by using install.packages from R.

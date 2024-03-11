@@ -25,7 +25,7 @@ BG<-compileBNF(booleanGrammar())
 cat("XOR FutureMultiSession (FMS)\n")
 gc(full=TRUE)
 plan(multisession, workers=workers)
-g<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+g<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,

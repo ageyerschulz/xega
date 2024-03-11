@@ -11,10 +11,10 @@
 #SBATCH --nodes=20
 #
 # Number of program instances to be executed
-#SBATCH --tasks-per-node=20
+#SBATCH --tasks-per-node=40
 #
 # Maximum run time of job
-#SBATCH --time=00:30:00
+#SBATCH --time=00:45:00
 #
 # Write standard output and errors in same file
 #SBATCH --output="output-%x-%j.log"
@@ -36,4 +36,4 @@ echo "Number of cores allocated to job:     $SLURM_NTASKS"
 module load math/R/4.1.2
 module load mpi/openmpi/4.1
 
-mpirun Rscript XORGPTmpi.R
+mpirun Rscript XORGPRmpi.R

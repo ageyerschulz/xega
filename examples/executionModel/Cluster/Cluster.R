@@ -23,7 +23,7 @@ FutureApplyBenchmarkLAN<-function(
 {
 cat("XOR Sequential (S, pop=6400)\n")
 gc(full=TRUE)
-d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=6400, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="Sequential", profile=TRUE,
@@ -32,58 +32,56 @@ d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR Cluster (pop=64)\n")
 gc(full=TRUE)
-wcl<-parallel::makeClusterPSOCK(
-     names=names,
-     master="em-ags-nb1.iism.kit.edu",
-     port=10250)
+wcl<-parallelly::makeClusterPSOCK(
+     workers=names)
 on.exit(parallel::stopCluster(wcl))
 
-e<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=64, 
        crossrate=crossrate, mutrate=mutrate,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=verbose, replay=replay[2])
 
 cat("XOR Cluster (pop=640)\n")
-f<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+f<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=640, 
        crossrate=crossrate, mutrate=mutrate,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=verbose, replay=replay[3])
 
 cat("XOR Cluster (pop=6400)\n")
-g<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+g<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=6400, 
        crossrate=crossrate, mutrate=mutrate,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=verbose, replay=replay[4])
 
 cat("XOR Cluster (pop=12800)\n")
-h<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+h<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=12800, 
        crossrate=crossrate, mutrate=0.1,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=verbose, replay=replay[5])
 
 cat("XOR Cluster (mutrate=1.0, 6400)\n")
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=6400, 
-       crossrate=crossrate, mutrate=1.0,
-       executionModel="Cluster", profile=TRUE,
+       crossrate=crossrate, mutrate=0.4,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
        verbose=verbose, replay=replay[6])
 # Compare Solutions
 
-prtSolution("        (S)", d)
-prtSolution("  (Cluster)", e)
-prtSolution("  (Cluster)", f)
-prtSolution("  (Cluster)", g)
-prtSolution("  (Cluster)", h)
-prtSolution("  (Cluster)", i)
+prtSolution("               (S)", d)
+prtSolution("(C m,     p=64   )", e)
+prtSolution("(C m,     p=640  )", f)
+prtSolution("(C m,     p=6400 )", g)
+prtSolution("(C m=0.2, p=12800)", h)
+prtSolution("(C m=1.0, p=6400 )", i)
 
 rLst<-c(list(d), list(e), list(f), list(g), list(h), list(i))
 
@@ -97,49 +95,50 @@ toEvalS<-tEval/tEval[1]
 
 df<-data.frame(tMain, toMainS, tNext, toNextS,  tEval, toEvalS, 
     row.names=c("(S)", 
-               "(C    64)", 
-               "(C   640)", 
-               "(C  6400)", 
-               "(C 12800)",
-               "(C1m6400)")) 
+               "(C       64)", 
+               "(C      640)", 
+               "(C     6400)", 
+               "(C.2m 12800)",
+               "(C1.m  6400)")) 
 colnames(df)<-c(
               "tMain (s)", "tMain/(S)",
               "tNext (s)", "tNext/(S)",
               "tEval (s)", "tEval/(S)")
 
 cat("======================================================================", "\n")
-cat("XOR", "workers:", names, "\n"
+cat("XOR", "workers:", names, "\n")
 cat("XOR", "popsize:", popsize, "generations:", generations, 
      "crossrate:", crossrate, "mutrate:", mutrate, "\n")
 cat("======================================================================", "\n")
 print(df)
 cat("======================================================================", "\n\n")
-return(wcl)
+return(df)
 }
 
 #####
 verbose<-1
-# replay<-sample(1:1000, 8)
-replay<-rep(73, 8)
-popsize<-64
-generations<-2
+replay<-sample(1:1000, 8)
+#replay<-rep(73, 8)
+popsize<-640
+generations<-10
 crossrate<-0.3
-mutrate<-0.10
+mutrate<-0.3
 workers<-4
-#
+#####
+
 envXOR<-NewEnvXOR()
 BG<-compileBNF(booleanGrammar())
 
 names<-c("em-pop.iism.kit.edu",
              "em-pop.iism.kit.edu", 
              "em-pop.iism.kit.edu", 
-             "em-ags-nb1.iism.kit.edu",
-             "em-ags-nb1.iism.kit.edu",
-             "em-folk.iism.kit.edu")
+             "em-pop.iism.kit.edu")
+
+workers<-length(names)
 
 cat("Cluster Benchmark Examples (LAN).\n")
 
-wcl<-FutureApplyBenchmarkLAN(
+results<-FutureApplyBenchmarkLAN(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=popsize,
       crossrate=crossrate, mutrate=mutrate,

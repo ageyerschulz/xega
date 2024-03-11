@@ -70,13 +70,13 @@ cat("XOR GP Rmpi::mpi.parLapply() \n")
 verbose<-1
 # replay<-sample(1:1000, 8)
 replay<-rep(73, 8)
-popsize<-640
+popsize<-40000
 generations<-10
 
 envXOR<-NewEnvXOR()
 BG<-compileBNF(booleanGrammar())
 
-d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
+d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",
        generations=generations, popsize=popsize,
        executionModel="Sequential", uParApply=rmpiLapply,  profile=TRUE,
        verbose=verbose, replay=replay[1], batch=TRUE)

@@ -23,7 +23,7 @@ FutureApplyBenchmarkNB<-function(
 {
 cat("XOR Sequential (S)\n")
 gc(full=TRUE)
-d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="Sequential", profile=TRUE,
@@ -33,7 +33,7 @@ d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 cat("XOR FutureSequential (FS)\n")
 gc(full=TRUE)
 plan(sequential)
-e<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,
@@ -44,7 +44,7 @@ plan(sequential)
 cat("XOR FutureMultiCore (FMC)\n")
 gc(full=TRUE)
 plan(multicore, workers=workers)
-f<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+f<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,
@@ -52,22 +52,22 @@ f<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
        verbose=verbose, replay=replay[3])
 plan(sequential)
 
-### This does not work!
+## This does not work!
 cat("XOR FutureMultiSession (FMS)\n")
 gc(full=TRUE)
 plan(multisession, workers=workers)
-g<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
-       generations=generations, popsize=popsize, 
-       crossrate=crossrate, mutrate=mutrate,
-       executionModel="FutureApply", profile=TRUE,
-       evalmethod="Deterministic",
-       verbose=verbose, replay=replay[4])
+g<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
+        generations=generations, popsize=popsize, 
+        crossrate=crossrate, mutrate=mutrate,
+        executionModel="FutureApply", profile=TRUE,
+        evalmethod="Deterministic",
+        verbose=verbose, replay=replay[4])
 plan(sequential)
 
 cat("XOR FutureCallr (FCallr)\n")
 gc(full=TRUE)
 plan(callr, workers=workers)
-h<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+h<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,
@@ -81,7 +81,7 @@ gc(full=TRUE)
 wcl<-makeClusterPSOCK(rep("localhost", workers))
 on.exit(parallel::stopCluster(wcl))
 plan(cluster, workers=wcl)
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,

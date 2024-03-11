@@ -8,5 +8,19 @@ Options tested:
 excutionModel="MultiCore",
 cores:  1-32.
 
+Start on Notebook:
 
+./GPXORmc.sh
+
+Result: 
+
+GPXORmc.out
+
+Start in HPC-Cluster with Slurm:
+
+sbatch GPXORmcSlurm.sh
+
+Result:
+
+GPXORmultiCore.output
 

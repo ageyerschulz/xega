@@ -1,0 +1,28 @@
+Cluster Benchmark Examples Small, Random Seeds (LAN).
+XOR Sequential (S, Small)
+...
+XOR Cluster (Small)
+XOR Cluster (Small)
+XOR Cluster (Small)
+XOR Cluster (Small)
+XOR Cluster (Small)
+...
+            (S) : 4 : AND(OR(D2,NOT(OR(NOT(D1),NOT(NOT(D2))))),NOT(AND(D2,D1))) 4.000772 
+(Cluster Small) : 3 : NOT(OR(NOT(D1),D2)) 3.006944 
+(Cluster Small) : 3 : NOT(AND(D2,D1)) 3.012346 
+(Cluster Small) : 3 : OR(D2,D1) 3.027778 
+(Cluster Small) : 3 : NOT(OR(NOT(D1),D2)) 3.006944 
+(Cluster Small) : 3 : NOT(AND(D2,D1)) 3.012346 
+====================================================================== 
+XOR workers: em-pop.iism.kit.edu em-pop.iism.kit.edu em-pop.iism.kit.edu em-pop.iism.kit.edu 
+XOR popsize: 64 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)        0.4613647  1.000000 0.05729175 1.0000000 0.3827336  1.000000
+(CSmall 1) 2.8269494  6.127363 0.04193783 0.7320047 2.7635996  7.220688
+(CSmall 2) 2.6174498  5.673276 0.03168154 0.5529861 2.5686467  6.711318
+(CSmall 3) 2.7849686  6.036371 0.04727578 0.8251761 2.7131529  7.088881
+(CSmall 4) 2.3509395  5.095620 0.03804660 0.6640852 2.2897234  5.982552
+(CSmall 5) 2.3055243  4.997184 0.03195500 0.5577593 2.2576313  5.898702
+====================================================================== 
+

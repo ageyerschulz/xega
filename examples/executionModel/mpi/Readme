@@ -1,0 +1,16 @@
+
+Notebook:
+
+./benchRmpiNotebook8.sh
+
+Output:
+- XORGPRmpi.out
+- xegaResult2024-03-01-10-40-45.002129.rds
+
+(Time stamp may vary.)
+
+HPC Slurm
+
+sbatch benchRmpiSlurm.sh
+
+

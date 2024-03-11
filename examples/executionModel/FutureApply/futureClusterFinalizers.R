@@ -32,7 +32,7 @@ gc(full=TRUE)
 ### Version 1 autoStopCluster + garbage collect cluster object
 wcl<-autoStopCluster(makeClusterPSOCK(rep("localhost", workers)))
 plan(cluster, workers=wcl)
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,
@@ -48,7 +48,7 @@ gc(full=TRUE)
 { wcl<-makeClusterPSOCK(rep("localhost", workers))
 on.exit(parallel::stopCluster(wcl))
 plan(cluster, workers=wcl)
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,
@@ -62,7 +62,7 @@ oldplan<-plan(sequential)
 { wcl<-makeClusterPSOCK(rep("localhost", workers))
 on.exit(killNode(wcl))
 plan(cluster, workers=wcl)
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,

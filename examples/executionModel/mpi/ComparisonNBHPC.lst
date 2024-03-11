@@ -1,0 +1,21 @@
+GP XOR.
+
+       Time spent in A=rmpi(800)    B=seq      A/B    B/A
+1          tMainLoop 856.758178 2541.065255 0.3372  2.966
+2    tInitPopulation  18.380174   13.806560 1.3313  0.751
+3    tNextPopulation 772.839823  502.430605 1.5382  0.650
+4    tEvalPopulation  65.329764 2024.791133 0.0323 30.993
+5 tObservePopulation   0.201885    0.032245 6.2610  0.160
+6 tSummaryPopulation   0.000832    0.000763 1.0900  0.917
+
+Population size: 40 000
+Generations:         10
+
+Data:
+
+A=rmpi(800):
+a<-readRDS("xegaResult2024-03-07-21-51-50.rds")
+
+B=seq:
+b<-readRDS("xegaResult2024-03-08-17-06-47.763237.rds")
+

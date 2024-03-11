@@ -22,7 +22,7 @@ MultiCoreBenchmark<-function(
 {
 cat("XOR Sequential (S)\n")
 gc(full=TRUE)
-d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="Sequential", profile=TRUE,
@@ -31,7 +31,7 @@ d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 cat("XOR MultiCore (MC, cores=NA(",availableCores(),"))\n")
 
 gc(full=TRUE)
-e<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", profile=TRUE,
@@ -39,7 +39,7 @@ e<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR MultiCore (MC, cores=2)\n")
 gc(full=TRUE)
-f<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+f<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", cores=2, profile=TRUE,
@@ -47,7 +47,7 @@ f<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR MultiCore (MC, cores=4)\n")
 gc(full=TRUE)
-g<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+g<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", cores=4, profile=TRUE,
@@ -55,7 +55,7 @@ g<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR MultiCore (MC, cores=8)\n")
 gc(full=TRUE)
-h<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+h<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", cores=8, profile=TRUE,
@@ -63,7 +63,7 @@ h<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR MultiCore (MC, cores=16)\n")
 gc(full=TRUE)
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", cores=16, profile=TRUE,
@@ -71,7 +71,7 @@ i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR MultiCore (MC, cores=24)\n")
 gc(full=TRUE)
-j<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+j<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", cores=24, profile=TRUE,
@@ -79,7 +79,7 @@ j<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 
 cat("XOR MultiCore (MC, cores=32)\n")
 gc(full=TRUE)
-k<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+k<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate, 
        executionModel="MultiCore", cores=32, profile=TRUE,
@@ -127,6 +127,7 @@ cat("XOR", "popsize:", popsize, "generations:", generations,
 cat("======================================================================", "\n")
 print(df)
 cat("======================================================================", "\n\n")
+return(df)
 }
 ####
 
@@ -143,20 +144,25 @@ BG<-compileBNF(booleanGrammar())
 
 cat("MultiCore Benchmark Examples.\n")
 
-MultiCoreBenchmark(
+df1<-MultiCoreBenchmark(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=64,
       crossrate=crossrate, mutrate=mutrate, 
       replay=replay, verbose=verbose) 
 
-MultiCoreBenchmark(
+df2<-MultiCoreBenchmark(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=640,
       crossrate=crossrate, mutrate=mutrate, 
       replay=replay, verbose=verbose) 
 
-MultiCoreBenchmark(
+df3<-MultiCoreBenchmark(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=6400,
       crossrate=crossrate, mutrate=mutrate, 
       replay=replay, verbose=verbose) 
+
+df4<-rbind(df1, df2, df3)
+
+saveRDS(df4, "GPXORmc.rds")
+

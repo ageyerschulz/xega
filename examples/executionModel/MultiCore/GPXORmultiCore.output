@@ -1,0 +1,109 @@
+MultiCore Benchmark Examples.
+XOR Sequential (S)
+XOR MultiCore (MC, cores=NA( 40 ))
+XOR MultiCore (MC, cores=2)
+XOR MultiCore (MC, cores=4)
+XOR MultiCore (MC, cores=8)
+XOR MultiCore (MC, cores=16)
+XOR MultiCore (MC, cores=24)
+XOR MultiCore (MC, cores=32)
+===================================================================== 
+            (S) : 3 : OR(D1,D2) 3.027778 
+ (MC, cores=NA) : 3 : OR(D1,D2) 3.027778 
+  (MC, cores=2) : 3 : OR(D1,D2) 3.027778 
+  (MC, cores=4) : 3 : OR(D1,D2) 3.027778 
+  (MC, cores=8) : 3 : OR(D1,D2) 3.027778 
+ (MC, cores=16) : 3 : OR(D1,D2) 3.027778 
+ (MC, cores=24) : 3 : OR(D1,D2) 3.027778 
+ (MC, cores=32) : 3 : OR(D1,D2) 3.027778 
+====================================================================== 
+XOR popsize: 64 generations: 10 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+          tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)       1.6173513 1.0000000 0.1865234  1.000000 1.2901156 1.0000000
+(MC, NA)  1.0798981 0.6676955 0.2832651  1.518657 0.7482681 0.5800008
+(MC, 2)   0.4940197 0.3054499 0.2166936  1.161750 0.2407751 0.1866306
+(MC, 4)   0.4390445 0.2714589 0.2310622  1.238784 0.1708937 0.1324638
+(MC, 8)   0.4736829 0.2928757 0.2529852  1.356319 0.1828070 0.1416981
+(MC, 16)  0.5939884 0.3672600 0.2668281  1.430534 0.2862086 0.2218473
+(MC, 24)  0.7367032 0.4554998 0.2768047  1.484021 0.4139633 0.3208730
+(MC, 32)  0.8869205 0.5483784 0.2772923  1.486635 0.5642745 0.4373829
+====================================================================== 
+
+XOR Sequential (S)
+XOR MultiCore (MC, cores=NA( 40 ))
+XOR MultiCore (MC, cores=2)
+XOR MultiCore (MC, cores=4)
+XOR MultiCore (MC, cores=8)
+XOR MultiCore (MC, cores=16)
+XOR MultiCore (MC, cores=24)
+XOR MultiCore (MC, cores=32)
+===================================================================== 
+            (S) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+ (MC, cores=NA) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+  (MC, cores=2) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+  (MC, cores=4) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+  (MC, cores=8) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+ (MC, cores=16) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+ (MC, cores=24) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+ (MC, cores=32) : 4 : AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),D2))) 4.001111 
+====================================================================== 
+XOR popsize: 640 generations: 10 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+          tMain (s) tMain/(S) tNext (s) tNext/(S)  tEval (s)  tEval/(S)
+(S)       21.236825 1.0000000  3.040298 1.0000000 17.9324155 1.00000000
+(MC, NA)   4.759390 0.2241103  3.134437 1.0309637  1.3266335 0.07397963
+(MC, 2)    5.168755 0.2433864  3.065770 1.0083779  1.8336284 0.10225217
+(MC, 4)    4.516451 0.2126707  3.034608 0.9981284  1.2114751 0.06755783
+(MC, 8)    4.367407 0.2056526  3.106665 1.0218291  0.9870448 0.05504249
+(MC, 16)   4.326382 0.2037207  3.112991 1.0239099  0.9394193 0.05238666
+(MC, 24)   4.349220 0.2047961  3.094539 1.0178406  0.9788232 0.05458401
+(MC, 32)   4.577270 0.2155346  3.060380 1.0066051  1.1822412 0.06592760
+====================================================================== 
+
+XOR Sequential (S)
+XOR MultiCore (MC, cores=NA( 40 ))
+XOR MultiCore (MC, cores=2)
+XOR MultiCore (MC, cores=4)
+XOR MultiCore (MC, cores=8)
+XOR MultiCore (MC, cores=16)
+XOR MultiCore (MC, cores=24)
+XOR MultiCore (MC, cores=32)
+===================================================================== 
+            (S) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+ (MC, cores=NA) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+  (MC, cores=2) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+  (MC, cores=4) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+  (MC, cores=8) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+ (MC, cores=16) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+ (MC, cores=24) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+ (MC, cores=32) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D1,D2))))) 4.0016 
+====================================================================== 
+XOR popsize: 6400 generations: 10 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+          tMain (s) tMain/(S) tNext (s) tNext/(S)  tEval (s)  tEval/(S)
+(S)       268.33065 1.0000000  28.73545 1.0000000 236.386308 1.00000000
+(MC, NA)   36.46102 0.1358809  28.72087 0.9994926   4.883060 0.02065712
+(MC, 2)    45.49440 0.1695460  28.38494 0.9878022  14.180701 0.05998952
+(MC, 4)    39.22320 0.1461749  28.08702 0.9774343   8.302418 0.03512225
+(MC, 8)    36.42673 0.1357531  28.39127 0.9880222   5.245465 0.02219022
+(MC, 16)   36.82253 0.1372282  28.83539 1.0034780   5.158664 0.02182303
+(MC, 24)   36.12081 0.1346131  28.15655 0.9798542   5.065386 0.02142842
+(MC, 32)   36.92155 0.1375972  28.55642 0.9937697   5.529505 0.02339181
+====================================================================== 
+
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n315
+Job ID: 23218244
+Cluster: uc2
+User/Group: dj2333/iism
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 40
+CPU Utilized: 00:16:37
+CPU Efficiency: 3.89% of 07:07:20 core-walltime
+Job Wall-clock time: 00:10:41
+Memory Utilized: 856.03 MB
+Memory Efficiency: 5.22% of 16.00 GB

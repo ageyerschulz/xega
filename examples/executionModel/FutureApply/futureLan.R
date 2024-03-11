@@ -23,7 +23,7 @@ FutureApplyBenchmarkLAN<-function(
 {
 cat("XOR Sequential (S)\n")
 gc(full=TRUE)
-d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="Sequential", profile=TRUE,
@@ -34,12 +34,11 @@ cat("XOR FutureCluster (FCluster)\n")
 gc(full=TRUE)
 
 wcl<-parallelly::makeClusterPSOCK(
-     workers=names,
-     master="em-ags-nb1.iism.kit.edu",
-     port=10250)
+     workers=names)
 on.exit(parallel::stopCluster(wcl))
+
 plan(cluster, workers=wcl)
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="FutureApply", profile=TRUE,
@@ -82,8 +81,8 @@ return(wcl)
 verbose<-1
 # replay<-sample(1:1000, 8)
 replay<-rep(73, 8)
-popsize<-64
-generations<-2
+popsize<-640
+generations<-10
 crossrate<-0.3
 mutrate<-0.10
 workers<-4
@@ -98,16 +97,41 @@ BG<-compileBNF(booleanGrammar())
 
 names<-c("em-pop.iism.kit.edu",
          "em-pop.iism.kit.edu") 
+workers<-length(names)
 
 # names<-c("em-ags-nb1.iism.kit.edu",
 #         "em-ags-nb1.iism.kit.edu")
 
 cat("FutureApply Benchmark Examples (LAN).\n")
+cat(names, "\n")
 
+pops<-c(100, 1000, 10000)
+
+for (i in (1:length(pops)))
+{
+cat(i, ": Popsize:", pops[i], "\n")
 wcl<-FutureApplyBenchmarkLAN(
       penv=envXOR, grammar=BG, 
-      generations=generations, popsize=popsize,
+      generations=generations, popsize=pops[i],
       crossrate=crossrate, mutrate=mutrate,
       replay=replay, verbose=verbose,
       workers=workers, names=names)
+}
+
+
+names<-c("em-pop.iism.kit.edu",
+         "em-pop.iism.kit.edu",
+         "em-pop.iism.kit.edu") 
+workers<-length(names)
+
+for (i in (1:length(pops)))
+{
+cat(i, ": Popsize:", pops[i], "\n")
+wcl<-FutureApplyBenchmarkLAN(
+      penv=envXOR, grammar=BG, 
+      generations=generations, popsize=pops[i],
+      crossrate=crossrate, mutrate=mutrate,
+      replay=replay, verbose=verbose,
+      workers=workers, names=names)
+}
 

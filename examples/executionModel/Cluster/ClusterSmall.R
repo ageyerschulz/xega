@@ -23,7 +23,7 @@ FutureApplyBenchmarkLAN<-function(
 {
 cat("XOR Sequential (S, Small)\n")
 gc(full=TRUE)
-d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="Sequential", profile=TRUE,
@@ -33,49 +33,47 @@ d<-Run(penv=envXOR, grammar=BG, algorithm="sgp",
 cat("XOR Cluster (Small)\n")
 gc(full=TRUE)
 wcl<-parallelly::makeClusterPSOCK(
-     workers=names,
-     master="em-ags-nb1.iism.kit.edu",
-     port=10250)
-# on.exit(parallel::stopCluster(wcl))
+     workers=names)
+on.exit(parallel::stopCluster(wcl))
 
-e<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
        executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=0, replay=replay[2])
 
 cat("XOR Cluster (Small)\n")
-f<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+f<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=0, replay=replay[3])
 
 cat("XOR Cluster (Small)\n")
-g<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+g<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=mutrate,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=0, replay=replay[4])
 
 cat("XOR Cluster (Small)\n")
-h<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+h<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=0.1,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=0, replay=replay[6])
+       verbose=0, replay=replay[2])
 
 cat("XOR Cluster (Small)\n")
-i<-Run(penv=envXOR, grammar=BG, algorithm="sgp",  
+i<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
        generations=generations, popsize=popsize, 
        crossrate=crossrate, mutrate=0.1,
-       executionModel="Cluster", profile=TRUE,
+       executionModel="Cluster", Cluster=wcl, profile=TRUE,
        evalmethod="Deterministic",
-       verbose=verbose, replay=replay[6])
+       verbose=verbose, replay=replay[3])
 # Compare Solutions
 
 prtSolution("            (S)", d)
@@ -97,11 +95,11 @@ toEvalS<-tEval/tEval[1]
 
 df<-data.frame(tMain, toMainS, tNext, toNextS,  tEval, toEvalS, 
     row.names=c("(S)", 
-               "(CSmall)", 
-               "(CSmall)", 
-               "(CSmall)", 
-               "(CSmall)",
-               "(CSmall)")) 
+               "(CSmall 1)", 
+               "(CSmall 2)", 
+               "(CSmall 3)", 
+               "(CSmall 4)",
+               "(CSmall 5)")) 
 colnames(df)<-c(
               "tMain (s)", "tMain/(S)",
               "tNext (s)", "tNext/(S)",
@@ -114,7 +112,7 @@ cat("XOR", "popsize:", popsize, "generations:", generations,
 cat("======================================================================", "\n")
 print(df)
 cat("======================================================================", "\n\n")
-return(wcl)
+return(df)
 }
 
 #####
@@ -135,13 +133,13 @@ BG<-compileBNF(booleanGrammar())
 #             "em-folk.iism.kit.edu", 
 #             "em-ags-nb1.iism.kit.edu") 
 
-# names<-c("em-pop.iism.kit.edu",
-#             "em-pop.iism.kit.edu", 
-#             "em-pop.iism.kit.edu", 
-#             "em-pop.iism.kit.edu") 
+names<-c("em-pop.iism.kit.edu",
+         "em-pop.iism.kit.edu", 
+         "em-pop.iism.kit.edu", 
+         "em-pop.iism.kit.edu") 
 
-names<-c("em-ags-nb1.iism.kit.edu",
-         "em-ags-nb1.iism.kit.edu")
+# names<-c("em-ags-nb1.iism.kit.edu",
+#         "em-ags-nb1.iism.kit.edu")
 
 cat("Cluster Benchmark Examples Small, Random Seeds (LAN).\n")
 
