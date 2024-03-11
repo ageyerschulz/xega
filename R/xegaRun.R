@@ -112,6 +112,14 @@
 #' the probability of applying the mutation operator to a gene 
 #' should be set to \code{1}.
 #'
+#' Two more parameters are important:
+#'
+#' \itemize{
+#' \item \code{elitist}: Boolean. If \code{TRUE} (default), the fittest gene always survives.
+#' \item \code{replay}:  Integer. If \code{0} (default), a random seed of the random number generator is chosen.
+#'                       For exact replications of a run of a genetic algorithm, set replay to a positive integer.
+#' }
+#'
 #' @section Global Adaptive Mechanisms:
 #'
 #' The adaptive mechanisms described in the following are based on threshold
@@ -142,6 +150,12 @@
 #'  The default dispersion measure is the variance of the population fitness (\code{dispersionMeasure="var"}). 
 #'  However, other dispersion measures ("std", "mad", "cv", "range", "iqr") can be configured.  
 #'
+#'  Another dynamic scaling method is continuous scaling (\code{scaling="ContinuousScaling"}).
+#'  The scaling exponent is adapted by a weighted ratio of dispersion measures. The weight 
+#'  of the exponent is set by \code{rdmWeight=1.1}, its default is \code{1.0}. Since the ratio 
+#'  of dispersion measures may be quite unstable, the default limits for the ratio are \code{drMin=0.5} 
+#'  and \code{drMax=2.0}. 
+#'
 #' \strong{Mutation and Crossover Probabilities}
 #'
 #' The rationale of individually variable mutation and crossover rates is that selected genes 
@@ -158,7 +172,67 @@
 #' If the fitness of a gene is higher than \code{cutoffFit} times the current best fitness, 
 #' the mutation rate is \code{mutrate} else the mutation rate is \code{mutrate2}.
 #'
+#' @section The Initialization of a Population:
+#'
+#' For the algorithms "sga", "sgde", and "sgperm" the information needed for
+#' initialization is the length of the gene in bits, in parameters, and in
+#' the number of symbols of a permutation. 
+#' For "sgp", the depth bound gives an upper limit for the 
+#' program which can be represented by a derivation tree.
+#' For "sge", a codon is an integer for selecting a production rule.
+#' The number of bits of a genes is \code{codons*codonBits}. 
+#'
+#' \tabular{lll}{
+#' \strong{Algorithm}\tab \tab \strong{Parameters} \cr
+#' \strong{"sga"}\tab Number of bits.  \tab \code{penv$genelength()} \cr
+#' \strong{"sgde"}\tab Number of parameters. \tab 
+#'                     \code{length(penv$bitlength()}, 
+#'                     \code{penv$lb()}, \code{penv$ub()}\cr
+#' \strong{"sgperm"}\tab Number of symbols. \tab \code{penv$genelength()} \cr
+#' \strong{"sgp"}\tab Depth bound of derivation tree. \tab \code{maxdepth} \cr
+#' \strong{"sge"}\tab Number of codons and 
+#'    \tab\code{codons}, \code{codonBits},
+#'                   \code{codonPrecision}, \code{maxPBias} \cr
+#' \tab number of bits of a codon. \tab
+#' }
+#'
+#' @section The Pipeline of Genetic Operators:
+#'
+#' The pipeline of genetic operators merges the pipeline of a genetic algorithm with the pipeline of 
+#' evolutionary algorithms and simulated annealing by adding an acceptance step: 
+#' \itemize{
+#' \item For evolutionary algorithms,
+#' the acceptance rule \code{accept="Best"} means that the fitter gene out of a parent and its kid survives
+#' (is copied into the next generation).
+#' \item For genetic algorithms the acceptance rule \code{accept="All"} means that always the kid survives.
+#' \item For simulated annealing the acceptance rule \code{accept="Metropolis"} 
+#' means that the survival probability of a kid with a fitness
+#' worse than its parent decreases as the number of generations executed increases. 
+#' }
+#'
+#' Proper configuration of the pipeline allows the configuration of new algorithm variants which mix elements
+#' of genetic, evolutionary, and simulated annealing algorithms.
+#'
+#' The following table gives a working standard configuration of the pipeline of the genetic operators for each 
+#' of the five algorithms:
+#'
+#' \tabular{lccccc}{
+#' \strong{Step/Algorithm}\tab\strong{"sga"}\tab\strong{"sgde"}\tab\strong{"sgperm"}\tab\strong{"sgp"}\tab\strong{"sge"}\cr 
+#' (next) Scaling         \tab NoScaling    \tab NoScaling     \tab NoScaling       \tab NoScaling    \tab NoScaling    \cr
+#' (next) Selection       \tab  SUS         \tab  UniformP     \tab SUS             \tab   SUS        \tab  SUS         \cr
+#' (next) Replication     \tab  Kid2        \tab    DE         \tab   Kid2          \tab   Kid2       \tab  Kid2        \cr
+#' (next) Crossover       \tab  Cross2Gene  \tab  UCrossGene   \tab  Cross2Gene     \tab Cross2Gene   \tab Cross2Gene   \cr
+#' (next) Mutation        \tab  MutateGene  \tab  MutateGeneDE \tab  MutateGene     \tab MutateGene   \tab MutateGene   \cr
+#' (next) Acceptance      \tab    All       \tab   Best        \tab   All           \tab    All       \tab   All        \cr 
+#' (eval) Decoder         \tab   Bin2Dec    \tab Identity      \tab Identity        \tab     -        \tab   Mod        \cr
+#' (eval) Evaluation      \tab  EvalGeneU   \tab EvalGeneU     \tab EvalGeneU       \tab  EvalGeneU   \tab EvalGeneU 
+#' }
+#' 
 #' @section Distributed and Parallel Processing:
+#'
+#' The current scope of parallelization is the parallel evaluation of genes (the steps marked with (eval) in the 
+#' genetic operator pipeline. This strategy is less efficient for differential evolution and permutation-based genetic
+#' algorithms because of the embedding of repeated evaluations into genetic operators. 
 #'
 #' In general, distributed and parallel processing requires a sequence of three steps:  
 #' \enumerate{
@@ -189,13 +263,15 @@
 #'             \code{cl<-parallel::makeClusterPSOCK( rep(localhost, 5))}
 #'             generates the cluster object and starts the R processes (of 5 workers in the same machine).  
 #'       }
-#' \item Some user-defined parallel apply function has been defined and e.g. called \code{UPARAPPLY}. 
-#'       By setting \code{uParApply=UPARAPPLY}, the apply function used is \code{UPARAPPLY}. 
+#' \item A user-defined parallel apply function has been defined and called \code{UPARAPPLY}. 
+#'       By setting \code{uParApply=UPARAPPLY}, the \code{lapply()} function used is \code{UPARAPPLY()}. 
 #'       This overrides the specification by \code{executionModel}. For example,
 #'       parallelization via the MPI interface can be achieved by providing a user-defined parallel 
-#'       apply function which is implemented by user-defined function whose function body 
+#'       \code{lapply()} function which is implemented by a user-defined function whose function body 
 #'       is the line \code{Rmpi::mpi.parLapply( pop, FUN=EvalGene, lF=lF)}.
 #' }
+#'
+#' The author acknowledges support by the state of Baden-Württemberg through bwHPC.
 #'
 #' @section Reporting:
 #'
@@ -434,7 +510,7 @@
 #'                           uniform crossover  (of reals).
 #'                           Local parameter: \code{uCrossSwap}.
 #'                    }
-#'                    \item Crossover operators with 2 kid: Not implemented.
+#'                    \item Crossover operators with 2 kids: Not implemented.
 #'                    }
 #'
 #'                    \item \code{algorithm="sgperm"}:
@@ -490,14 +566,14 @@
 #'                      \code{xegaPermMutateGene2Opt}
 #'                    and  \code{xegaPermMutateGeneOptLK}.
 #'
-#' @param scalefactor1  scale factor for differential mutation operator (Default: 0.9)
-#' @param scalefactor2  scale factor for differential mutation operator (Default: 0.2)
-#' @param scalefactor   method for setting scale factor. 
+#' @param scalefactor1  Scale factor for differential mutation operator (Default: 0.9).
+#' @param scalefactor2  Scale factor for differential mutation operator (Default: 0.2).
+#' @param scalefactor   Method for setting scale factor. 
 #'                      \itemize{
 #'                      \item "Const":  constant scale factor. 
 #'                      \item "Uniform": a random scale factor in 0.000001 to 1.0.
 #'                       }
-#' @param cutoffFit   cutoff for fitness.      Default: 0.5. 
+#' @param cutoffFit   Cutoff for fitness.      Default: 0.5. 
 #'                     Used in package xegaGaGene functions 
 #'                      \code{IVAdaptiveMutateGene}
 #'
@@ -566,20 +642,20 @@
 #'
 #'        \itemize{
 #'        \item "MutateGene": 
-#'              Function used: \code{sPermGene::xegaPermMutateGeneOrderBased}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateGeneOrderBased}.
 #'        \item "MutateGeneOrderBased": See "MutateGene". 
 #'        \item "MutateGenekInversion": 
-#'              Function used: \code{sPermGene::xegaPermMutateGenekInversion}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateGenekInversion}.
 #'        \item "MutateGene2Opt": 
-#'              Function used: \code{sPermGene::xegaPermMutateGene2Opt}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateGene2Opt}.
 #'        \item "MutateGenekOptLK": 
-#'              Function used: \code{sPermGene::xegaPermMutateGenekOptLK}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateGenekOptLK}.
 #'        \item "MutateGeneGreedy": 
-#'              Function used: \code{sPermGene::xegaPermMutateGeneGreedy}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateGeneGreedy}.
 #'        \item "MutateGeneBestGreedy": 
-#'              Function used: \code{sPermGene::xegaPermMutateGeneBestGreedy}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateGeneBestGreedy}.
 #'        \item "MutateGeneMix": 
-#'              Function used: \code{sPermGene::xegaPermMutateMix}.
+#'              Function used: \code{xegaPermGene::xegaPermMutateMix}.
 #'        }
 #'                    } 
 #'
@@ -727,13 +803,13 @@
 #'                    Argument of function factory 
 #'                    \code{SelectGeneFactory} in package xegaSelectGene.
 #'
-#' @param selectionContinuation   If \code{TRUE}, 
+#' @param selectionContinuation  Boolean. If \code{TRUE}, 
 #'        precomputes selection indices for next generation once and
 #'        transforms selection function to index lookup continuation.
 #'        Default: \code{TRUE}.
 #'        Used in package xegaPopulation function xegaNextPopulation.
 #'
-#' @param accept   acceptance rule for new gene. Default: "All".
+#' @param accept   Acceptance rule for new gene. Default: "All".
 #'        \itemize{
 #'          \item "All"  function \code{AcceptNewGene} 
 #'          \item "Best"  function \code{AcceptBest} 
@@ -766,16 +842,16 @@
 #' @param alpha    \code{1} minus the  discount rate for temperature. (Default: 0.99).
 #'                    (Used in cooling schedule at the end of main GA-loop.)
 #' 
-#' @param beta     constant in Metropolis acceptance rule. (Default: 2.0).
+#' @param beta     Constant in Metropolis acceptance rule. (Default: 2.0).
 #'                    (Used in Metroplis acceptance rule.)
 #'
-#' @param temp0    starting value of temperature (Default: 40).
+#' @param temp0    Starting value of temperature (Default: 40).
 #'                    (Used in Metroplis acceptance rule. Updated in cooling schedule.)
 #'
-#' @param tempN    final value of temperature (Default: 0.01).
+#' @param tempN    Final value of temperature (Default: 0.01).
 #'                    (Used in Metroplis acceptance rule. Updated in cooling schedule.)
 #'
-#' @param cooling  cooling schedule for temperature. (Default: "ExponentialMultiplicative")
+#' @param cooling  Cooling schedule for temperature. (Default: "ExponentialMultiplicative")
 #'                 \itemize{
 #'                 \item "ExponentialMultiplicative" calls \code{ExponentialMultiplicativeCooling}
 #'                 \item "LogarithmicMultiplicative" calls \code{LogarithmicMultiplicativeCooling}
@@ -787,7 +863,7 @@
 #'                    Argument of function factory 
 #'                    \code{CoolingFactory} in package xegaPopulation.
 #'
-#' @param coolingPower  exponent for PowerMultiplicative cooling schedule. 
+#' @param coolingPower  Exponent for PowerMultiplicative cooling schedule. 
 #'                     (Default: 1. This is called linear multiplicative cooling.)
 #'
 #' @param elitist    If \code{TRUE}, then keep best solution in population.
@@ -811,7 +887,7 @@
 #'              }
 #'
 #'
-#' @param logevals
+#' @param logevals  Boolean.
 #'        If \code{TRUE} then log all evaluations and their parameters 
 #'        in the file
 #'        \code{xegaEvalLog<time stamp>.rds}. Default: FALSE.
@@ -819,7 +895,7 @@
 #'        \code{log<-readRDS(xegaEvalLog<time stamp>.rds)} reads the log.
 #'        The format of a row of \code{log} is <fitness> <parameters>.
 #'
-#' @param allsolutions  If \code{TRUE}, then return all best solutions.
+#' @param allsolutions  Boolean. If \code{TRUE}, then return all best solutions.
 #'        Default: \code{FALSE}.
 #'
 #' @param early     Boolean. If FALSE (Default), ignore code for 
@@ -829,7 +905,7 @@
 #'                     for computing termination interval. Default: 0.01
 #'                  See \link{Parabola2DEarly}.
 #'
-#' @param replay  If \code{replay>0} then use \code{replay} 
+#' @param replay  Integer. If \code{replay>0} then use \code{replay} 
 #'                        as seed of random number generator and  
 #'                        store it for exact repetition of run.
 #'        Default: 0.
@@ -860,11 +936,11 @@
 #'                        \code{parallelly::makeCluster()}.
 #'                        Default: \code{NULL}.
 #' 
-#' @param profile    
+#' @param profile   Boolean. 
 #'        If \code{TRUE} measures execution time and counts number of executions
 #'        to main components of genetic algorithms. Default: \code{FALSE}.
 #'
-#' @param batch
+#' @param batch    Boolean.
 #'        If \code{TRUE} then save result in file
 #'        \code{xegaResult<time stamp>.rds}. Default: FALSE
 #'
@@ -874,43 +950,43 @@
 #' @return Result object. A named list of 
 #'         \enumerate{
 #'         \item
-#'         \code{$popStat} a matrix with mean, min, Q1, median, Q3, max,
+#'         \code{$popStat}: A matrix with mean, min, Q1, median, Q3, max,
 #'                         variance, and median absolute deviation
 #'                          of population fitness as columns:
 #'                          i-th row for the measures of the i-th generation.
 #'         \item 
-#'         \code{$fit} fitness vector if \code{generations<=1} else: NULL.
+#'         \code{$fit}: Fitness vector if \code{generations<=1} else: NULL.
 #'         \item
-#'         \code{$solution} with fields 
+#'         \code{$solution}: Named list with fields 
 #'         \itemize{
 #'         \item
-#'         \code{$solution$name},    name of problem environment. 
+#'         \code{$solution$name}:    Name of problem environment. 
 #'         \item
-#'         \code{$solution$fitness}, fitness value of the best solution.
+#'         \code{$solution$fitness}: Fitness value of the best solution.
 #'         \item
-#'         \code{$solution$value},   the evaluated best gene.
+#'         \code{$solution$value}:   The evaluated best gene.
 #'         \item
-#'         \code{$solution$numberofsolutions}, 
-#'                    number of solutions with the same fitness. 
+#'         \code{$solution$numberofsolutions}: 
+#'                    Number of solutions with the same fitness. 
 #'         \item
-#'         \code{$solution$genotype},     the binary (coded) string.
+#'         \code{$solution$genotype}:     The gene a genetic code. 
 #'         \item
-#'         \code{$solution$phenotype},    the decoded string.
+#'         \code{$solution$phenotype}:    The decoded gene.
 #'         \item
-#'         \code{$solution$phenotypeValue},   the   value of the
+#'         \code{$solution$phenotypeValue}:   The   value of the
 #'                          function of the parameters of the solution.
 #'         \item 
-#'         \code{$solution$evalFail}, number of failures or fitness evaluations
+#'         \code{$solution$evalFail}: Number of failures or fitness evaluations
 #'         \item
 #'         and, if configured, 
 #'         \code{$solution$allgenotypes}, as well as 
 #'         \code{$solution$allphenotypes}.
 #'         }
 #'         \item
-#'         \code{$GAconfig} to rerun with \code{ReRunGA}.
+#'         \code{$GAconfig}: For rerun with \code{xegaReRun()}.
 #'         \item
-#'         \code{$GAenv} attribute value list of GAconfig.
-#'         \item \code{$timer} an attribute value list with 
+#'         \code{$GAenv}: Attribute value list of GAconfig.
+#'         \item \code{$timer}: An attribute value list with 
 #'               the time used (in seconds) in the main blocks of the GA:
 #'               tUsed, tInit, tNext, tEval, tObserve, and tSummary.
 #'         }

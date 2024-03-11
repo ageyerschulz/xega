@@ -24,20 +24,20 @@
 #' @return A list of 
 #'         \enumerate{
 #'         \item
-#'         \code{$popStat} a matrix with 
+#'         \code{$popStat}: A matrix with 
 #'                         mean, min, Q1, median, Q3, max, var, mad
 #'                          of population fitness as columns:
 #'                          i-th row for i-th each generation.
 #'         \item
-#'         \code{$solution} with fields 
+#'         \code{$solution}: With fields 
 #'         \code{$solution$fitness}, 
 #'         \code{$solution$value},  
 #'         \code{$solution$genotype}, and  
 #'         \item
-#'         \code{$GAconfig} the configuration of the GA used by \code{ReRunGA}.
+#'         \code{$GAconfig}: The configuration of the GA used by \code{xegaReRun()}.
 #'         \item
-#'         \code{$GAenv} attribute value list of GAconfig.
-#'         \item \code{$timer} an attribute value list with 
+#'         \code{$GAenv}:  Attribute value list of GAconfig.
+#'         \item \code{$timer}: An attribute value list with 
 #'               the time used (in seconds) in the main blocks of the GA:
 #'               tUsed, tInit, tNext, tEval, tObserve, and tSummary.
 #'         }
