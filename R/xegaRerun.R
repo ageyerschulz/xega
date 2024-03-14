@@ -18,6 +18,10 @@
 #'          "FutureApply", because the user defines the configuration
 #'          before calling \code{xegaRun()}. 
 #'
+#'          If \code{executionModel} matches neither \code{"Sequential"} nor \code{"MultiCore"}
+#'          or \code{!is.null(uParApply)==TRUE},   
+#'          a warning is printed, and the previous solution is returned.
+#'
 #' @param  solution  The solution of a 
 #'                   previous run of \code{xegaRun()}.
 #'
@@ -47,8 +51,17 @@
 #' @examples
 #' a<-xegaRun(Parabola2D, max=FALSE, algorithm="sga", generations=10, popsize=20, verbose=1)
 #' b<-xegaReRun(a)
+#' seqApply<-function(pop, EvalGene, lF) {lapply(pop, EvalGene, lF)}
+#' c<-xegaRun(Parabola2D, max=FALSE, algorithm="sga", uParApply=seqApply)
+#' b<-xegaReRun(c)
 #'
 #' @export
 xegaReRun<-function(solution)
-{ eval(parse(text=solution$GAconfig)) }
+{ 
+if (!is.null(solution$GAenv$uParApply)) 
+{warning("Error: Re-run of configuration with a user supplied parallel apply not supported."); return(solution)}
+if (!(solution$GAenv$executionModel %in% c("Sequential", "MultiCore"))) 
+{warning("Error: Re-run of parallel or distributed configurations not possible."); return(solution)}
+eval(parse(text=solution$GAconfig)) 
+}
 

@@ -227,7 +227,117 @@
 #' (eval) Decoder         \tab   Bin2Dec    \tab Identity      \tab Identity        \tab     -        \tab   Mod        \cr
 #' (eval) Evaluation      \tab  EvalGeneU   \tab EvalGeneU     \tab EvalGeneU       \tab  EvalGeneU   \tab EvalGeneU 
 #' }
+
 #' 
+#' @section Scaling:
+#' 
+#' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
+#'
+#' @section Selection:
+#'
+#' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
+#'
+#' @section Replication:
+#'
+#' For genetic algorithms ("sga", "sgp", sgperm", and "sge") 
+#' in the replication process of a gene the crossover operator may 
+#' by configured to produce one new gene (\code{replication="Kid1"})  
+#' or two new genes (\code{replication="Kid2"}). The first version  
+#' looses genetic information in the crossover operation, whereas the second version 
+#' retains the genetic material in the population.
+#' There is a dependency between \code{replication} and \code{crossover}:
+#' \code{"Kid2"} requires a crossover operator which produces two kids.
+#' The replication method is configured by the function  
+#' \code{xegaGaReplicationFactory()} of package \code{xegaGaGene}.
+#'
+#' Note that only the function \code{xegaGaReplicateGene} of \code{xegaGaGene} 
+#' (configured with \code{replication="Kid1"}) implements a genetic operator pipeline
+#' with an acceptance rule. 
+#'
+#' For differential evolution (algorithm "sgde"), \code{replication="DE"} 
+#' must be configured.
+#' The replication method for differential evolution is configured by the function  
+#' \code{xegaDfReplicationFactory()} of package \code{xegaDfGene}.
+#' It implements a configurable acceptance rule. For classic differential evolution, 
+#' use \code{accept="Best"}. 
+#'
+#' @section Crossover:
+#'
+#' TBD
+#'
+#' @section Mutation:
+#'
+#' TBD
+#'
+#' @section Acceptance:
+#'
+#' Acceptance rules are extensions of genetic and evolutionary algorithms 
+#' which to the best of my knowledge have their origin in simulated annealing.  
+#' An acceptance rule compares the fitness value of a modified gene with the 
+#' fitness value of its parent and determines which of the two genes is passed
+#' into the next population.
+#' 
+#' An acceptance rule is only executed as part of the genetic operator pipeline, if 
+#' \code{replicate="Kid1"} or \code{replicate="DE"}.
+#' 
+#' Two classes of acceptance rules are provided: 
+#' \itemize{
+#' \item Simple acceptance rules.   
+#' \itemize{
+#' \item Accept the new gene unconditionally (configured by \code{accept="All"}).
+#'       The new gene is always passed to the next population. 
+#'       Choose the rule for configuring a classic genetic algorithm.
+#'       (The default). 
+#' \item Accept only best gene (configured by \code{accept="Best"}).
+#'       This acceptance rule guarantees an increasing fitness curve over the run 
+#'       of the algorithm. For example, classic differential evolution uses this acceptance rule.
+#' }
+#' \item Configurable acceptance rules.
+#' \itemize{
+#' \item The Metropolis acceptance rule.
+#' \item The individually adaptive Metropolis acceptance rule.
+#' }
+#' }
+#'
+#' See package \code{xegaPopulation} <https://CRAN.R-project.org/package=xegaPopulation>
+#'
+#' @section Decoder:
+#'
+#' Decoders are algorithm and task dependent. Their implementation often makes use of a gene map. 
+#' The table below summarizes the available decoders 
+#' and gene maps of the current version.
+#'
+#' \tabular{lccc}{
+#' Algorithm:          \tab\strong{"sga"}          \tab\strong{"sgde"}         \tab\strong{"sgperm"}     \cr 
+#' In package:         \tab xegaGaGene             \tab xegaDfGene             \tab xegaPermGene         \cr
+#' Decoder:            \tab xegaGaDecodeGene()     \tab xegaDfDecodeGene()     \tab xegaPermDecodeGene() \cr
+#' Gene map factories: \tab xegaGaGeneMapFactory() \tab xegaDfGeneMapFactory() \tab (Not configurable)   \cr
+#' Method              \tab "Bin2Dec"               \tab "Identity"             \tab                      \cr
+#' Method              \tab "Gray2Dec"              \tab                        \tab                      \cr
+#' Method              \tab "Identity"              \tab                        \tab                      \cr
+#' Method              \tab "Permutation"           \tab                        \tab                      \cr
+#' }
+#'
+#' \tabular{lcc}{
+#' Algorithm:          \tab \strong{"sgp"}     \tab\strong{"sge"}          \cr 
+#' In package:         \tab xegaGpGene         \tab xegaGeGene             \cr
+#' Decoder:            \tab xegaGpDecodeGene() \tab xegaGeDecodeGene()     \cr
+#' Gene map factories: \tab (Not configurable) \tab xegaGeGeneMapFactory() \cr
+#' Method              \tab                    \tab "Mod"                  \cr
+#' Method              \tab                    \tab "Buck"                 \cr
+#' }
+#'
+#' @section Evaluation:
+#'
+#' The method of evaluation of a gene is configured by
+#' \code{evalmethod}: "EvalGeneU" means that the function is always executed,
+#  "EvalGeneR" allows repairs a gene by a decoder (e.g. in grammatical evolution), 
+#' "Deterministic" evaluates a gene only once, and "Stochastic" incrementally updates mean and 
+#' variance of a stochastic function. 
+#' If \code{reportEvalErrors==TRUE}, evaluation failures are reported. However, for grammatical  
+#' evolution without gene repair this should be set to \code{FALSE}. 
+#' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
+#'
 #' @section Distributed and Parallel Processing:
 #'
 #' The current scope of parallelization is the parallel evaluation of genes (the steps marked with (eval) in the 
@@ -263,7 +373,7 @@
 #'             \code{cl<-parallel::makeClusterPSOCK( rep(localhost, 5))}
 #'             generates the cluster object and starts the R processes (of 5 workers in the same machine).  
 #'       }
-#' \item A user-defined parallel apply function has been defined and called \code{UPARAPPLY}. 
+#' \item Assume that a user-defined parallel apply function has been defined and called \code{UPARAPPLY}. 
 #'       By setting \code{uParApply=UPARAPPLY}, the \code{lapply()} function used is \code{UPARAPPLY()}. 
 #'       This overrides the specification by \code{executionModel}. For example,
 #'       parallelization via the MPI interface can be achieved by providing a user-defined parallel 
@@ -271,7 +381,9 @@
 #'       is the line \code{Rmpi::mpi.parLapply( pop, FUN=EvalGene, lF=lF)}.
 #' }
 #'
-#' The author acknowledges support by the state of Baden-Württemberg through bwHPC.
+#' See package \code{xegaPopulation}  <https://CRAN.R-project.org/package=xegaPopulation> 
+#' 
+#' \strong{Acknowledgment.}The author acknowledges support by the state of Baden-Württemberg through bwHPC.
 #'
 #' @section Reporting:
 #'
