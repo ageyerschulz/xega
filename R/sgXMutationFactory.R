@@ -27,8 +27,11 @@
 #' @return MutateGene Function for the selected  algorithm 
 #'                     from the correct package.
 #'
+#' @family Configuration
+#'
 #'@examples
 #' sgXMutationFactory(algorithm="sga", method="MutateGene")
+#' 
 #'@importFrom xegaGaGene xegaGaMutationFactory
 #'@importFrom xegaGpGene xegaGpMutationFactory
 #'@importFrom xegaDfGene xegaDfMutationFactory

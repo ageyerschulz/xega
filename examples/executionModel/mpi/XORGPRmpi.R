@@ -54,11 +54,13 @@ Rmpi::mpi.close.Rslaves(dellog=FALSE)
 Rmpi::mpi.quit()
 }
 
+# The user defined parallel apply function
 rmpiLapply<-function(pop, EvalGene, lF)
 {
    Rmpi::mpi.parLapply(pop, FUN=EvalGene, lF=lF)
 }
 
+#### The user defined code
 main<-function()
 {
 nSlaves<-startSlaves()
@@ -84,6 +86,8 @@ d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",
 }
 
 system.time(main())
+
+### End of user defined code
 
 message("Program finished.")
 

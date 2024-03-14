@@ -6,7 +6,6 @@
 #'              \item the algorithm specific crossover factory and 
 #'              \item the method in this factory. 
 #'              }
-
 #'
 #' @details The available methods for each algorithm are: 
 #'    \itemize{
@@ -33,6 +32,11 @@
 #'                   crossover factories.
 #' @return  Crossover Crossover function from the crossover factory of 
 #'                    the selected package.
+#'
+#' @family Configuration
+#'
+#' @examples
+#' sgXCrossoverFactory(algorithm="sga", method="CrossGene")
 #'
 #'@importFrom xegaGaGene xegaGaCrossoverFactory
 #'@importFrom xegaGpGene xegaGpCrossoverFactory

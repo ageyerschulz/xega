@@ -1,0 +1,1743 @@
+Loading module dependency 'compiler/intel/2021.4.0'.
+Loading module dependency 'numlib/mkl/2021.4.0'.
+FutureApply Benchmark Examples (HPC).
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+        (S) : 3 : AND(NOT(D1),D2) 3.012346 
+       (FS) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 1 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+     parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         S  64 1 0.6396961 1.0000000 0.05692840 1.0000000 0.4882033 1.0000000
+(FS)       FS  64 1 0.4646840 0.7264137 0.03402042 0.5976003 0.4054394 0.8304724
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 1 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 1 0.3282282  1.000000 0.03365564  1.000000 0.2687633   1.00000
+(FCallr)   FCallr  64 1 3.1029799  9.453726 0.04080009  1.212281 3.0354893  11.29428
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 2 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 2 0.4783969  1.000000 0.04210711  1.000000 0.4091961  1.000000
+(FCallr)   FCallr  64 2 2.9182127  6.099982 0.04500294  1.068773 2.8469279  6.957367
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 3 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 3  0.420773  1.000000 0.03800750  1.000000 0.3557961  1.000000
+(FCallr)   FCallr  64 3  3.276474  7.786797 0.04242015  1.116099 3.2076318  9.015365
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 4 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 4 0.4888842  1.000000 0.03748417  1.000000 0.4234812  1.000000
+(FCallr)   FCallr  64 4 3.1926091  6.530399 0.04023576  1.073407 3.1254709  7.380424
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 5 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 5 0.4852157  1.000000 0.03896189   1.00000 0.4179156  1.000000
+(FCallr)   FCallr  64 5 3.3363643  6.876044 0.04115582   1.05631 3.2685919  7.821177
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 6 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 6 0.5059862  1.000000 0.03845763 1.0000000 0.4400218  1.000000
+(FCallr)   FCallr  64 6 3.5690770  7.053704 0.03778458 0.9824988 3.5046618  7.964747
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 7 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 7 0.5740087  1.000000 0.03974342  1.000000 0.5066435  1.000000
+(FCallr)   FCallr  64 7 3.4334631  5.981552 0.05044198  1.269191 3.3567221  6.625412
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 8 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 8  0.655494  1.000000 0.04473519 1.0000000 0.5832312  1.000000
+(FCallr)   FCallr  64 8  3.542306  5.404025 0.04040504 0.9032047 3.4754319  5.958927
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 9 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 9 0.6876612  1.000000 0.04117179  1.000000 0.6183674  1.000000
+(FCallr)   FCallr  64 9 3.6189737  5.262728 0.04887199  1.187026 3.5438952  5.731051
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 10 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 10 0.5786347  1.000000 0.03904867  1.000000 0.5125792  1.000000
+(FCallr)   FCallr  64 10 3.8958268  6.732791 0.04233003  1.084032 3.8269207  7.466009
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 11 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 11  0.745116  1.000000 0.03798676 1.0000000 0.6789939  1.000000
+(FCallr)   FCallr  64 11  4.051857  5.437887 0.03758550 0.9894369 3.9877231  5.872988
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 12 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 12 0.6578579  1.000000 0.04018354  1.000000 0.5906694  1.000000
+(FCallr)   FCallr  64 12 4.2958021  6.529985 0.04316378  1.074165 4.2138751  7.134067
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 13 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 13 0.6682949  1.000000 0.03994226 1.0000000 0.6012545    1.0000
+(FCallr)   FCallr  64 13 4.4140589  6.604957 0.03859186 0.9661911 4.3486929    7.2327
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 14 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 14 0.8636281  1.000000 0.04279995  1.000000 0.7923195  1.000000
+(FCallr)   FCallr  64 14 4.5257280  5.240366 0.04723883  1.103712 4.4515593  5.618389
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 15 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 15 0.8761611  1.000000 0.04144979 1.0000000 0.8072417   1.00000
+(FCallr)   FCallr  64 15 4.7279859  5.396252 0.03850555 0.9289687 4.6626680   5.77605
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 16 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 16 0.9590061  1.000000 0.04313898 1.0000000 0.8877773   1.00000
+(FCallr)   FCallr  64 16 4.8288906  5.035308 0.03670692 0.8508992 4.7662368   5.36873
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 17 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 17 0.9941311  1.000000 0.0429523 1.0000000 0.9233873  1.000000
+(FCallr)   FCallr  64 17 4.8853447  4.914186 0.0379498 0.8835336 4.8212976  5.221317
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 18 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 18 0.8245871  1.000000 0.04318571 1.0000000 0.7538877  1.000000
+(FCallr)   FCallr  64 18 4.9812076  6.040851 0.04111600 0.9520742 4.9129763  6.516855
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 19 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 19  1.072418  1.000000 0.04137039  1.000000  1.004005   1.00000
+(FCallr)   FCallr  64 19  5.206443  4.854862 0.04440832  1.073432  5.135667   5.11518
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 20 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 20  0.891494  1.000000 0.04106307 1.0000000   0.82338  1.000000
+(FCallr)   FCallr  64 20  5.252818  5.892152 0.03840566 0.9352846   5.18745  6.300189
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 21 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 21  1.168692  1.000000 0.04825234 1.0000000  1.091944  1.000000
+(FCallr)   FCallr  64 21  5.583400  4.777477 0.04156661 0.8614423  5.515330  5.050928
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 22 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 22  1.113183  1.000000 0.03786135   1.00000  1.047785  1.000000
+(FCallr)   FCallr  64 22  5.856616  5.261144 0.03849554   1.01675  5.791143  5.527033
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 23 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 23 0.9701555  1.000000 0.04133201  1.000000 0.9014258  1.000000
+(FCallr)   FCallr  64 23 5.7909713  5.969117 0.05295587  1.281231 5.7080576  6.332254
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 24 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 24  1.314461   1.00000 0.04410291  1.000000  1.241435  1.000000
+(FCallr)   FCallr  64 24  6.365565   4.84272 0.03624082  0.821733  6.302831  5.077053
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 25 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 25  1.340014  1.000000 0.04304957 1.0000000  1.269083   1.00000
+(FCallr)   FCallr  64 25  5.929070  4.424632 0.03806019 0.8841014  5.859928   4.61745
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 26 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 26  1.114440  1.000000 0.04016709  1.000000  1.046663  1.000000
+(FCallr)   FCallr  64 26  6.555668  5.882478 0.04554820  1.133968  6.480321  6.191411
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 27 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 27  1.340591  1.000000 0.04262733  1.000000  1.267511  1.000000
+(FCallr)   FCallr  64 27  6.439069  4.803158 0.04032993  0.946105  6.364034  5.020891
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 28 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 28  1.503375  1.000000 0.04213238    1.0000  1.430209  1.000000
+(FCallr)   FCallr  64 28  7.221108  4.803264 0.04720092    1.1203  7.144952  4.995741
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 29 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 29  1.489195   1.00000 0.04077506 1.0000000  1.421135  1.000000
+(FCallr)   FCallr  64 29  7.216965   4.84622 0.03679156 0.9023055  7.151447  5.032206
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 30 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 30  1.575282  1.000000 0.04319024 1.0000000  1.503956  1.000000
+(FCallr)   FCallr  64 30  7.327240  4.651383 0.04266071 0.9877396  7.255811  4.824485
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 31 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 31  1.660461   1.00000 0.03796315 1.0000000  1.594943   1.00000
+(FCallr)   FCallr  64 31  7.419555   4.46837 0.03525043 0.9285432  7.357900   4.61327
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 32 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 32  1.463945  1.000000 0.04101300 1.0000000  1.396333  1.000000
+(FCallr)   FCallr  64 32  7.198585  4.917251 0.03741956 0.9123828  7.131855  5.107562
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 33 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 33  1.725783  1.000000 0.04190063 1.0000000  1.657338  1.000000
+(FCallr)   FCallr  64 33  7.613862  4.411831 0.03915906 0.9345696  7.548490  4.554588
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 34 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 34  1.782841  1.000000 0.03971124  1.000000  1.713744  1.000000
+(FCallr)   FCallr  64 34  7.855186  4.405994 0.03808022  0.958928  7.790537  4.545916
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 35 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 35  1.760518   1.00000 0.03704143   1.00000  1.692870  1.000000
+(FCallr)   FCallr  64 35  8.307956   4.71904 0.04013252   1.08345  8.241131  4.868141
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 36 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 36  1.882550  1.000000 0.04062462 1.0000000  1.785713  1.000000
+(FCallr)   FCallr  64 36  8.135341  4.321447 0.03626251 0.8926241  8.070779  4.519638
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 37 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 37  1.903785  1.000000 0.04419708 1.0000000  1.831588  1.000000
+(FCallr)   FCallr  64 37  8.206041  4.310382 0.03711462 0.8397527  8.136344  4.442236
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 38 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 38  1.993741  1.000000 0.03805017  1.000000  1.927278  1.000000
+(FCallr)   FCallr  64 38  8.236448  4.131152 0.04333758  1.138959  8.166877  4.237519
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 39 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 39  1.840057  1.000000 0.04364824 1.0000000  1.769258  1.000000
+(FCallr)   FCallr  64 39  8.892547  4.832756 0.04017663 0.9204639  8.826145  4.988614
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 40 popsize: 64 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC  64 40  2.056766  1.000000 0.04131675  1.000000  1.988539  1.000000
+(FCallr)   FCallr  64 40  8.574455  4.168902 0.03780222  0.914937  8.505998  4.277511
+====================================================================== 
+
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+        (S) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(D2)),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000473 
+       (FS) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 1 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+     parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         S 640 1  5.480369  1.000000 0.5625198 1.0000000  4.680422  1.000000
+(FS)       FS 640 1  5.689813  1.038217 0.5378990 0.9562313  4.918131  1.050788
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 1 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 1  5.314268  1.000000 0.6319535 1.0000000  4.444355  1.000000
+(FCallr)   FCallr 640 1 10.544427  1.984173 0.5646219 0.8934549  9.744478  2.192552
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 2 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 2  3.334439  1.000000 0.5537775  1.000000  2.537941  1.000000
+(FCallr)   FCallr 640 2  8.518580  2.554726 0.5571747  1.006135  7.727516  3.044798
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 3 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 3  3.453169  1.000000 0.5819726  1.000000  2.622779  1.000000
+(FCallr)   FCallr 640 3  8.166213  2.364846 0.6204307  1.066082  7.307091  2.786011
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 4 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 4  3.572268  1.000000 0.5722346 1.0000000  2.762338   1.00000
+(FCallr)   FCallr 640 4  7.748914  2.169186 0.5529628 0.9663218  6.963662   2.52093
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 5 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 5  3.683842  1.000000 0.6472237 1.0000000  2.799423   1.00000
+(FCallr)   FCallr 640 5  7.836369  2.127227 0.5516756 0.8523723  7.051299   2.51884
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 6 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 6  3.864041  1.000000 0.5943120  1.000000  3.026333  1.000000
+(FCallr)   FCallr 640 6  8.002860  2.071111 0.6343753  1.067411  7.132694  2.356877
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 7 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 7  3.897230  1.000000 0.5808215 1.0000000  3.076616  1.000000
+(FCallr)   FCallr 640 7  8.490834  2.178684 0.5794570 0.9976508  7.677151  2.495324
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 8 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 8  4.029258  1.000000 0.5654850   1.00000  3.217466  1.000000
+(FCallr)   FCallr 640 8  8.074784  2.004038 0.5961623   1.05425  7.244013  2.251465
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 9 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 9  4.166476  1.000000 0.5685339 1.0000000  3.357595  1.000000
+(FCallr)   FCallr 640 9  8.387150  2.013008 0.5525391 0.9718666  7.593337  2.261541
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 10 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 10  4.280804  1.000000 0.5649440  1.000000  3.478743  1.000000
+(FCallr)   FCallr 640 10  8.601437  2.009304 0.5903263  1.044929  7.773174  2.234478
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 11 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 11  4.241091  1.000000 0.6219754 1.0000000  3.382238  1.000000
+(FCallr)   FCallr 640 11  8.622941  2.033189 0.5807035 0.9336438  7.805284  2.307727
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 12 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 12  4.557583  1.000000 0.5832429  1.000000  3.737673  1.000000
+(FCallr)   FCallr 640 12  8.430718  1.849822 0.6204278  1.063756  7.574599  2.026555
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 13 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 13  4.596310  1.000000 0.5588114  1.000000  3.798954  1.000000
+(FCallr)   FCallr 640 13  9.202803  2.002216 0.5915811  1.058642  8.374937  2.204537
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 14 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 14  4.584783  1.000000 0.5527689  1.000000  3.793051  1.000000
+(FCallr)   FCallr 640 14  9.251986  2.017977 0.5683322  1.028155  8.447686  2.227148
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 15 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 15  4.812937  1.000000 0.5665393  1.000000  4.009178  1.000000
+(FCallr)   FCallr 640 15  9.029712  1.876134 0.5608954  0.990038  8.185762  2.041756
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 16 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 16  5.059381  1.000000 0.5925105 1.0000000  4.198870  1.000000
+(FCallr)   FCallr 640 16  9.451892  1.868191 0.5776250 0.9748774  8.638745  2.057397
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 17 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 17  4.912982  1.000000 0.5664322  1.000000  4.105004    1.0000
+(FCallr)   FCallr 640 17  9.272237  1.887293 0.6613176  1.167514  8.377903    2.0409
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 18 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 18  4.213059  1.000000 0.5707288 1.0000000  3.397877   1.00000
+(FCallr)   FCallr 640 18  9.833898  2.334147 0.5672596 0.9939214  9.024662   2.65597
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 19 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 19  4.531810  1.000000 0.6014178 1.0000000  3.689581  1.000000
+(FCallr)   FCallr 640 19  9.899187  2.184378 0.5895214 0.9802195  9.070518  2.458414
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 20 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 20  4.595463  1.000000 0.5812781     1.000  3.773282  1.000000
+(FCallr)   FCallr 640 20 10.244414  2.229245 0.6562631     1.129  9.348071  2.477438
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 21 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 21  5.192523   1.00000 0.5653548  1.000000  4.386868  1.000000
+(FCallr)   FCallr 640 21  9.784896   1.88442 0.6129479  1.084183  8.937172  2.037256
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 22 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 22  5.075523  1.000000 0.5580628  1.000000  4.280690  1.000000
+(FCallr)   FCallr 640 22 10.747249  2.117466 0.5666926  1.015464  9.942466  2.322631
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 23 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 23  5.245695  1.000000 0.5805206 1.0000000  4.318838  1.000000
+(FCallr)   FCallr 640 23 10.043366  1.914592 0.5508487 0.9488874  9.223564  2.135659
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 24 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 24  5.187177  1.000000 0.6166747 1.0000000  4.305493  1.000000
+(FCallr)   FCallr 640 24 10.028874  1.933397 0.5770812 0.9357952  9.188449  2.134122
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 25 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 25  5.054219  1.000000 0.6075711  1.000000  4.209172  1.000000
+(FCallr)   FCallr 640 25 10.766056  2.130113 0.6183271  1.017703  9.884217  2.348257
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 26 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 26  4.791638   1.00000 0.5833216  1.000000  3.958967  1.000000
+(FCallr)   FCallr 640 26 11.243193   2.34642 0.5914459  1.013928 10.392793  2.625127
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 27 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 27  4.956764  1.000000 0.6031618 1.0000000  4.115344    1.0000
+(FCallr)   FCallr 640 27 10.492670  2.116839 0.5839412 0.9681336  9.648836    2.3446
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 28 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 28  5.325477  1.000000 0.6341369 1.0000000  4.450152  1.000000
+(FCallr)   FCallr 640 28 11.075463  2.079713 0.5902736 0.9308299 10.219982  2.296547
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 29 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 29   5.30330  1.000000 0.5919576  1.000000  4.447466  1.000000
+(FCallr)   FCallr 640 29  11.27102  2.125285 0.6237171  1.053652 10.382845  2.334553
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 30 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 30   5.18327  1.000000 0.5640132 1.0000000   4.35529  1.000000
+(FCallr)   FCallr 640 30  11.57323  2.232805 0.5637853 0.9995959  10.74565  2.467263
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 31 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 31  5.170006  1.000000 0.6006744 1.0000000  4.301262  1.000000
+(FCallr)   FCallr 640 31 11.207907  2.167871 0.5827703 0.9701934 10.364805  2.409713
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 32 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 32  5.246783  1.000000 0.5771620  1.000000  4.402505  1.000000
+(FCallr)   FCallr 640 32 11.977796  2.282884 0.6952386  1.204581 11.039111  2.507461
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 33 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 33  5.342335  1.000000 0.7009254 1.0000000  4.396586  1.000000
+(FCallr)   FCallr 640 33 11.766100  2.202426 0.5821400 0.8305306 10.952875  2.491223
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 34 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 34  5.612754  1.000000 0.5988967 1.0000000   4.75047  1.000000
+(FCallr)   FCallr 640 34 12.099913  2.155789 0.5795135 0.9676352  11.26168  2.370645
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 35 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 35  5.454684  1.000000 0.5891054  1.000000  4.601236  1.000000
+(FCallr)   FCallr 640 35 12.899325  2.364816 0.7172313  1.217492 11.942340  2.595463
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 36 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 36  5.360888  1.000000 0.5925052  1.000000   4.49554  1.000000
+(FCallr)   FCallr 640 36 12.812265  2.389952 0.5561852  0.938701  12.02192  2.674187
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 37 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 37  5.444561  1.000000 0.5848439  1.000000  4.593519  1.000000
+(FCallr)   FCallr 640 37 13.093503  2.404878 0.5838654  0.998327 12.247277  2.666208
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 38 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 38  5.293379  1.000000 0.5779409  1.000000  4.478168  1.000000
+(FCallr)   FCallr 640 38 13.317522  2.515883 0.5845313  1.011403 12.492845  2.789722
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 39 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 39  5.565227  1.000000 0.5653043  1.000000  4.726403  1.000000
+(FCallr)   FCallr 640 39 13.343819  2.397713 0.5911374  1.045698 12.495208  2.643703
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+====================================================================== 
+XOR workers: 40 popsize: 640 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 640 40   5.71005  1.000000 0.6052809 1.0000000  4.869297  1.000000
+(FCallr)   FCallr 640 40  13.43588  2.353023 0.5628810 0.9299501 12.641933  2.596255
+====================================================================== 
+
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+        (S) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+       (FS) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 1 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+     parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         S 6400 1  65.76294  1.000000  6.859046  1.000000  56.02433  1.000000
+(FS)       FS 6400 1  90.06809  1.369587  7.439641  1.084647  79.87340  1.425691
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 1 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 1  83.24532  1.000000  6.292701  1.000000  74.23461   1.00000
+(FCallr)   FCallr 6400 1  89.69979  1.077536  6.385850  1.014803  80.76947   1.08803
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 2 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 2  32.93788  1.000000  6.495625 1.0000000  23.88870   1.00000
+(FCallr)   FCallr 6400 2  62.69938  1.903564  6.431927 0.9901938  53.75292   2.25014
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 3 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 3  33.78461  1.000000  6.607764  1.000000  24.63408  1.000000
+(FCallr)   FCallr 6400 3  58.12590  1.720484  6.886964  1.042253  48.71964  1.977733
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 4 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 4  34.40439  1.000000  6.525621  1.000000  25.31877  1.000000
+(FCallr)   FCallr 6400 4  58.79072  1.708815  6.840960  1.048323  49.43274  1.952415
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 5 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 5  34.39824  1.000000  6.620661 1.0000000  25.22858  1.000000
+(FCallr)   FCallr 6400 5  51.03999  1.483796  6.548787 0.9891439  41.98964  1.664368
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 6 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 6  34.69452  1.000000  6.484625  1.000000  25.63468  1.000000
+(FCallr)   FCallr 6400 6  58.22081  1.678098  6.660338  1.027097  49.09843  1.915313
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 7 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 7  34.87937  1.000000  6.509869  1.000000  25.80891  1.000000
+(FCallr)   FCallr 6400 7  50.28642  1.441724  7.056587  1.083983  40.72236  1.577841
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 8 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 8  35.31551   1.00000  6.419734  1.000000  26.30549  1.000000
+(FCallr)   FCallr 6400 8  56.70469   1.60566  6.739111  1.049749  47.42027  1.802676
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 9 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 9  36.73059  1.000000  6.946129 1.0000000  27.13203  1.000000
+(FCallr)   FCallr 6400 9  52.05108  1.417104  6.817346 0.9814597  42.64034  1.571587
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 10 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 10  35.72268  1.000000  6.505461  1.000000  26.63781  1.000000
+(FCallr)   FCallr 6400 10  57.59901  1.612394  6.599129  1.014398  48.50658  1.820967
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 11 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 11  36.57814  1.000000  6.594994  1.000000  27.43778  1.000000
+(FCallr)   FCallr 6400 11  56.06050  1.532623  6.685729  1.013758  46.85105  1.707538
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 12 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 12  37.10033  1.000000  6.707372  1.000000  27.87611  1.000000
+(FCallr)   FCallr 6400 12  50.59416  1.363712  6.852238  1.021598  41.22018  1.478692
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 13 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 13  37.44984   1.00000  6.760587  1.000000  28.12065  1.000000
+(FCallr)   FCallr 6400 13  55.16174   1.47295  6.814314  1.007947  45.83569  1.629966
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 14 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 14  37.71451  1.000000  6.900332 1.0000000  28.31163  1.000000
+(FCallr)   FCallr 6400 14  51.15094  1.356267  6.835597 0.9906185  41.76967  1.475354
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 15 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 15  38.05385  1.000000  7.085751 1.0000000  28.35555   1.00000
+(FCallr)   FCallr 6400 15  56.52627  1.485428  7.043892 0.9940925  46.96104   1.65615
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 16 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 16  38.03114  1.000000   6.78117 1.0000000  28.64484  1.000000
+(FCallr)   FCallr 6400 16  56.87172  1.495399   6.64710 0.9802292  47.70980  1.665563
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 17 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 17  38.91799  1.000000  6.955804  1.000000  29.29664  1.000000
+(FCallr)   FCallr 6400 17  55.10062  1.415814  7.495680  1.077615  45.05908  1.538029
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 18 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 18  35.58840  1.000000  6.924165  1.000000  25.85796  1.000000
+(FCallr)   FCallr 6400 18  50.33548  1.414379  7.010138  1.012416  40.57673  1.569216
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 19 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 19  36.80631  1.000000  7.328705 1.0000000  26.72984  1.000000
+(FCallr)   FCallr 6400 19  51.12569  1.389047  7.294211 0.9952933  41.19696  1.541235
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 20 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 20  36.22144  1.000000  7.035304 1.0000000  26.41664  1.000000
+(FCallr)   FCallr 6400 20  51.12487  1.411453  6.918798 0.9834399  41.63245  1.575993
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 21 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 21  37.05647  1.000000  7.042356  1.000000  27.11624  1.000000
+(FCallr)   FCallr 6400 21  52.51338  1.417117  7.160573  1.016787  42.64067  1.572514
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 22 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 22  36.49096  1.000000  6.767999  1.000000  26.94289  1.000000
+(FCallr)   FCallr 6400 22  52.38869  1.435662  6.876060  1.015967  42.77293  1.587541
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 23 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 23  39.88904   1.00000  7.529769 1.0000000  29.61685  1.000000
+(FCallr)   FCallr 6400 23  55.51236   1.39167  7.081908 0.9405213  45.83419  1.547571
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 24 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 24  37.89505  1.000000  7.345386 1.0000000  27.73988  1.000000
+(FCallr)   FCallr 6400 24  53.41363  1.409515  7.077397 0.9635159  43.73877  1.576746
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 25 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 25  38.12490  1.000000  7.341879 1.0000000  27.97423  1.000000
+(FCallr)   FCallr 6400 25  55.22528  1.448536  7.043518 0.9593617  45.61806  1.630717
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 26 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 26  39.84991  1.000000  6.726095 1.0000000  30.48581  1.000000
+(FCallr)   FCallr 6400 26  66.03641  1.657128  6.662248 0.9905076  56.84187  1.864536
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 27 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 27  41.41889  1.000000  6.825471 1.0000000  31.91807  1.000000
+(FCallr)   FCallr 6400 27  64.45362  1.556141  6.740253 0.9875147  55.14655  1.727753
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 28 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 28  40.93854  1.000000  6.988678 1.0000000  31.35750  1.000000
+(FCallr)   FCallr 6400 28  67.39819  1.646326  6.707975 0.9598346  58.15632  1.854622
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 29 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 29  42.19611  1.000000  6.914946 1.0000000  32.63336  1.000000
+(FCallr)   FCallr 6400 29  66.95710  1.586807  6.910641 0.9993775  57.50207  1.762064
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 30 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 30  41.37800   1.00000  6.640594  1.000000  32.14637  1.000000
+(FCallr)   FCallr 6400 30  64.15288   1.55041  6.784972  1.021742  54.79931  1.704681
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 31 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 31  42.02430  1.000000  6.709654    1.0000  32.65836  1.000000
+(FCallr)   FCallr 6400 31  64.62103  1.537706  6.945836    1.0352  55.12179  1.687831
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 32 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 32  42.17313  1.000000  6.764171 1.0000000  32.62009  1.000000
+(FCallr)   FCallr 6400 32  68.46242  1.623366  6.681281 0.9877457  59.25444  1.816501
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 33 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 33  43.51641  1.000000  6.936890 1.0000000  33.93319  1.000000
+(FCallr)   FCallr 6400 33  70.15828  1.612226  6.795426 0.9796069  60.85347  1.793332
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 34 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 34  42.49946  1.000000  7.014227  1.000000  32.86701  1.000000
+(FCallr)   FCallr 6400 34  59.56356  1.401513  7.026366  1.001731  49.87945  1.517614
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 35 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 35  40.68128   1.00000  6.900396 1.0000000  31.09025  1.000000
+(FCallr)   FCallr 6400 35  73.23567   1.80023  6.807405 0.9865239  63.72315  2.049618
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 36 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 36  42.61545  1.000000  6.490717  1.000000  33.54254  1.000000
+(FCallr)   FCallr 6400 36  68.64859  1.610885  6.631786  1.021734  59.41106  1.771215
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 37 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 37  44.72978  1.000000  6.670372  1.000000  35.51968  1.000000
+(FCallr)   FCallr 6400 37  68.51389  1.531729  7.148743  1.071716  58.79895  1.655391
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 38 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 38  42.80006  1.000000  7.024932 1.0000000  33.00264  1.000000
+(FCallr)   FCallr 6400 38  61.83950  1.444846  6.815518 0.9701898  52.53477  1.591835
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 39 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 39  42.42255  1.000000  7.361630 1.0000000  32.38599  1.000000
+(FCallr)   FCallr 6400 39  78.61235  1.853079  7.089812 0.9630763  68.67633  2.120557
+====================================================================== 
+
+XOR FutureMultiCore (FMC)
+...
+XOR FutureCallr (FCallr)
+...
+      (FMC) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+   (FCallr) : 4 : NOT(OR(NOT(OR(D1,D2)),AND(D1,D2))) 4.002066 
+====================================================================== 
+XOR workers: 40 popsize: 6400 generations: 2 crossrate: 0.2 mutrate: 0.2 
+====================================================================== 
+         parModel  pop  w tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(FMC)         FMC 6400 40  46.73492  1.000000  6.615762  1.000000  37.58343  1.000000
+(FCallr)   FCallr 6400 40  73.99151  1.583217  6.866262  1.037864  64.58380  1.718411
+====================================================================== 
+
+     user    system   elapsed 
+12748.149  1820.864  5080.954 
+Error while shutting down parallel: unable to terminate some child processes
+
+============================= JOB FEEDBACK =============================
+
+NodeName=uc2n289
+Job ID: 23250572
+Cluster: uc2
+User/Group: dj2333/iism
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 40
+CPU Utilized: 04:02:50
+CPU Efficiency: 7.10% of 2-08:58:40 core-walltime
+Job Wall-clock time: 01:25:28
+Memory Utilized: 7.28 GB
+Memory Efficiency: 45.50% of 16.00 GB

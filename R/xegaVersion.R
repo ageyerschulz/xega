@@ -12,7 +12,7 @@
 #' @export
 xegaVersion<-function()
 {
-	cat('Package xega. Version 1.0. As of 2024/02/29 \n')
+	cat('Package xega. Version 0.9.0.0. As of 2024/03/15 \n')
 	cat('(c) Andreas Geyer-Schulz\n')
 }
 

@@ -5,7 +5,14 @@
 #'                  Available: "sga", "sgde", "sgperm", "sge", sgp". 
 #'                  Default: "sga".
 #'
+#' @param method    Method. Default: "InitGene".
+#'
 #' @return InitGene function from the correct package.
+#'
+#' @family Configuration
+#'
+#' @examples
+#' sgXInitGeneFactory(algorithm="sgperm")
 #'
 #'@importFrom xegaGaGene xegaGaInitGene
 #'@importFrom xegaGpGene xegaGpInitGene
@@ -13,7 +20,7 @@
 #'@importFrom xegaDfGene xegaDfInitGene
 #'@importFrom xegaPermGene xegaPermInitGene
 #'@export
-sgXInitGeneFactory<-function(algorithm="sga")
+sgXInitGeneFactory<-function(algorithm="sga", method="InitGene")
 {
    if (algorithm=="sga") {f<-xegaGaGene::xegaGaInitGene}
    if (algorithm=="sgp") {f<-xegaGpGene::xegaGpInitGene}

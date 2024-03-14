@@ -54,7 +54,7 @@
 #' \itemize{ 
 #' \item \code{penv}: The problem environment. 
 #' \item \code{max}:  Maximize? Boolean. Default: \code{TRUE}.
-#' \item \code{grammar}: A grammar object. For the algorithms \code{"sgp"} and \code{"sga"}.   
+#' \item \code{grammar}: A grammar object. For the algorithms \code{"sgp"} and \code{"sge"}.   
 #' }
 #'
 #' @section Basic Parameters:
@@ -69,6 +69,14 @@
 #'
 #'  \code{crossrate} and \code{mutrate} specify the probability of 
 #'  applying the genetic operators crossover and mutation to a gene.
+#'
+#' Two more parameters are important:
+#'
+#' \itemize{
+#' \item \code{elitist}: Boolean. If \code{TRUE} (default), the fittest gene always survives.
+#' \item \code{replay}:  Integer. If \code{0} (default), a random seed of the random number generator is chosen.
+#'                       For exact replications of a run of a genetic algorithm, set replay to a positive integer.
+#' }
 #'
 #' @section Global and Local Parameters:
 #'
@@ -112,14 +120,6 @@
 #' the probability of applying the mutation operator to a gene 
 #' should be set to \code{1}.
 #'
-#' Two more parameters are important:
-#'
-#' \itemize{
-#' \item \code{elitist}: Boolean. If \code{TRUE} (default), the fittest gene always survives.
-#' \item \code{replay}:  Integer. If \code{0} (default), a random seed of the random number generator is chosen.
-#'                       For exact replications of a run of a genetic algorithm, set replay to a positive integer.
-#' }
-#'
 #' @section Global Adaptive Mechanisms:
 #'
 #' The adaptive mechanisms described in the following are based on threshold
@@ -130,7 +130,7 @@
 #  crossover and mutation rates, on a comparison of a gene's fitness with 
 #  a population statistic. 
 #'
-#' \strong{Scaling.} For adaptive scaling, select a dynamic scaling method,
+#' \strong{Adaptive Scaling.} For adaptive scaling, select a dynamic scaling method,
 #'                   e.g. \code{scaling="ThresholdScaling"}.
 #' A high selection pressure decreases the dispersion in the population.
 #' The parameter \code{scalingThreshold} is a numerical parameter which defines    
@@ -150,17 +150,17 @@
 #'  The default dispersion measure is the variance of the population fitness (\code{dispersionMeasure="var"}). 
 #'  However, other dispersion measures ("std", "mad", "cv", "range", "iqr") can be configured.  
 #'
-#'  Another dynamic scaling method is continuous scaling (\code{scaling="ContinuousScaling"}).
+#'  Another adaptive scaling method is continuous scaling (\code{scaling="ContinuousScaling"}).
 #'  The scaling exponent is adapted by a weighted ratio of dispersion measures. The weight 
 #'  of the exponent is set by \code{rdmWeight=1.1}, its default is \code{1.0}. Since the ratio 
 #'  of dispersion measures may be quite unstable, the default limits for the ratio are \code{drMin=0.5} 
 #'  and \code{drMax=2.0}. 
 #'
-#' \strong{Mutation and Crossover Probabilities}
+#' \strong{Individually Variable Mutation and Crossover Probabilities}
 #'
 #' The rationale of individually variable mutation and crossover rates is that selected genes 
 #' with a low fitness should be changed by a genetic operator with a higher probability. 
-#' This increases the chance of survival of the gene because of a fitness increase through  
+#' This increases the chance of survival of the gene because of the chance of a fitness increase through  
 #' crossover or mutation.
 #'
 #' Select an adaptive genetic operator rate:
@@ -332,17 +332,24 @@
 #' @param mutrate     Probability of applying mutation operator. Default: 1.0.
 #'                    (Global parameter)
 #'
+#' @param elitist     Boolean. If \code{TRUE}, 
+#'                    then keep best solution in population.
+#'                    Default: \code{TRUE}.
+#' @param replay      Integer. If \code{replay>0} then use \code{replay} 
+#'                        as seed of random number generator and  
+#'                        store it for exact repetition of run.
+#'                    Default: 0.
 ###
-#' @param maxdepth    The maximal depth of a derivation tree. Default: 7.
+#' @param maxdepth    The maximal depth of a derivation tree. Default: 7. (\code{"sgp"}).
 #' @param maxtrials   Maximal number of trials of finding subtrees with same root symbol.
-#'                    Default: 5.
+#'                    Default: 5. (\code{sgp}).
 #'
 #' @param codons      The maximal number of codons of derivations on a gene. 
-#'                    For grammatical evolution. Default: 25.
+#'                    Default: 25. (\code{"sge"}).
 #' @param codonBits   The number of bits of a codon.
-#'                    For grammatical evolution. Default: 0.
+#'                    Default: 0. (\code{"sge"}).
 #' @param codonPrecision Specify the method to set the number of bits of a
-#'                    codon:  
+#'                    codon (\code{"sge"}):  
 #'                    \itemize{
 #'                    \item "Min": Sufficient to code the maximal number 
 #'                                 of choices of production rules for 
@@ -355,15 +362,17 @@
 #'                                 that the choice rule bias for a non-terminal
 #'                                 is below \code{maxPBias}. 
 #'                    }
+#'          Argument of function factory 
+#'          \code{xegaGePrecisionFactory} in package \code{xegaGeGene}.
 #' @param maxPBias    The threshold of the choice rule bias. 
-#'                    Default: \code{0.01}.
+#'                    Default: \code{0.01}. (\code{sge}").
 #'
 #' @param evalmethod  Specifies the method of function evaluation:
 #'          \itemize{ 
 #'          \item  "EvalGeneU": The function is always evaluated. (Default)
 #'          \item  "EvalGeneR": The function is always evaluated. 
 #'                              Repairs of the gene by the decoder are 
-#'                              possible. 
+#'                              possible.
 #'          \item  "Deterministic": The function is evaluated only once.
 #'          \item  "Stochastic": The expected function value and its 
 #'                                  variance are incrementally updated.
@@ -376,7 +385,9 @@
 #'
 #' @param genemap     Gene map for decoding. Default: "Bin2Dec".
 #'                    The default value works only for algorithm "sga".
-#'                   
+#'                    Used as \code{method} argument of the function factory
+#'                    \code{sgXGeneMapFactory} of package \code{xega}.
+#'
 #'                    Available available options determined by 
 #'                    \code{algorithm}:
 #'                    \itemize{
@@ -388,7 +399,7 @@
 #'                    \item "Permutation": For permutations.
 #'                    }
 #'                    See the function factory 
-#'                    \code{xegaGaGeneMapFactory} in package xegaGaGene.
+#'                    \code{xegaGaGeneMapFactory} in package \code{xegaGaGene}.
 #'                    \item "sgp": Derivation tree. 
 #'                           Gene map is not used, but must be specified.
 #'                           We use \code{xegaGaGene::xegaGaGeneMapFactory} 
@@ -400,6 +411,8 @@
 #'                    \item "Bucket": The bucket rule (with the mLCM). 
 #'                          Problem: Mapping \code{1: 2^k} to \code{1:mLCMG}.
 #'                    }
+#'                    See the function factory 
+#'                    \code{xegaGeGeneMapFactory} in package \code{xegaGeGene}.
 #'                    \item "sgde": Real coded gene.
 #'                           We use \code{xegaDfGene::xegaDfGeneMapFactory} 
 #'                           with \code{method="Identity"}.
@@ -435,13 +448,13 @@
 #'                     is used.
 #'                     } 
 #'          Argument of function factory 
-#'          \code{CrossRateFactory} in package xegaPopulation.
+#'          \code{CrossRateFactory} in package \code{xegaPopulation}.
 #'
 #' @param uCrossSwap  The fraction of positions swapped in the
 #'                    parametrized uniform crossover operator.
 #'                    A local crossover parameter.
-#'                    Default: 0.2. 
-#'                    Used in packages xegaGaGene and xegaDfGene
+#'                    Default: 0.2. (\code{"sga"} and \code{"sgde"}). 
+#'                    Used in packages \code{xegaGaGene} and \code{xegaDfGene}
 #'                    for functions 
 #'                    \code{xegaGaUPCross2Gene},
 #'                    \code{xegaDfUPCross2Gene},
@@ -449,39 +462,42 @@
 #'                    \code{xegaDfUPCrossGene}.    
 #'
 #' @param mincrossdepth  minimal depth of exchange nodes (roots of subtrees
-#'                       swapped by crossover). 
+#'                       swapped by crossover). (\code{"sgp"}).
 #' @param maxcrossdepth  Maximal depth of exchange nodes (roots of subtrees
-#'                       swapped by crossover). 
-#'                     Used in package xegaGpGene functions 
+#'                       swapped by crossover). (\code{"sgp"}).
+#'                     Used in package \code{xegaGpGene} functions 
 #'                      \code{xegaGpCrossGene} and \code{xegaGpCross2Gene}
 #'                     in package xegaGpGene. 
 #'
 #' @param crossover   Crossover method. Default: "CrossGene".
 #'                    The choice of crossover methods depends on the 
 #'                    setting of the argument \code{algorithm}.
+#'                    Used as the \code{method} argument in function factory
+#'                    \code{sgXCrossoverFactory} of package \code{xega}.
+#'
 #'                    \itemize{
 #'                    \item \code{algorithm="sga"}:
 #'                    \code{crossover} is  argument of function factory 
-#'                    \code{xegaGaCrossoverFactory} in package xegaGaGene.
+#'                    \code{xegaGaCrossoverFactory} in package \code{xegaGaGene}.
 #'                    \itemize{
 #'                    \item Crossover operators with 1 kid:
 #'                    \itemize{
 #'                    \item "CrossGene"  one-point crossover. 
 #'                    \item "UCrossGene" uniform crossover.
 #'                    \item "UPCrossgene" parameterized uniform crossover.
-#'                          Local parameter: \code{uCrossSwap}
+#'                          Local parameter: \code{uCrossSwap}.
 #'                    }
 #'                    \item Crossover operators with 2 kids:
 #'                    \itemize{
 #'                    \item "Cross2Gene"  one-point crossover. 
 #'                    \item "UCross2Gene" uniform crossover.
 #'                    \item "UPCross2gene" parameterized uniform crossover.
-#'                          Local parameter: \code{uCrossSwap}
+#'                          Local parameter: \code{uCrossSwap}.
 #'                    }
 #'                    }
 #'                    \item \code{algorithm="sgp"}:
 #'                    \code{crossover} is  argument of function factory 
-#'                    \code{xegaGpCrossoverFactory} in package xegaGpGene.
+#'                    \code{xegaGpCrossoverFactory} in package \code{xegaGpGene}.
 #'                    \itemize{
 #'                    \item Crossover operators with 1 kid:
 #'                    \itemize{
@@ -500,7 +516,7 @@
 #'
 #'                    \item \code{algorithm="sgde"}:
 #'                    \code{crossover} is  argument of function factory 
-#'                    \code{xegaDfCrossoverFactory} in package xegaDfGene.
+#'                    \code{xegaDfCrossoverFactory} in package \code{xegaDfGene}.
 #'                    \itemize{
 #'                    \item Crossover operators with 1 kid:
 #'                    \itemize{
@@ -515,7 +531,7 @@
 #'
 #'                    \item \code{algorithm="sgperm"}:
 #'                    \code{crossover} is  argument of function factory 
-#'                    \code{xegaPermCrossoverFactory} in package xegaPermGene.
+#'                    \code{xegaPermCrossoverFactory} in package \code{xegaPermGene}.
 #'                    \itemize{
 #'                    \item Crossover operators with 1 kid:
 #'                    \itemize{
@@ -529,63 +545,66 @@
 #'                    }
 #'    
 #' @param mutrate2    Mutation rate. Default: 1.0.
+#'                    (Global parameter).
 #'
 #' @param ivmutrate "Const" or "IV" (individually variable). 
 #'                     Default: "Const".
 #'
 #' @param bitmutrate     Bit mutation rate. Default: 0.005.
-#'                    A local mutation parameter.
-#'                     Used in package xegaGaGene functions 
+#'                    A local mutation parameter. (\code{"sga"} and \code{"sge"}).
+#'                     Used in package \code{xegaGaGene} functions 
 #'                      \code{MutateGene}
 #'                      \code{IVAdaptiveMutateGene}
 #'
 #' @param bitmutrate2    Bit mutation rate for genes
 #'                       with ``below average'' fitness. Default: 0.01.
-#'                    A local mutation parameter.
-#'                     Used in package xegaGaGene functions 
+#'                    A local mutation parameter. (\code{"sga"} and \code{"sge"}).
+#'                     Used in package \code{xegaGaGene} functions 
 #'                      \code{IVAdaptiveMutateGene}
 #' 
 #' @param maxmutdepth   Maximal depth of a derivation tree inserted 
-#'                      by mutation. Default: 3.
+#'                      by mutation. Default: 3. (\code{"sgp"}).
 #' @param minmutinsertiondepth   Minimal depth at which an insertion tree
-#'                      is inserted. Default: 1.
+#'                      is inserted. Default: 1. (\code{"sgp"}).
 #' @param maxmutinsertiondepth   Maximal depth at which an insertion tree
-#'                      is inserted. Default: 7. 
-#'                     Used in package xegaGpGene functions 
-#'                      \code{xegaGpMutateGene}
+#'                      is inserted. Default: 7. (\code{"sgp"}).
+#'                     Used in package \code{xegaGpGene} function
+#'                      \code{xegaGpMutateGene}.
 #'
 #' @param lambda        Decay rate. Default: 0.05.
-#'                    A local mutation parameter.
-#'                     Used in package xegaPermGene functions 
-#'                      \code{xegaPermMutateGenekInversion}
+#'                    A local mutation parameter. (\code{"sgperm"}).
+#'                     Used in package \code{xegaPermGene} function
+#'                      \code{xegaPermMutateGenekInversion}.
 #' 
 #' @param max2opt     Maximal number of trials to find  
 #'                    an improvement by a random edge exchange 
-#'                    in a permutation. Default: \code{100}.
-#'                     Used in package xegaPermGene functions 
-#'                      \code{xegaPermMutateGene2Opt}
+#'                    in a permutation. Default: \code{100}. (\code{"sgperm"}).
+#'                     Used in package \code{xegaPermGene} function
+#'                      \code{xegaPermMutateGene2Opt}.
 #'                    and  \code{xegaPermMutateGeneOptLK}.
 #'
-#' @param scalefactor1  Scale factor for differential mutation operator (Default: 0.9).
-#' @param scalefactor2  Scale factor for differential mutation operator (Default: 0.2).
-#' @param scalefactor   Method for setting scale factor. 
+#' @param scalefactor1  Scale factor for differential mutation operator (Default: 0.9). (\code{"sgde"}).
+#' @param scalefactor2  Scale factor for differential mutation operator (Default: 0.2). (\code{"sgde"}).
+#' @param scalefactor   Method for setting scale factor (\code{"sgde"}):
 #'                      \itemize{
 #'                      \item "Const":  constant scale factor. 
 #'                      \item "Uniform": a random scale factor in 0.000001 to 1.0.
 #'                       }
-#' @param cutoffFit   Cutoff for fitness.      Default: 0.5. 
-#'                     Used in package xegaGaGene functions 
-#'                      \code{IVAdaptiveMutateGene}
+#' @param cutoffFit   Cutoff for fitness.      Default: 0.5. (\code{"sga"} and \code{"sge"}).
+#'                     Used in package \code{xegaGaGene} function
+#'                      \code{IVAdaptiveMutateGene}.
 #'
 #' @param mutation    Label specifies mutation method
 #'                    dependend on \code{algorithm}. Default: "MutateGene".
 #'                    The (global) probability of calling a mutation method
 #'                    is specified by \code{mutrate} and \code{mutrate2}.
+#'                    Used as \code{method} argument of function factory 
+#'                    \code{sgXMutationFactory} package \code{xega}. 
 #'       
 #'                    \itemize{
 #'                    \item \code{algorithm="sga"}:
 #'                    \code{mutation} is  argument of function factory 
-#'                    \code{xegaGaMutationFactory} in package xegaGaGene.
+#'                    \code{xegaGaMutationFactory} in package \code{xegaGaGene}.
 #'                    \itemize{
 #'                    \item "MutateGene": Bitwise mutation. 
 #'                          Local parameter: \code{bitmutrate}.
@@ -606,7 +625,7 @@
 #'                    }
 #'                    \item \code{algorithm="sgp"}:
 #'                    \code{mutation} is  argument of function factory 
-#'                    \code{xegaGpMutationFactory} in package xegaGpGene.
+#'                    \code{xegaGpMutationFactory} in package \code{xegaGpGene}.
 #'
 #'                    \itemize{
 #'                    \item "MutateGene": Random insertion of 
@@ -618,18 +637,18 @@
 #'                    \item \code{algorithm="sge"}:
 #'                    \code{mutation} is  argument of function factory 
 #'                    \code{xegaGaMutationFactory}.
-#'                    Nothing specific to grammatical evolution implented.
+#'                    Nothing specific to grammatical evolution implemented.
 #'
 #'                    \item \code{algorithm="sgde"}:
 #'                    \code{mutation} is  argument of function factory 
-#'                    \code{xegaDfMutationFactory} in package xegaDfGene.
+#'                    \code{xegaDfMutationFactory} in package \code{xegaDfGene}.
 #'
 #'                    \itemize{
 #'                    \item "MutateGene": Add the scaled difference 
 #'                          of the parameters of two randomly selected
 #'                          to a gene.
 #'                          Local parameters: Choice of function for 
-#'                                      scalefactor as well as
+#'                                      \code{scalefactor} as well as
 #'                                            \code{scalefactor1}  
 #'                                            and \code{scalefactor2}.
 #'                          Function used: \code{xegaDfGene::xegaDfMutateGeneDE}.
@@ -638,7 +657,7 @@
 #'
 #'                    \item \code{algorithm="sgperm"}:
 #'                    \code{mutation} is  argument of function factory 
-#'                    \code{xegaPermMutationFactory} in package xegaPermGene.
+#'                    \code{xegaPermMutationFactory} in package \code{xegaPermGene}.
 #'
 #'        \itemize{
 #'        \item "MutateGene": 
@@ -667,8 +686,12 @@
 #'                     For algorithm "sgde", \code{replication} must be 
 #'                     set to "DE".
 #'
+#'                    Used as the \code{method} argument of the 
+#'                    function factory \code{sgXReplicationFactory} 
+#'                    of package \code{xega}.
+#'
 #' @param offset  Offset used in proportional selection. Default: 1. 
-#'            Used in the following functions of package xegaSelectGene: 
+#'            Used in the following functions of package \code{xegaSelectGene}: 
 #'            \code{ScaleFitness},
 #'            \code{PropFitOnLn},
 #'            \code{PropFit},
@@ -687,7 +710,7 @@
 #'
 #' @param eps         Epsilon in proportional 
 #'                    fitness difference selection. Default: 0.01.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'                    \code{PropFitDiffM}.
 #'
 ##                    \code{\link[xegaSelectGene:PropFitDiffM]{PropFitDiffM}}.
@@ -701,12 +724,12 @@
 #'                    \item "ContinuousScaling" (Dynamic).
 #'                    }
 #'                    Argument of function factory 
-#'                    \code{ScalingFactory} in package xegaSelectGene.
+#'                    \code{ScalingFactory} in package \code{xegaSelectGene}.
 #'
 #' @param scalingExp  Scaling exponent \code{k} in \code{fit^k}.
 #'                    With "ConstantScaling": 0 =< k. 
 #'                    With "ThresholdScaling": 1 < k. (Default: 1)
-#'                    Used in package xegaSelectGene, functions
+#'                    Used in package \code{xegaSelectGene}, functions
 #'             \code{ScalingFitness},
 #'             \code{ThresholdScaleFitness}.
 #'
@@ -715,7 +738,7 @@
 #'
 #' @param scalingExp2 Scaling exponent 
 #'                    for "ThresholdScaling": 0 <= k <1. (Default:1)
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'             \code{ThresholdScaleFitness}.
 #'
 ##             \code{\link[xegaSelectGene:ThresholdScaleFitness]{ThresholdScaleFitness}}.
@@ -724,25 +747,25 @@
 #'                    If  ratio of dispersion measures is in 
 #'                    [(1-scalingThreshold), 1+scalingThreshold)], 
 #'                    fitness is not scaled.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'             \code{ThresholdScaleFitness}.
 #'
 ##             \code{\link[xegaSelectGene:ThresholdScaleFitness]{ThresholdScaleFitness}}.
 #'
 #' @param rdmWeight   Numerical constant. Default: 1.0. Weight of 
 #'                    ratio of dispersion measures in continuous scaling.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'             \code{ContinuousScaleFitness}.
 #'
 ##             \code{\link[xegaSelectGene:ContinuousScaleFitness]{ContinuousScaleFitness}}.
 #'
 #' @param drMin       Minimal allowable dispersion ratio. Default: 0.5.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'             \code{DispersionRatio}.
 ##             \code{\link[xegaSelectGene:DispersionRatio]{DispersionRatio}}.
 #'
 #' @param drMax       Maximal allowable dispersion ratio. Default: 2.0.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'             \code{DispersionRatio}.
 ##             \code{\link[xegaSelectGene:DispersionRatio]{DispersionRatio}}.
 #'
@@ -752,17 +775,17 @@
 #'                    Available dispersion measures: 
 #'                    "var, "std", "mad", "cv", "range", "iqr".
 #'                    Argument of function factory 
-#'                    \code{DispersionMeasureFactory} in package xegaSelectGene.
+#'                    \code{DispersionMeasureFactory} in package \code{xegaSelectGene}.
 #'
 #' @param scalingDelay The ratio of dispersion measures compares the current
 #'                     population dispersion at t with the population dispersion 
 #'                     at t-scalingdelay. Default: 1.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'             \code{DispersionRatio}.
 ##             \code{\link[xegaSelectGene:DispersionRatio]{DispersionRatio}}.
 #'
 #' @param tournamentSize   Tournament size. Default: 2. 
-#'                    Used in package xegaSelectGene functions
+#'                    Used in package \code{xegaSelectGene} functions
 #'                    \code{SelectTournament},
 #'                    \code{SelectSTournament}.
 ##                    \code{\link[xegaSelectGene:SelectTournament]{SelectTournament}},
@@ -772,14 +795,14 @@
 #'        Whitley's linear rank selection
 #'        with selective pressure. Default: 1.5. Near 1.0: almost
 #'        uniform selection.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'                    \code{SelectLRSelective},
 #'
 #' @param maxTSR    Controls selection pressure for 
 #'                  Grefenstette and Baker's linear rank selection 
 #'                  method. Should be higher than 1.0 and lower equal 2.0.
 #'                  Default: 1.5.
-#'                    Used in package xegaSelectGene function
+#'                    Used in package \code{xegaSelectGene} function
 #'         \code{SelectLinearRankTSR}.
 ##         \code{\link[xegaSelectGene:SelectLinearRankTSR]{SelectLinearRankTSR}},
 #'
@@ -801,13 +824,13 @@
 #' \item Rank selection: "LRSelective" (fastest), "LRTSR".
 #' }
 #'                    Argument of function factory 
-#'                    \code{SelectGeneFactory} in package xegaSelectGene.
+#'                    \code{SelectGeneFactory} in package \code{xegaSelectGene}.
 #'
 #' @param selectionContinuation  Boolean. If \code{TRUE}, 
 #'        precomputes selection indices for next generation once and
 #'        transforms selection function to index lookup continuation.
 #'        Default: \code{TRUE}.
-#'        Used in package xegaPopulation function xegaNextPopulation.
+#'        Used in package \code{xegaPopulation} function \code{xegaNextPopulation}.
 #'
 #' @param accept   Acceptance rule for new gene. Default: "All".
 #'        \itemize{
@@ -837,7 +860,7 @@
 #'                }
 #'            }
 #'                    Argument of function factory 
-#'                    \code{AcceptFactory} in package xegaPopulation.
+#'                    \code{AcceptFactory} in package \code{xegaPopulation}.
 #'
 #' @param alpha    \code{1} minus the  discount rate for temperature. (Default: 0.99).
 #'                    (Used in cooling schedule at the end of main GA-loop.)
@@ -861,13 +884,10 @@
 #'                 \item "TrigonometricAdditive" calls \code{TrigonometricAdditiveCooling}
 #'                 }
 #'                    Argument of function factory 
-#'                    \code{CoolingFactory} in package xegaPopulation.
+#'                    \code{CoolingFactory} in package \code{xegaPopulation}.
 #'
 #' @param coolingPower  Exponent for PowerMultiplicative cooling schedule. 
 #'                     (Default: 1. This is called linear multiplicative cooling.)
-#'
-#' @param elitist    If \code{TRUE}, then keep best solution in population.
-#'        Default: \code{TRUE}.
 #'
 #' @param verbose  
 #'        The value of \code{verbose} (Default: 1) controls the
@@ -905,11 +925,6 @@
 #'                     for computing termination interval. Default: 0.01
 #'                  See \link{Parabola2DEarly}.
 #'
-#' @param replay  Integer. If \code{replay>0} then use \code{replay} 
-#'                        as seed of random number generator and  
-#'                        store it for exact repetition of run.
-#'        Default: 0.
-#'
 #' @param cores   Number of cores used for multi core parallel execution.
 #'                (Default: NA. NA means that the number of cores 
 #'                is set by \code{parallelly:availableCores()} 
@@ -945,7 +960,7 @@
 #'        \code{xegaResult<time stamp>.rds}. Default: FALSE
 #'
 #' @param path
-#'        Path. Default: ""
+#'        Path. Default: \code{""}.
 #'
 #' @return Result object. A named list of 
 #'         \enumerate{
@@ -1053,7 +1068,11 @@ xegaRun<-function(
       generations=20,     # Number of generations
       crossrate=0.2,      # (Probability crossover operator is used)
       mutrate=1.0,        # (Probability mutation operator is used.)
-###
+      elitist=TRUE,       # TRUE: Best gene always survives.
+      replay=0,           # replay=0: current seed of random number generator.
+                          # replay>0: use small integer. 
+                          #           Same integer = same seed.	
+### 
 	      maxdepth=7,          # maximal depth of a derivation tree
 	      maxtrials=5,         # maximal of number of trials of 
                                    # finding subtrees with common root
@@ -1152,8 +1171,6 @@ xegaRun<-function(
 		 temp0=40,           # Higher than generations.
 		 tempN=0.01,         # Final temperature.
 		                     #
-		 elitist=TRUE,       # TRUE: Best gene always survives.
-		                     #
 		 verbose=1,          # Maximal output per generation displayed.
 		                     #
 		 logevals=FALSE,     # If TRUE: log evals and parms to file
@@ -1162,10 +1179,6 @@ xegaRun<-function(
 		 early=FALSE,        # FALSE: Ignore code for early termination.
 		 terminationEps=0.01, # fraction of known optimal solution
 		                      # for termination interval
-		 replay=0,           # replay=0: current seed of random 
-	                             #           number generator.
-                                     # replay>0: use small integer. 
-                                     #           same integer = same seed.	
                 cores=NA,             # Number of cores.
 		executionModel="Sequential", 
 		                     # Execution models are:
@@ -1174,8 +1187,8 @@ xegaRun<-function(
 		                     # "Cluster"
 		                     # needs master, workers, port.
 		                     # default: my minimal configuration.
-                uParApply=NULL,        # user-defined execution model. 
-		Cluster=NULL,          # A cluster object generated by 
+                uParApply=NULL,      # user-defined execution model. 
+		Cluster=NULL,        # A cluster object generated by 
                                      # parallel::makeCluster() or
                                      # parallelly::makeCluster() or
 		profile=FALSE,       # If TRUE: Measure time spent in

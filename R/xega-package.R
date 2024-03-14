@@ -1,5 +1,6 @@
 
-#' The main program(s) of the simple genetic algorithm for binary coded genes.
+#' The main program of the e(x)tended (e)volutionary and  (g)enetic (a)lgorithm
+#' (xega) package.
 #' 
 #' @section Layers (in top-down direction):
 #'
@@ -44,12 +45,40 @@
 #'
 #' @section Parallel and Distributed Execution:
 #'
-#' TBD
+#' Parallel and distributed execution is supported for
+#' several combinations of hard- and software architectures
+#' by overloading the \code{lapply()}-function used in the 
+#' evaluation of a fitness function for a population of genes
+#' with a parallel version with the abstract interface:
+#'  
+#' \code{parallelApply(pop, EvalGene, lF)}
+#'
+#' where \code{pop} is a list of genes, \code{EvalGene} the evaluation 
+#' function for the fitness of a gene, and \code{lF} the local function
+#' configuration of the algorithm.
+#'
+#' The several implementations of a \code{parallelApply()} function 
+#' are provided. The implementations use
+#'
+#' \itemize{
+#' \item the function \code{parallel::mclapply()} for multicore 
+#'       parallelization by the fork mechanism of Unix-based operating systems 
+#'       on a single machine.
+#' \item the function \code{parallel::parLapply()} for socket connections
+#'       on a single or multiple machines on the Internet.
+#' \item the function \code{future.apply::future_lapply()} for 
+#'       asynchronous parallelization based on future packages.
+#' }
+#'
+#' In addition, user-defined parallel apply functions can be provided.
+#' Example scripts for using the \code{Rmpi::mpi.parLapply()} function
+#' of the \code{Rmpi} package are provided for a HPC environment with Slurm
+#' as well as on a notebook. 
 #'
 #' @section The Architecture of the xegaX-Packages:
 #' 
 #' The xegaX-packages are a family of R-packages which implement 
-#' eXtended Evolutionary and Genetic Algorithms (xega).  
+#' e(x)tended (e)volutionary and (g)enetic (a)lgorithms (xega).  
 #' The architecture has 3 layers, 
 #' namely the user interface layer,
 #' the population layer, and the gene layer: 

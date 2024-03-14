@@ -24,6 +24,8 @@
 #'
 #' @return GeneMap function for the selected algorithm from the correct package.
 #'
+#' @family Configuration
+#'
 #' @examples
 #' sgXGeneMapFactory(algorithm="sga", method="Bin2Dec")
 #'

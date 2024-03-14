@@ -1,0 +1,251 @@
+FutureApply Benchmark Examples (Notebook).
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 3 : OR(D1,D2) 3.027778 
+       (FS) : 3 : AND(NOT(D1),D2) 3.012346 
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+      (FMS) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+(FCcluster) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 4 popsize: 64 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S)  tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)        0.4204462 1.0000000 0.04531932 1.0000000 0.3535199 1.0000000
+(FS)       0.2761710 0.6568522 0.02671957 0.5895845 0.2271073 0.6424172
+(FMC)      0.3625126 0.8622093 0.03501439 0.7726151 0.3062818 0.8663778
+(FMS)      2.2531612 5.3589768 0.02503157 0.5523377 2.2076716 6.2448296
+(FCallr)   1.7382696 4.1343452 0.03201580 0.7064493 1.6863058 4.7700446
+(FCluster) 2.3782938 5.6565953 0.02622962 0.5787735 2.3300755 6.5910728
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+       (FS) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+      (FMS) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+(FCcluster) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+====================================================================== 
+XOR workers: 4 popsize: 640 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         3.867603 1.0000000 0.4091125  1.000000  3.273538 1.0000000
+(FS)        4.130058 1.0678600 0.5221102  1.276202  3.424331 1.0460644
+(FMC)       2.506150 0.6479855 0.4746978  1.160311  1.847525 0.5643817
+(FMS)       5.644054 1.4593159 0.5120711  1.251664  4.951600 1.5126143
+(FCallr)    5.252588 1.3580993 0.4552603  1.112800  4.615242 1.4098637
+(FCluster)  5.985893 1.5477011 0.4462378  1.090746  5.350785 1.6345572
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+       (FS) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+      (FMC) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+      (FMS) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+   (FCallr) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+(FCcluster) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+====================================================================== 
+XOR workers: 4 popsize: 6400 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         43.95325 1.0000000  4.631199 1.0000000  37.20609 1.0000000
+(FS)        59.59493 1.3558709  4.546293 0.9816664  52.91338 1.4221698
+(FMC)       22.83739 0.5195836  4.645676 1.0031259  16.16227 0.4343985
+(FMS)       37.04248 0.8427699  4.693381 1.0134268  30.30560 0.8145332
+(FCallr)    38.55408 0.8771611  4.754575 1.0266403  31.73089 0.8528413
+(FCluster)  37.23476 0.8471446  4.534974 0.9792225  30.51230 0.8200888
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 3 : OR(D1,D2) 3.027778 
+       (FS) : 3 : AND(NOT(D1),D2) 3.012346 
+      (FMC) : 3 : AND(NOT(D1),D2) 3.012346 
+      (FMS) : 3 : AND(NOT(D1),D2) 3.012346 
+   (FCallr) : 3 : AND(NOT(D1),D2) 3.012346 
+(FCcluster) : 3 : AND(NOT(D1),D2) 3.012346 
+====================================================================== 
+XOR workers: 8 popsize: 64 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s)  tMain/(S)  tNext (s) tNext/(S) tEval (s)  tEval/(S)
+(S)        0.3182807  1.0000000 0.04206848 1.0000000 0.2559533  1.0000000
+(FS)       0.2656224  0.8345538 0.02638221 0.6271253 0.2182777  0.8528028
+(FMC)      0.5396333  1.6954634 0.03453922 0.8210238 0.4823773  1.8846300
+(FMS)      4.2608199 13.3869881 0.02401638 0.5708877 4.2158203 16.4710520
+(FCallr)   2.5203903  7.9187657 0.03290009 0.7820604 2.4666660  9.6371716
+(FCluster) 4.9233842 15.4686861 0.02385211 0.5669829 4.8794110 19.0636759
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(NOT(NOT(AND(D1,D1))),AND(D1,OR(D2,AND(D2,D2)))))))) 4.000384 
+       (FS) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+      (FMC) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+      (FMS) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+   (FCallr) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+(FCcluster) : 4 : NOT(NOT(AND(OR(D2,D1),NOT(AND(D2,AND(D1,OR(D2,AND(D2,D2)))))))) 4.000625 
+====================================================================== 
+XOR workers: 8 popsize: 640 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         3.388045 1.0000000 0.3972139  1.000000  2.807067 1.0000000
+(FS)        3.991210 1.1780276 0.4297967  1.082028  3.380159 1.2041603
+(FMC)       3.119128 0.9206276 0.4832165  1.216515  2.453324 0.8739812
+(FMS)       7.655997 2.2597094 0.4045751  1.018532  7.073349 2.5198360
+(FCallr)    6.042608 1.7835088 0.4716759  1.187461  5.391606 1.9207256
+(FCluster)  8.317592 2.4549827 0.4129615  1.039645  7.719565 2.7500463
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+       (FS) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+      (FMC) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+      (FMS) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+   (FCallr) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+(FCcluster) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+====================================================================== 
+XOR workers: 8 popsize: 6400 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         43.03945 1.0000000  4.666167 1.0000000  36.35618 1.0000000
+(FS)        59.02568 1.3714321  4.525957 0.9699518  52.47134 1.4432579
+(FMC)       23.89876 0.5552758  4.383422 0.9394052  17.44667 0.4798818
+(FMS)       37.74903 0.8770798  5.085739 1.0899178  30.65398 0.8431575
+(FCallr)    37.51713 0.8716916  5.150019 1.1036935  30.25544 0.8321953
+(FCluster)  37.66443 0.8751141  4.627331 0.9916771  30.89994 0.8499227
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 4 : AND(OR(D2,D1),NOT(AND(D1,D2))) 4.00277 
+       (FS) : 4 : AND(OR(D2,D1),NOT(AND(D2,AND(D1,D2)))) 4.001736 
+      (FMC) : 4 : AND(OR(D2,D1),NOT(AND(D2,AND(D1,D2)))) 4.001736 
+      (FMS) : 4 : AND(OR(D2,D1),NOT(AND(D2,AND(D1,D2)))) 4.001736 
+   (FCallr) : 4 : AND(OR(D2,D1),NOT(AND(D2,AND(D1,D2)))) 4.001736 
+(FCcluster) : 4 : AND(OR(D2,D1),NOT(AND(D2,AND(D1,D2)))) 4.001736 
+====================================================================== 
+XOR workers: 8 popsize: 64000 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         492.2545 1.0000000  80.48080 1.0000000  388.0848 1.0000000
+(FS)        673.4471 1.3680870  80.29829 0.9977322  571.0791 1.4715315
+(FMC)       312.7919 0.6354271  95.46547 1.1861893  190.9205 0.4919556
+(FMS)       451.2378 0.9166758 114.47792 1.4224251  313.3054 0.8073117
+(FCallr)    464.1139 0.9428331 124.89803 1.5518984  314.7812 0.8111144
+(FCluster)  446.5638 0.9071807 108.98380 1.3541589  309.2717 0.7969176
+====================================================================== 
+
+[1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+XOR Sequential (S)
+...
+XOR FutureSequential (FS)
+...
+XOR FutureMultiCore (FMC)
+...
+XOR FutureMultiSession (FMS)
+...
+XOR FutureCallr (FCallr)
+...
+XOR FutureCluster (FCluster)
+...
+        (S) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+       (FS) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+      (FMC) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+      (FMS) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+   (FCallr) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+(FCcluster) : 4 : OR(AND(NOT(D2),NOT(NOT(NOT(NOT(D1))))),AND(D2,NOT(NOT(NOT(D1))))) 4.000625 
+====================================================================== 
+XOR workers: 16 popsize: 6400 generations: 2 crossrate: 0.3 mutrate: 0.1 
+====================================================================== 
+           tMain (s) tMain/(S) tNext (s) tNext/(S) tEval (s) tEval/(S)
+(S)         43.89322 1.0000000  4.563139  1.000000  37.16032 1.0000000
+(FS)        58.24799 1.3270385  4.780269  1.047583  51.48303 1.3854300
+(FMC)       34.13556 0.7776956  5.016228  1.099293  27.09212 0.7290603
+(FMS)       43.37889 0.9882822  4.827236  1.057876  36.54622 0.9834741
+(FCallr)    43.91585 1.0005157  5.306246  1.162850  36.63596 0.9858893
+(FCluster)  48.15825 1.0971685  5.590480  1.225139  40.15571 1.0806072
+====================================================================== 
+
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[16] TRUE
+Error while shutting down parallel: unable to terminate some child processes

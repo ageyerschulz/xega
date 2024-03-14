@@ -5,7 +5,14 @@
 #'
 #' @param algorithm  "sga", "sgde", "sgperm", "sge", sgp". Default: "sga".
 #'
+#' @param method     Method. Default: "DecodeGene". 
+#'
 #' @returns Decode function for the selected algorithm from the correct package.
+#'
+#' @family Configuration
+#'
+#' @examples
+#' sgXDecodeGeneFactory(algorithm="sgperm", method="DecodeGene")
 #'
 #'@importFrom xegaGaGene xegaGaDecodeGene
 #'@importFrom xegaGpGene xegaGpDecodeGene
@@ -13,7 +20,7 @@
 #'@importFrom xegaDfGene xegaDfDecodeGene
 #'@importFrom xegaPermGene xegaPermDecodeGene
 #'@export
-sgXDecodeGeneFactory<-function(algorithm="sga")
+sgXDecodeGeneFactory<-function(algorithm="sga", method="DecodeGene")
 {
    if (algorithm=="sga") {f<-xegaGaGene::xegaGaDecodeGene}
    if (algorithm=="sgp") {f<-xegaGpGene::xegaGpDecodeGene}

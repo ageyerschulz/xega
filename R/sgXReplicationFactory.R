@@ -14,6 +14,12 @@
 #'     \item "sgde": 
 #'        "DE".
 #'  }
+#'
+#' @family Configuration
+#'
+#' @examples
+#' sgXReplicationFactory(algorithm="sgp", method="Kid1")
+#'
 #' @return A replication function for the algorithm from the correct package.
 #'
 #'@importFrom xegaGaGene xegaGaReplicationFactory
