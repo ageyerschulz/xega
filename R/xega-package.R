@@ -85,8 +85,9 @@
 #' 
 #' \itemize{
 #' \item
-#' The user interface layer (package \code{xega}) 
-#' provides a function call interface and configuration support
+#' The user interface layer (package \code{xega}
+#' <https://CRAN.R-project.org/package=xega> 
+#' ) provides a function call interface and configuration support
 #' for several algorithms: genetic algorithms (sga), 
 #' permutation-based genetic algorithms (sgPerm), 
 #' derivation free algorithms as e.g. differential evolution (sgde), 

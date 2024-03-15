@@ -231,9 +231,108 @@
 #' 
 #' @section Scaling:
 #' 
+#' In genetic algorithms scaling of the fitness functions has the purpose of increasing or decreasing 
+#' the selection pressure. Two classes of scaling methods are available:
+#'
+#' \itemize{
+#' \item Constant scaling methods.
+#' \itemize{
+#' \item No scaling (configured by \code{scaling="NoScaling"}).
+#' \item Constant scaling (configured by \code{scaling="ConstantScaling"}).
+#'       Depends on scaling exponent \code{scalingExp}. 
+#' }
+#' \item Adaptive scaling methods.
+#' \itemize{      
+#' \item Threshold scaling (configured by \code{scaling="ThresholdScaling"}).
+#'       It is configured with the scaling exponents \code{scalingExp} and \code{scalingExp2}, 
+#'       and the scaling threshold \code{scalingThreshold}.
+#'       It uses a threshold rule about the change of a dispersion measure 
+#'       of the population fitness \code{lF$RDM()} 
+#'       to choose the scaling exponent:
+#'       \itemize{
+#'       \item \code{lF$RDM()>1+scalingThreshold}: The scaling exponent is \code{scalingExp} 
+#'              which should be greater than \code{1}. 
+#'             Rationale: Increase selection pressure to reduce dispersion of fitness.
+#'       \item \code{lF$RDM()<1-scalingThreshold}: The scaling exponent is \code{scalingExp2} 
+#'             which should be lower than \code{1}.
+#'             Rationale: Decrease selection pressure to increase dispersion of fitness.
+#'       \item Else: Scaling exponent is \code{1}. Fitness is not scaled.  
+#'       }
+#' \item Continuous scaling (configured by \code{scaling="ContinuousScaling"}).
+#'         The ratio of the dispersion measures \code{lF$RDM()} is 
+#'         greater than 1 if the dispersion increased in the last generation and 
+#'         less than 1 if the dispersion decreased in the last generation. 
+#'         The scaling exponent is the product of the ratio of the 
+#'         dispersion measures \code{lF$RDM()} with the 
+#'         weight \code{rdmWeight}. 
+#' }
+#' }
+#'
+#' The change of the dispersion measure of the population fitness is measured by the function \code{lF$RDM()}
+#' (RDM means (R)atio of (D)ispersion (M)easure). This function depends on
+#' \itemize{
+#' \item the choice of a dispersion measure of the population fitness \code{dispersionMeasure}. 
+#'       The variance is the default (\code{dispersionMeasure="var"}).
+#'       The following dispersion measure of the population fitness are avalaible:
+#'       Variance (\code{"var"}), 
+#'       standard deviation (\code{"std"}), 
+#'       median absolute deviation (\code{"mad"}), 
+#'       coefficient of variation (\code{"cv"}), 
+#'       range (\code{"range"}), 
+#'       inter quartile range (\code{"iqr"}). 
+#' \item the scaling delay \code{scalingDelay}. The default is \code{scalingDelay=1}. 
+#'       This means the ratio of the variance of the fitness of the population at time t 
+#'       and the variance of the fitness of the population at time t-1 is computed.
+#' \item the upper and lower bounds of the ratio of dispersion measures. 
+#' \item Dispersion ratios may have extreme fluctuations: The parameters \code{drMax} and \code{drMin}  
+#'       define upper and lower bounds of the ratio of dispersion measures. 
+#'       The defaults are \code{drMax=2} and \code{drMin=1}.
+#' }
 #' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
 #'
 #' @section Selection:
+#'
+#' Selection operators determine which genes are chosen for the replication process for the next generation.
+#' Selection operators are configured by \code{selection} and \code{mateselection} 
+#' (the 2nd parent for crossover). The default operator is stochastic universal selection 
+#' for both parents (configured by \code{selection="SUS"} and \code{mateselection="SUS"}).  
+#' The following operators are implemented:
+#' \itemize{
+#' \item Uniform random selection with replacement (configured by \code{"Uniform"}).
+#'       Needed for simulating uniform random mating behavior, computer experiments without
+#'       selection pressure, for computing random search solutions as naive benchmarks.
+#' \item Uniform random selection without replacement (configured by \code{"UniformP"}).
+#'       Needed for differential evolution.
+#' \item Selection proportional to fitness 
+#' (in \code{O(n)} by \code{"SelectPropFit"}, in \code{O(n*log(n))} by \code{"SelectPropFitOnln"}, 
+#' and in \code{O(n^2)} by \code{"SelectPropFitM"}).  
+#' \code{offset} configures the shift of the fitness vector if \code{min(fit)=<0}.
+#' \item Selection proportional to fitness differences
+#' (in \code{O(n)} by \code{"SelectPropFitDiff"}, in \code{O(n*log(n))} by \code{"SelectPropFitDiffOnln"}, 
+#' and in \code{O(n^2)} by \code{"SelectPropFitDiffM"}). 
+#' Even the worst gene should have a minimal chance of survival: \code{eps} is added to the 
+#' fitness difference vector. This also guarantees numerical stability for populations 
+#' in which all genes have the same fitness. 
+#' \item Deterministic tournament selection of \code{k} genes (configured by \code{"Tournament"}).  
+#'       The tournament size is configured by \code{tournamentSize}.
+#'       Selection pressure increases with tournament size. 
+#'       The worst \code{k-1} genes of a population never survive.
+#' \item Deterministic tournament selection of \code{2} genes (configured by \code{"Duel"}).  
+#' \item Stochastic tournament selection of \code{k} genes (configured by \code{"STournament"}).  
+#'       The tournament size is configured by \code{tournamentSize}.
+#' \item Linear rank selection with selective pressure (configured by \code{"LRSelective"}). 
+#'       The selection bias which regulates the selection pressure 
+#'       is configured by \code{selectionBias} 
+#'       (should be between \code{1.0} (uniform selection) and \code{2.0}). 
+#' \item Linear rank selection with interpolated target sampling rates (configured by \code{"LRTSR"}).
+#'       The maximal target sampling rate is configured by \code{maxTSR} 
+#'       (should be between \code{1} and \code{2}).
+#' \item Stochastic universal sampling (configured by \code{"SUS"}).
+#' }
+#'
+#' If \code{selectionContinuation=TRUE} then selection functions are computed exactly once 
+#' per generation. They are transformed into lookup-functions which deliver the index of selected genes by 
+#' indexing a vector of integers.
 #'
 #' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
 #'
@@ -292,11 +391,46 @@
 #'       This acceptance rule guarantees an increasing fitness curve over the run 
 #'       of the algorithm. For example, classic differential evolution uses this acceptance rule.
 #' }
-#' \item Configurable acceptance rules.
+#' \item Configurable acceptance rules. 
+#'       The rules always accept a new gene with a fitness improvement. 
+#'       They also accept a new gene with a lower fitness with a probability which depends 
+#'       on the fitness difference of the old and the new gene 
+#'       and a temperature parameter which is reduced over the algorithm 
+#'       run by a configurable cooling schedule. 
 #' \itemize{
-#' \item The Metropolis acceptance rule.
-#' \item The individually adaptive Metropolis acceptance rule.
+#' \item The Metropolis acceptance rule (configured by \code{accept="Metropolis"}). 
+#'       The larger the parameter \code{beta} is set, the faster the drop in acceptance probability. 
+#' \item The individually adaptive Metropolis acceptance rule (configured by \code{accept="IVMetropolis"}). 
+#'       The larger the parameter \code{beta} is set, the faster the drop in acceptance probability. 
+#'       Individually adaptive means that the temperature is corrected. The correction (increase) of temperature 
+#'       depends on the difference between the fitness of the currently known best solution and the 
+#'       and the fitness of the new gene.
 #' }
+#' }
+#'
+#' The cooling schedule updates the temperature parameter at the end of the main loop.
+#' The following cooling schedules are available:
+#' \itemize{ 
+#' \item Exponential multiplicative cooling (configured by \code{cooling="ExponentialMultiplicative"}).
+#'       Depends on the discount factor \code{alpha} 
+#'       and the start temperature \code{temp0}.
+#' \item Logarithmic multiplicative cooling (configured by \code{cooling="LogarithmicMultiplicative"}).
+#'       Depends on the scaling factor \code{alpha} 
+#'       and the start temperature \code{temp0}.
+#' \item Power multiplicative cooling (configured by \code{cooling="PowerMultiplicative"}).
+#'       Depends on the scaling factor \code{alpha}, 
+#'       the cooling power exponent \code{coolingPower}, 
+#'       and the start temperature \code{temp0}.
+#' \item Power additive cooling (configured by \code{cooling="PowerAdditive"}).
+#'       Depends on the number of generations \code{generations}, 
+#'       the cooling power exponent \code{coolingPower}, 
+#'       the start temperature \code{temp0}, and the final temperature \code{tempN}.
+#' \item Exponential additive cooling (configured by \code{cooling="ExponentialAdditive"}).
+#'       Depends on the number of generations \code{generations}, the 
+#'       start temperature \code{temp0}, and the final temperature \code{tempN}.
+#' \item Trigonometric additive cooling (configured by \code{cooling="TrigonometricAdditive"}).
+#'       Depends on the number of generations \code{generations}, the 
+#'       start temperature \code{temp0}, and the final temperature \code{tempN}.
 #' }
 #'
 #' See package \code{xegaPopulation} <https://CRAN.R-project.org/package=xegaPopulation>
@@ -963,6 +1097,7 @@
 #'                \item \code{temperature} the starting value of the 
 #'                      temperature. Must be higher than the number of 
 #'                      generations.
+#'                }
 #'          \item "IVMetropolis" function \code{AcceptIVMetropolis}.
 #'                The behavior of this acceptance rule is qualitatively the same as that 
 #'                of the Metropolis acceptance rule above.
@@ -970,7 +1105,6 @@
 #'                in proportion to the difference between the fitness of the current best and
 #'                the fitness of the gene considered.
 #'                }
-#'            }
 #'                    Argument of function factory 
 #'                    \code{AcceptFactory} in package \code{xegaPopulation}.
 #'
