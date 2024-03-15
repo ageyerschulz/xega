@@ -362,7 +362,27 @@
 #'
 #' @section Crossover:
 #'
-#' TBD
+#' \tabular{lcccc}{
+#'            \tab \strong{Algorithm:} \tab \strong{"sga"} and \strong{sge} \tab xegaRun-Option \tab xegaRun-Parameter\cr 
+#' Crossover  \tab \strong{Package:}   \tab  \strong{xegaGaGene}            \tab crossover=     \tab \cr
+#'  (2 kids)  \tab 1-Point              \tab  xegaGaCross2Gene()            \tab "Cross2Gene"   \tab \cr
+#'            \tab Uniform              \tab  xegaGaUCross2Gene()           \tab "UCross2Gene"  \tab \cr
+#'            \tab Parametrized Uniform \tab xegaGaUPCross2Gene()           \tab "UPCross2Gene" \tab ucrossSwap \cr
+#'  (1 kid)   \tab 1-Point              \tab xegaGaCrossGene()              \tab "CrossGene"   \tab           \cr
+#'            \tab Uniform              \tab xegaGaUCrossGene()             \tab "UCrossGene"  \tab      \cr
+#'            \tab Parametrized Uniform \tab  xegaGaUPCrossGene()           \tab "UPCrossGene" \tab ucrossSwap  \cr
+#'            \tab \strong{Algorithm:}  \tab \strong{"sgde"}                \tab \tab \cr 
+#'            \tab \strong{Package:}    \tab \strong{xegaDfGene}            \tab     \tab \cr
+#'  (1 kid)   \tab 1-Point              \tab  xegaDfCrossGene()             \tab "CrossGene"   \tab           \cr
+#'            \tab Uniform              \tab  xegaDfCrossGene()             \tab "UCrossGene"  \tab      \cr
+#'            \tab Parametrized Uniform \tab  xegaDfUPCrossGene()           \tab "UPCrossGene" \tab ucrossSwap  \cr
+#'            \tab \strong{Algorithm:}  \tab \strong{"sgperm"}              \tab \tab \cr 
+#'            \tab \strong{Package:}    \tab \strong{xegaPermGene}                \tab     \tab \cr
+#'  (2 kids)  \tab Position-Based       \tab  xegaPermCross2Gene()          \tab "Cross2Gene"   \tab \cr
+#'  (1 kid)   \tab Position-Based       \tab  xegaPermCrossGene()           \tab "CrossGene"   \tab           \cr
+#'            \tab \strong{Algorithm:}  \tab \strong{"sgp"}              \tab \tab \cr 
+#'            \tab \strong{Package:}    \tab \strong{xegaGpGene}                \tab     \tab \cr
+#' }
 #'
 #' @section Mutation:
 #'
@@ -451,6 +471,7 @@
 #' Method              \tab "Identity"              \tab                        \tab                      \cr
 #' Method              \tab "Permutation"           \tab                        \tab                      \cr
 #' }
+
 #'
 #' \tabular{lcc}{
 #' Algorithm:          \tab \strong{"sgp"}     \tab\strong{"sge"}          \cr 
