@@ -362,31 +362,76 @@
 #'
 #' @section Crossover:
 #'
-#' \tabular{lcccc}{
-#'            \tab \strong{Algorithm:} \tab \strong{"sga"} and \strong{sge} \tab xegaRun-Option \tab xegaRun-Parameter\cr 
-#' Crossover  \tab \strong{Package:}   \tab  \strong{xegaGaGene}            \tab crossover=     \tab \cr
+#' The table below summarizes the available crossover operators of the current version.
+#'
+#' \tabular{lllll}{
+#' \strong{Algorithm:} \tab \strong{"sga"} and \strong{"sge"}  \tab \strong{Package:}   \tab  \strong{xegaGaGene}  \tab\cr
+#'  Kids \tab Name  \tab Function \tab crossover=  \tab Influenced by\cr
 #'  (2 kids)  \tab 1-Point              \tab  xegaGaCross2Gene()            \tab "Cross2Gene"   \tab \cr
 #'            \tab Uniform              \tab  xegaGaUCross2Gene()           \tab "UCross2Gene"  \tab \cr
 #'            \tab Parametrized Uniform \tab xegaGaUPCross2Gene()           \tab "UPCross2Gene" \tab ucrossSwap \cr
 #'  (1 kid)   \tab 1-Point              \tab xegaGaCrossGene()              \tab "CrossGene"   \tab           \cr
 #'            \tab Uniform              \tab xegaGaUCrossGene()             \tab "UCrossGene"  \tab      \cr
 #'            \tab Parametrized Uniform \tab  xegaGaUPCrossGene()           \tab "UPCrossGene" \tab ucrossSwap  \cr
-#'            \tab \strong{Algorithm:}  \tab \strong{"sgde"}                \tab \tab \cr 
-#'            \tab \strong{Package:}    \tab \strong{xegaDfGene}            \tab     \tab \cr
+#'  \strong{Algorithm:}  \tab \strong{"sgde"} \tab \strong{Package:}    \tab \strong{xegaDfGene}  \tab \cr
 #'  (1 kid)   \tab 1-Point              \tab  xegaDfCrossGene()             \tab "CrossGene"   \tab           \cr
 #'            \tab Uniform              \tab  xegaDfCrossGene()             \tab "UCrossGene"  \tab      \cr
 #'            \tab Parametrized Uniform \tab  xegaDfUPCrossGene()           \tab "UPCrossGene" \tab ucrossSwap  \cr
-#'            \tab \strong{Algorithm:}  \tab \strong{"sgperm"}              \tab \tab \cr 
-#'            \tab \strong{Package:}    \tab \strong{xegaPermGene}                \tab     \tab \cr
+#' \strong{Algorithm:}  \tab \strong{"sgperm"} \tab \strong{Package:}    \tab \strong{xegaPermGene}   \tab \cr
 #'  (2 kids)  \tab Position-Based       \tab  xegaPermCross2Gene()          \tab "Cross2Gene"   \tab \cr
 #'  (1 kid)   \tab Position-Based       \tab  xegaPermCrossGene()           \tab "CrossGene"   \tab           \cr
-#'            \tab \strong{Algorithm:}  \tab \strong{"sgp"}              \tab \tab \cr 
-#'            \tab \strong{Package:}    \tab \strong{xegaGpGene}                \tab     \tab \cr
+#' \strong{Algorithm:}  \tab \strong{"sgp"} \tab \strong{Package:}    \tab \strong{xegaGpGene}    \tab \cr
+#'  (2 kids)  \tab of Derivation Trees  \tab  xegaGpAllCross2Gene()       \tab "Cross2Gene" or \tab maxcrossdepth, \cr
+#'            \tab                      \tab                              \tab "All2Cross2Gene" \tab maxdepth, \cr
+#'            \tab                      \tab                              \tab                  \tab and maxtrials \cr
+#'            \tab of Depth-Filtered    \tab  xegaGpFilterCross2Gene()    \tab "FilterCross2Gene" \tab maxcrossdepth,\cr
+#'            \tab Derivation Trees     \tab                              \tab                    \tab mincrossdepth, \cr
+#'            \tab                      \tab                              \tab                    \tab maxdepth, \cr
+#'            \tab                      \tab                              \tab                    \tab and maxtrials \cr
+#'  (1 kid)   \tab of Derivation Trees  \tab  xegaGpAllCrossGene()       \tab "CrossGene" \tab maxcrossdepth, \cr
+#'            \tab                      \tab                              \tab            \tab maxdepth, \cr
+#'            \tab                      \tab                              \tab            \tab and maxtrials \cr
+#'            \tab of Depth-Filtered    \tab  xegaGpFilterCrossGene()    \tab "FilterCrossGene" \tab maxcrossdepth, \cr
+#'            \tab Derivation Trees     \tab                              \tab                    \tab mincrossdepth, \cr
+#'            \tab                      \tab                              \tab                    \tab maxdepth, \cr
+#'            \tab                      \tab                              \tab                    \tab and maxtrials \cr
 #' }
 #'
 #' @section Mutation:
 #'
-#' TBD
+#' The table below summarizes the available mutation operators of the current version.
+#'
+#' \tabular{llll}{
+#' \strong{Algorithm:} \tab \strong{"sga"} and \strong{"sge"}  \tab \strong{Package:}   \tab  \strong{xegaGaGene} \cr
+#'  Name  \tab Function \tab mutation=  \tab Influenced by\cr
+#'  Bit Mutation         \tab  xegaGaMutateGene()            \tab "MutateGene"   \tab bitmutrate \cr
+#'  Individually        \tab  xegaGaIVAdaptiveMutateGene()  \tab "IVM"  \tab bitmutrate,     \cr
+#'  Variable Bit        \tab                                \tab        \tab bitmutrate2,     \cr
+#'  Mutation            \tab                                \tab        \tab  and cutoffFit     \cr
+#'  \strong{Algorithm:}  \tab \strong{"sgde"} \tab \strong{Package:}    \tab \strong{xegaDfGene} \cr
+#'  Differential \tab  xegaDfMutateGeneDE()             \tab "MutateGene" or   \tab lF$ScaleFactor() \cr
+#'  Evolution Mutation             \tab                                     \tab "MutateGeneDe"    \tab (Configurable)   \cr
+#' \strong{Algorithm:} \tab \strong{"sgperm"} \tab \strong{Package:}    \tab \strong{xegaPermGene}\cr
+#'  Generalized Order  \tab  xegaPermMutateGeneOrderBased()          \tab "MutateGene"             \tab bitmutrate \cr
+#'  Based Mutation     \tab                                \tab "MutateGeneOrderBased"   \tab \cr
+#'  k Inversion  \tab  xegaPermMutateGenekInversion()          \tab "MutateGenekInversion" \tab lambda \cr
+#'  Mutation     \tab                                \tab          \tab \cr
+#'  2-Opt Mutation \tab  xegaPermMutateGene2Opt()          \tab "MutateGene2Opt" \tab max2opt \cr
+#'  k-Opt LK Mutation \tab  xegaPermMutateGenekOptLK()          \tab "MutateGenekOptLK" \tab max2opt \cr
+#'  (Lin-Kernighan)     \tab                                \tab          \tab \cr
+#'  Greedy Path  \tab  xegaPermMutateGeneGreedy()          \tab "MutateGeneGreedy" \tab lambda \cr
+#'  Mutation     \tab                                \tab          \tab \cr
+#'  Best Greedy Path  \tab  xegaPermMutateGeneBestGreedy()          \tab "MutateGeneBestGreedy" \tab lambda \cr
+#'  Mutation     \tab                                \tab          \tab \cr
+#'  Random Mutation  \tab  xegaPermMutateMix()          \tab "MutateGeneMix" \tab  \cr
+#'  Operator     \tab                                \tab          \tab \cr
+#' \strong{Algorithm:}  \tab \strong{"sgp"} \tab \strong{Package:}    \tab \strong{xegaGpGene} \cr
+#'  Derivation Tree  \tab  xegaGpMutateAllGene()       \tab "MutateGene" or \tab maxmutdepth \cr
+#'  Mutation         \tab                              \tab "MutateAllGene" \tab  \cr
+#'  Filtered Derivation   \tab  xegaGpMutateGeneFilter()       \tab "MutateFilterGene" \tab maxmutdepth, \cr
+#'  Tree Mutation         \tab                              \tab                 \tab  minmutinsertiondepth, \cr
+#'                       \tab                              \tab                 \tab  and maxmutinsertiondepth \cr
+#' }
 #'
 #' @section Acceptance:
 #'
