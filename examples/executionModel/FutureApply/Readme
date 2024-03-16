@@ -1,0 +1,65 @@
+
+Scripts for running genetic algorithms 
+using future.apply::future_lapply for parallelization.
+
+1. Future  plan(multisession, workers):
+
+   Proper shutdown of R-slave processes works only for 
+   a single run:
+
+   Multisession.R
+
+2. Shutting down slave processes for PSOCK clusters on remote machines:
+
+   Three versions.
+
+   futureClusterFinalizers.R
+
+3. Tests of future apply for the following future plans:
+   plan(sequential) with base::lapply(). 
+   plan(sequential) with future.apply::future_lapply()
+   plan(multicore, workers) 
+   plan(multisession, workers) 
+   plan(cluster, workers) on PSOCK cluster on localhost
+
+   Short tests on notebook:
+   futureNBshort.sh 
+   uses
+   futureNBshort.R
+   and produces
+   futureNBshort.lst
+
+   Long tests on notebook:
+   futureNB.sh 
+   uses
+   futureNB.R
+   and produces
+   futureNB.lst
+  
+4. Tests of future.apply::future_lapply()  on LAN for 
+   plan(cluster, workers) on PSOCK cluster on LAN:
+
+   futureLAN.sh 
+   uses 
+   futureLAN.R
+   and produces
+   futureLanOut.lst
+
+5. Tests of future.apply::future_lapply() on HPC and on notebook
+   for plans: 
+   plan(sequential) with base::lapply(). 
+   plan(sequential) with future.apply::future_lapply()
+   plan(multicore, workers) 
+   plan(callr, workers) 
+    
+
+             HPC Slurm:                Notebook
+      Start: futureHPCSlurm.sh         futureHPCnb.sh
+   R-Script: futureHPC.R               futureHPC.R
+     Outputs
+Console log: futureHPC.output          futureHPCnb.lst
+  rds file : Slurm20240312HPCout.rds   nb20240312HPCout.rds
+popsize=64000:     ---                 nb20240311p64000HPCout.rds 
+
+
+   
