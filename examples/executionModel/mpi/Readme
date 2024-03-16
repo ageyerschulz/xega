@@ -1,16 +1,49 @@
 
-Notebook:
+Scripts for using mpi with package Rmpi function Rmpi::mpi.parLapply() 
+in user defined apply statement:
 
-./benchRmpiNotebook8.sh
+# The user defined parallel apply function
+rmpiLapply<-function(pop, EvalGene, lF)
+{
+   Rmpi::mpi.parLapply(pop, FUN=EvalGene, lF=lF)
+}
 
-Output:
-- XORGPRmpi.out
-- xegaResult2024-03-01-10-40-45.002129.rds
+Scripts:
 
-(Time stamp may vary.)
+1. Notebook (Sequential):
 
-HPC Slurm
+   ./Rscript XORGPRmpi.R > output-benchNotebookSeq-23218642.log
 
-sbatch benchRmpiSlurm.sh
+   Output:
+   output-benchNotebookSeq-23218642.log
+   xegaResult2024-03-08-17-06-47.763237.rds
+
+2. Notebook mpi with 8 cores:
+
+   ./benchRmpiNotebook8.sh
+
+   (uses Rscript XORGPRmpi.R)
+
+   Output:
+   - XORGPRmpi.out
+   - xegaResult2024-03-01-10-40-45.002129.rds
+
+   (Time stamp may vary.)
+
+3. HPC Slurm with 20 nodes,  40 cores on each node (800 cores): 
+
+   sbatch benchRmpiSlurm.sh
+
+   (uses Rscript XORGPRmpi.R)
+
+   Output:
+
+   output-benchRmpiSlurm-23218642.log
+   xegaResult2024-03-07-21-51-50.rds
+
+4. Comparion of results:
+
+   ComparisonNBHPC.lst
+
 
 
