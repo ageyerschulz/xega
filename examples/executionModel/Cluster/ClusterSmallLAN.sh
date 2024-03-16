@@ -1,2 +1,2 @@
 #!/bin/sh
-Rscript ClusterSmall.R > ClusterSmallOutLAN.lst 2>&1
+Rscript ClusterSmall.R > ClusterSmallLANOut.lst 2>&1

@@ -14,7 +14,7 @@ vecT<-function(rLst, accessFUN)
   unlist(lapply(rLst, FUN=accessFUN)) 
 }
 
-FutureApplyBenchmarkLAN<-function(
+PsockApplyBenchmarkLAN<-function(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=popsize,
       crossrate=crossrate, mutrate=mutrate,
@@ -138,7 +138,7 @@ workers<-length(names)
 
 cat("Cluster Benchmark Examples (LAN).\n")
 
-results<-FutureApplyBenchmarkLAN(
+results<-PsockApplyBenchmarkLAN(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=popsize,
       crossrate=crossrate, mutrate=mutrate,

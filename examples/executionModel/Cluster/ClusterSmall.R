@@ -14,7 +14,7 @@ vecT<-function(rLst, accessFUN)
   unlist(lapply(rLst, FUN=accessFUN)) 
 }
 
-FutureApplyBenchmarkLAN<-function(
+PsockApplyBenchmarkLAN<-function(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=popsize,
       crossrate=crossrate, mutrate=mutrate,
@@ -143,7 +143,7 @@ names<-c("em-pop.iism.kit.edu",
 
 cat("Cluster Benchmark Examples Small, Random Seeds (LAN).\n")
 
-wcl<-FutureApplyBenchmarkLAN(
+wcl<-PsockApplyBenchmarkLAN(
       penv=envXOR, grammar=BG, 
       generations=generations, popsize=popsize,
       crossrate=crossrate, mutrate=mutrate,

@@ -1,0 +1,11 @@
+
+Test the generation of log-files of all evaluated solutions of 
+genetic algorithms:
+
+Rscript test-logEvals.R
+
+The script generates 5 xegaEvalLog<timestamp>.rds files 
+in the current directory and one in the ./logs/ directory.
+
+Andreas Geyer-Schulz
+

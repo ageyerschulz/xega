@@ -1,0 +1,13 @@
+
+Example scripts for setting up and running
+genetic algorithms with xega on a LAN with 
+a PSOCK cluster and parallel::parLapply().
+
+Start scripts ClusterLAN.sh and ClusterSmall.sh
+use R-scripts Cluster.R and ClusterSmall.R
+
+They produce:
+
+ClusterLANOut.lst
+ClusterSmallLAN.Out.lst
+ 

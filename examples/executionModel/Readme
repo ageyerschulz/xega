@@ -1,0 +1,28 @@
+
+Scripts and logs for running xega on
+parallel and distributed environments.
+
+The logs have been collected from several different environments:
+
+- notebook: 
+  A ThinkPad with an AMD chip set with 8 physical/16 logical cores.
+  16 GB of memory. 
+  Linux, release: 6.7.7-100.fc38.x86_64.
+  R version 4.3.3 (2024-02-29)
+
+- LAN:
+  Master: notebook 
+  Slaves: 4 processes on em.pop.iism.ki.edu
+
+- HPC: bwUniCluster 2.0+GFB-HPC
+  login node: uc2.scc.kit.edu
+  
+  - Test of future apply
+    Partition: single, 40 cores.
+
+  - Test of multiCore
+    Partition: single, 40 cores.
+
+  - Test of mpi  
+    Partition: multiple, 20 nodes with 40 cores per node: 800 cores.
+
