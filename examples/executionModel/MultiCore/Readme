@@ -15,6 +15,7 @@ Start on Notebook:
 Result: 
 
 GPXORmc.out
+GPXORmcNB.rds (after manual renaming)
 
 Start in HPC-Cluster with Slurm:
 
@@ -23,4 +24,5 @@ sbatch GPXORmcSlurm.sh
 Result:
 
 GPXORmultiCore.output
+GPXORmcSlurm.rds (after manual renaming)
 
