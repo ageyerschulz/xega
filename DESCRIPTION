@@ -1,5 +1,5 @@
 Package: xega 
-Title: E(x)tended (e)volutionary and (g)enetic algorithms
+Title: Extended Evolutionary and Genetic Algorithms
 Version: 0.9.0.0
 Authors@R: 
     person(given = "Andreas",
