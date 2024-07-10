@@ -19,7 +19,6 @@
 #' @family Grammar
 #'
 #' @examples
-#' \dontrun{booleanGrammar<-newBNF("~/dev/cran/xega/xegaBNF/BooleanGrammar.txt")}
 #' booleanGrammar()
 #' @importFrom xegaBNF booleanGrammar
 #' @export
@@ -28,7 +27,7 @@ booleanGrammar<-xegaBNF::booleanGrammar
 #' Compile a BNF.
 #'
 #' @description \code{compileBNF()} produces a context-free grammar
-#'               from its specification of in Backus-Naur form (BNF).
+#'               from its specification in Backus-Naur form (BNF).
 #'               Warning: No error checking implemented.
 #'
 #' @details A grammar consists of the symbol table \code{ST}, the production
@@ -83,13 +82,13 @@ compileBNF<-xegaBNF::compileBNF
 #'
 #'  \enumerate{
 #'  \item
-#'  \code{name()}   a string with the name of the environment
+#'  \code{name()}:   A string with the name of the environment.
 #'  \item
-#'  \code{ProblemEnv$f(word)}
-#'   function with word a word of the language (as text string).
+#'  \code{ProblemEnv$f(word)}:
+#'   Function with the \code{word} a word of the language (as a text string).
 #'  }
 #'
-#'  Should be provided by the user as standard R-file.
+#'  Should be provided by the user as a standard R-file.
 #'
 #' @family Problem Environment
 #'
@@ -97,11 +96,17 @@ compileBNF<-xegaBNF::compileBNF
 #' \itemize{
 #' \item \code{$name}: The name of the problem environment.
 #' \item \code{$f}:    The fitness function. 
-#'                     For this environment number of correct test cases 
+#'                     For this environment, 
+#'                     fitness is defined as the number of correct test cases 
 #'                     (correct function)
-#'                     and the inverse of the number of terminal symbols
-#'                     (boolean function with small number of elements). 
+#'                     and the inverse of the number of terminal symbols.
+#'                     The second part means that
+#'                     a boolean function with a fewer number of variables 
+#'                     and logical functions is fitter than one with more 
+#'                     variables and logical functions if both solve 
+#'                     the same number of test cases. 
 #' }
+#'
 #' @examples
 #' EnvXOR<-NewEnvXOR()
 #' EnvXOR$name()

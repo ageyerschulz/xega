@@ -1,5 +1,5 @@
 
-#' Factory for configuring a gene dependent InitGene function.
+#' Factory for configuring a gene-dependent InitGene function.
 #'
 #' @param algorithm Algorithm. 
 #'                  Available: "sga", "sgde", "sgperm", "sge", sgp". 

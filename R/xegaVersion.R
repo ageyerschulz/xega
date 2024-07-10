@@ -5,14 +5,23 @@
 #          Package: xega
 #
 
-#' About this version
+#' About this version.
+#'
+#' @param verbose  Boolean. If \code{TRUE} (Default), print 
+#'                 package information and version number to the console.
+#'
+#' @return Version number (invisible).
 #'
 #' @examples
 #' xegaVersion()
 #' @export
-xegaVersion<-function()
+xegaVersion<-function(verbose=TRUE)
 {
-	cat('Package xega. Version 0.9.0.0. As of 2024/03/15 \n')
-	cat('(c) Andreas Geyer-Schulz\n')
+        version<-"0.9.0.0"
+        if (verbose)
+	{cat('Package xega. Version', version, 'As of 2024/03/15 \n')
+	cat('(c) Andreas Geyer-Schulz\n')}
+        invisible(version)
+
 }
 

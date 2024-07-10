@@ -1,9 +1,9 @@
 
-#' Factory for configuring a gene dependent Mutation function.
+#' Factory for configuring a gene-dependent Mutation function.
 #'
 #' @description \code{sgXMutationFactory()} selects 
 #'              \enumerate{
-#'              \item the algorithm specific crossover factory and 
+#'              \item the algorithm-specific mutation factory and 
 #'              \item the method in this factory. 
 #'              }
 #'
@@ -11,9 +11,9 @@
 #'    \itemize{
 #'     \item "sga": "MutateGene", "IVM".
 #'     \item "sge": "MutateGene", "IVM".
-#'     \item "sgp": "MutateGene".
-#'     \item "sgde": "MutateGeneDE".
-#'     \item "sgperm": "MutateGeneOrderBased", 
+#'     \item "sgp": "MutateGene", "MutateAllGene", "MutateFilterGene".
+#'     \item "sgde": "MutateGene", "MutateGeneDE".
+#'     \item "sgperm": "MutateGene", "MutateGeneOrderBased", 
 #'           "MutateGenekInversion", "MutateGene2Opt", "MutateGenekOptLK",
 #'           "MutateGeneGreedy", "MutateGeneBestGreedy", "MutateGeneMix".
 #'  }
@@ -24,7 +24,7 @@
 #'
 #' @param method     Method. Available methods are package-dependent.
 #'
-#' @return MutateGene Function for the selected  algorithm 
+#' @return MutateGene  function for the selected  algorithm 
 #'                     from the correct package.
 #'
 #' @family Configuration

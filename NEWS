@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------
+  xega                                                              News
+-------------------------------------------------------------------------
+
+Version 0.9.0.1 (2024-07-10)
+
+- Documentation corrected.
+- Option "MultiCoreHet" for parameter executionmodel added.
+- Option "ClusterHet" for parameter executionmodel added.
+- Option "FutureApplyHet" for parameter executionmodel added.
+

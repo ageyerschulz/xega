@@ -32,11 +32,19 @@
 #'                         mean, min, Q1, median, Q3, max, var, mad
 #'                          of population fitness as columns:
 #'                          i-th row for i-th each generation.
+#'         \item 
+#'         \code{$fit}: Fitness vector if \code{generations<=1} else: NULL.
 #'         \item
 #'         \code{$solution}: With fields 
+#'         \code{$solution$name},
 #'         \code{$solution$fitness}, 
 #'         \code{$solution$value},  
-#'         \code{$solution$genotype}, and  
+#'         \code{$numberOfSolutions},
+#'         \code{$solution$genotype}, 
+#'         \code{$solution$phenotype}, 
+#'         \code{$solution$phenotypeValue}, 
+#'         \item 
+#'         \code{$evalFail}: Number of failures of fitness evaluations.
 #'         \item
 #'         \code{$GAconfig}: The configuration of the GA used by \code{xegaReRun()}.
 #'         \item

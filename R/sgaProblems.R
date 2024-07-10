@@ -61,11 +61,11 @@ Parabola2D<-xegaSelectGene::Parabola2DFactory()
 #'         \code{Parabola2DEarly$terminate(solution, lF)} 
 #'         is a test function which returns true if the \code{solution} 
 #'         is in an epsilon environment of a known solution. 
-#'         To invoke this function, use \code{Run( ..., early=TRUE, ...)}.
+#'         To invoke this function, use \code{xegaRun( ..., early=TRUE, ...)}.
 #'         The epsilon which determines 
 #'         the length of the interval as a fraction
 #'         of the known optimal solution is configured by  
-#'         e.g. \code{Run( ..., terminationEps=0.001, ...)}.
+#'         e.g. \code{xegaRun( ..., terminationEps=0.001, ...)}.
 #'
 #' @family Problem Environment
 #'

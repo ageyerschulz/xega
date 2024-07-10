@@ -1,9 +1,9 @@
 
-#' Factory for configuring a gene dependent Crossover function.
+#' Factory for configuring a gene-dependent Crossover function.
 #'
 #' @description \code{sgXCrossoverFactory()} selects 
 #'              \enumerate{
-#'              \item the algorithm specific crossover factory and 
+#'              \item the algorithm-specific crossover factory and 
 #'              \item the method in this factory. 
 #'              }
 #'
@@ -16,7 +16,8 @@
 #'        "Cross2Gene", "UCross2Gene", "UPCross2Gene",
 #'        "CrossGene", "UCrossGene", "UPCrossGene".
 #'     \item "sgp": 
-#'        "CrossGene", "Cross2Gene".
+#'        "CrossGene", "Cross2Gene", "AllCrossGene", "AllCross2Gene",
+#'        "FilterCrossGene", "FilterCross2Gene".
 #'     \item "sgde": 
 #'        "CrossGene", "UCrossGene", "UPCrossGene".
 #'     \item "sgperm": 
@@ -27,10 +28,10 @@
 #'                   Available: "sga", "sgde", "sgperm", "sge", sgp". 
 #'                   Default: "sga".
 #' @param method     Crossover method.  Algorithm (gene representation) 
-#'                   dependent. Default: \code{Crossgene()}. 
-#'                   Must be available in the gene specific 
+#'                   dependent. Default: \code{CrossGene()}. 
+#'                   Must be available in the gene-specific 
 #'                   crossover factories.
-#' @return  Crossover Crossover function from the crossover factory of 
+#' @return  Crossover function from the crossover factory of 
 #'                    the selected package.
 #'
 #' @family Configuration

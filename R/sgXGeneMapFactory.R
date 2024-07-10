@@ -1,5 +1,5 @@
 
-#' Factory for configuring a gene dependent geneMap function.
+#' Factory for configuring a gene-dependent geneMap function.
 #'
 #' @description The geneMap function depends on the gene representation and
 #'              the algorithm selected.

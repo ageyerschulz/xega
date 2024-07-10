@@ -67,6 +67,9 @@ nSlaves<-startSlaves()
 cat("Number of Slaves:", nSlaves, "\n")
 gc(full=TRUE)
 
+# for repeatable runs, set iseed to an integer.
+mpi.setup.rngstream(iseed=NULL)
+
 cat("XOR GP Rmpi::mpi.parLapply() \n")
 
 verbose<-1

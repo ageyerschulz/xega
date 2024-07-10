@@ -1,7 +1,7 @@
 
-#' Factory for configuring a gene dependent DecodeGene function.
+#' Factory for configuring a gene-dependent DecodeGene function.
 #'
-#' @description A gene specific decoder must be provided.
+#' @description A gene-specific decoder must be provided.
 #'
 #' @param algorithm  "sga", "sgde", "sgperm", "sge", sgp". Default: "sga".
 #'
