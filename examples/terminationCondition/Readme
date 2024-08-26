@@ -1,0 +1,12 @@
+
+To test early termination conditions:
+
+Rscript test-termination.R
+
+The script tests
+- functions from the R-package smoof.
+- termination conditions for absolute and relative errors.
+- terminate functions supplied by the problem environment.
+
+Andreas Geyer-Schulz 
+

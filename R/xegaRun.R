@@ -697,6 +697,8 @@
 #'          Argument of function factory 
 #'          \code{EvalGeneFactory} in package xegaSelectGene.
 #'     
+#' @param evalrep           Specifies the number of repeated fitness 
+#'                          evaluations of a (stochastic) function. 
 #' @param reportEvalErrors  Report errors in the evaluation 
 #'                          of fitness functions. Default: TRUE.
 #'
@@ -1237,7 +1239,19 @@
 #'        \code{xegaEvalLog<time stamp>.rds}. Default: \code{FALSE}.
 #'        
 #'        \code{log<-readRDS(xegaEvalLog<time stamp>.rds)} reads the log.
-#'        The format of a row of \code{log} is <fitness> <parameters>.
+#'        The \code{log} is a list of named lists with the following elements:
+#'         \itemize{
+#'         \item \code{$generation}:   The generation.
+#'         \item \code{$fit}:          The fitness value.
+#'         \item \code{$sigma}:        The standard deviation of the 
+#'                                     fitness value, if it exists.
+#'                                     Default: \code{0}.
+#'         \item \code{$obs}:          The number of observations for 
+#'                                     computing the 
+#'                                     fitness value, if it exists.
+#'                                     Default: \code{0}.
+#'         \item \code{$phenotype}:    The phenotype of the gene.
+#'         }
 #'
 #' @param allsolutions  Boolean. If \code{TRUE}, then return all the best solutions.
 #'        Default: \code{FALSE}.
@@ -1245,6 +1259,20 @@
 #' @param early     Boolean. If \code{FALSE} (Default), ignore the code for 
 #'                  early termination. 
 #'                  See \link{Parabola2DEarly}.
+#' @param terminationCondition  Termination condition.
+#'                  Avalailable:
+#'                  \itemize{
+#'                  \item "NoTermination" (Default).
+#'                  \item "AbsoluteError": 
+#'                        Algorithm ends if current optimum is in optimum \code{+/-} \code{terminationEps}. 
+#'                  \item "RelativeError": 
+#'                       Algorithm ends if current optimum is in optimum \code{+/-} \code{terminationEps*optimum}. 
+#'                       If the optimum is \code{0}, the interval has length \code{0}. 
+#'                  \item "RelativeErrorZero": 
+#'                       Algorithm ends if current optimum is in optimum \code{+/-} \code{terminationEps*optimum}. 
+#'                       If the optimum is \code{0}, the interval is from \code{-terminationEps} to \code{terminationEps}.
+#'                  } 
+#'                            
 #' @param terminationEps  Fraction of the known optimal solution
 #'                     for computing termination interval. Default: \code{0.01}.
 #'                  See \link{Parabola2DEarly}.
@@ -1380,7 +1408,7 @@
 #' @importFrom xegaGeGene xegaGePrecisionFactory
 #' @importFrom xegaDfGene xegaDfScaleFactorFactory
 #' @importFrom xegaPopulation xegaInitPopulation
-#' @importFrom xegaPopulation xegaEvalPopulation
+#' @importFrom xegaPopulation xegaEvalPopulationFactory
 #' @importFrom xegaPopulation xegaObservePopulation
 #' @importFrom xegaPopulation xegaSummaryPopulation
 #' @importFrom xegaPopulation xegaNextPopulation
@@ -1390,6 +1418,8 @@
 #' @importFrom xegaPopulation CrossRateFactory
 #' @importFrom xegaPopulation AcceptFactory
 #' @importFrom xegaPopulation CoolingFactory
+#' @importFrom xegaPopulation TerminationFactory
+#' @importFrom xegaPopulation checkTerminationFactory
 #' @importFrom xegaPopulation xegaLogEvalsPopulation
 ##### TODO
 #' @importFrom xegaPopulation MutationRateFactory 
@@ -1411,6 +1441,8 @@ xegaRun<-function(
       replay=0,           # replay=0: current seed of random number generator.
                           # replay>0: use small integer. 
                           #           Same integer = same seed.	
+###
+      
 ### 
 	      maxdepth=7,          # maximal depth of a derivation tree
 	      maxtrials=5,         # maximal of number of trials of 
@@ -1428,6 +1460,7 @@ xegaRun<-function(
 		                     # "EvalGeneR", 
 		                     # "EvalGeneDet", 
 		                     # "EvalGeneStoch".
+                 evalrep=1,          # Number of repeated evalutions.
                  reportEvalErrors=TRUE, # Report errors in fitness functions.
 		                     #
 		 genemap="Bin2Dec",  # Gene map for decoding.
@@ -1516,6 +1549,10 @@ xegaRun<-function(
 		 allsolutions=FALSE, # TRUE: All best solutions are returned.
 		                     #       at the end of the run.
 		 early=FALSE,        # FALSE: Ignore code for early termination.
+                 terminationCondition="NoTermination", 
+                                      # "NoTermination"  
+                                      # "AbsoluteError"  
+                                      # "RelativeError"  
 		 terminationEps=0.01, # fraction of known optimal solution
 		                      # for termination interval
                 cores=NA,             # Number of cores.
@@ -1665,11 +1702,13 @@ InitGene=sgXInitGeneFactory(algorithm),  # gene dependent
 DecodeGene=sgXDecodeGeneFactory(algorithm), # gene dependent 
 GeneMap=sgXGeneMapFactory(algorithm=algorithm, method=genemap), # gene dependent
 EvalGene=xegaSelectGene::EvalGeneFactory(method=evalmethod),
+rep=xegaSelectGene::parm(evalrep),
 ReportEvalErrors=xegaSelectGene::parm(reportEvalErrors),
 ReplicateGene=sgXReplicationFactory(algorithm=algorithm, method=replication), # gene dependent
 Cores=xegaSelectGene::parm(cores), # number of cores
 lapply=parApply,
-cluster=cluster
+cluster=cluster,
+path=xegaSelectGene::parm(path)
 )
 
 # Configure timing.
@@ -1681,10 +1720,15 @@ observePopulationTimer<-xegaSelectGene::newTimer()
 summaryPopulationTimer<-xegaSelectGene::newTimer()
 nextPopulationTimer<-xegaSelectGene::newTimer()
 
+if (evalrep==1)
+{evalpopfn<-xegaPopulation::xegaEvalPopulationFactory(method="EvalPopulation")}
+else
+{evalpopfn<-xegaPopulation::xegaEvalPopulationFactory(method="RepEvalPopulation")}
+
 if (profile==TRUE)
 {
 InitPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaInitPopulation, initPopulationTimer)
-EvalPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaEvalPopulation, evalPopulationTimer)
+EvalPopulation<-xegaSelectGene::Timed(evalpopfn, evalPopulationTimer)
 ObservePopulation<-xegaSelectGene::Timed(xegaPopulation::xegaObservePopulation, observePopulationTimer)
 SummaryPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaSummaryPopulation, summaryPopulationTimer)
 NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPopulationTimer)
@@ -1693,7 +1737,7 @@ NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPo
 if (profile==FALSE)
 {
 InitPopulation<-xegaPopulation::xegaInitPopulation
-EvalPopulation<-xegaPopulation::xegaEvalPopulation
+EvalPopulation<-evalpopfn
 ObservePopulation<-xegaPopulation::xegaObservePopulation
 SummaryPopulation<-xegaPopulation::xegaSummaryPopulation
 NextPopulation<-xegaPopulation::xegaNextPopulation
@@ -1719,10 +1763,18 @@ if (logevals==TRUE)
 #       Needs to see e.g. history of solutions, known optima, 
 #                         distance from reference points.
 if (early && ("terminate" %in% names(penv)))
-{ Terminate<-penv$terminate}   # nocov
+{ Terminate<-penv$terminate 
+}  # nocov
 else
-{ Terminate<-function(solution, lF) {FALSE} }
+{ Terminate<-xegaPopulation::TerminationFactory(terminationCondition); 
+  checkTerminate<-xegaPopulation::checkTerminationFactory(terminationCondition)
+  checklst<-checkTerminate(penv, max)
+  lF$penv<-checklst$penv
+  }
 
+#### Termination conditions.
+
+# skip main loop, if generations == 1 (random sample)!
 if (generations>1)
 {
 for(i in 1:generations)
@@ -1745,7 +1797,7 @@ if (logevals==TRUE)
 {evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=i, lF=lF)} # nocov  
 
         if (Terminate(xegaBestInPopulation(pop, fit, lF, FALSE), lF)==TRUE) 
-		{break}    # nocov
+		{generations<-i;break}    # nocov
 
 	# Cooling schedule for Metropolis acceptance rule. Abstract out?
 #	cat("Temperature:", lF$TempK(), "\n")
@@ -1753,8 +1805,12 @@ if (logevals==TRUE)
 	newTemperature<-force(lF$Cooling(i, lF))
 #	cat("new Temperature:", newTemperature, "\n")
 	lF$TempK<-parm(newTemperature)
+} 
+# end of main loop
 }
-}
+# end of skip
+
+# set up return values.
 
 	rc<-SummaryPopulation(pop, fit, lF, generations)
 

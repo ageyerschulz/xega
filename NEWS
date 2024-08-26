@@ -9,3 +9,9 @@ Version 0.9.0.1 (2024-07-10)
 - Option "ClusterHet" for parameter executionmodel added.
 - Option "FutureApplyHet" for parameter executionmodel added.
 
+Version 0.9.0.2 (2024-08-19)
+
+- TerminationFactory integrated with consistency checks.
+- Loop for repeated evaluation and aggregation of stochastic functions 
+  integrated (parameter evalrep). 
+
