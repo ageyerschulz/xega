@@ -167,5 +167,4 @@
 #' @section License: MIT
 #' @section URL: https://github.com/ageyerschulz/xega 
 #' @section Installation: From CRAN by \code{install.packages('xega')} 
-NULL
-
+"_PACKAGE"

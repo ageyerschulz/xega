@@ -518,10 +518,13 @@
 #' }
 #'
 #' \tabular{lcc}{
-#' Algorithm:          \tab \strong{"sgp"}     \tab\strong{"sge"}          \cr 
-#' In package:         \tab xegaGpGene         \tab xegaGeGene             \cr
-#' Decoder:            \tab xegaGpDecodeGene() \tab xegaGeDecodeGene()     \cr
-#' Gene map factories: \tab (Not configurable) \tab xegaGeGeneMapFactory() \cr
+#' Algorithm:          \tab \strong{"sgp"}     \tab\strong{"sge"}                 \cr 
+#' In package:         \tab xegaGpGene         \tab xegaGeGene                    \cr
+#' Decoder Factories   \tab (Not configurable) \tab xegaGeDecodeGeneFactory()     \cr
+#' Decoder:            \tab xegaGpDecodeGene() \tab                          \cr 
+#' Method:             \tab                    \tab "DecodeGene"            \cr
+#' Method:             \tab                    \tab "DecodeGeneDT"            \cr
+#' Gene map factories: \tab (Not configurable) \tab xegaGeGeneMapFactory()        \cr
 #' Method              \tab                    \tab "Mod"                  \cr
 #' Method              \tab                    \tab "Buck"                 \cr
 #' }
@@ -744,6 +747,10 @@
 #'                           Function used: \code{xegaDfGene::xegaDfGeneMapIdentity}
 #'                    } 
 ### End of genemap
+#' @param decoder     Specifies a decoder for a gene, Default: \code{"DecodeGene"}.
+#'                    For algorithm \code{sge}, a second decoder is available:
+#'                    \code{DecodeGeneDT}. This decoder is faster, but it may generate code which
+#'                    still contains non-terminal symbols and which does not work.
 #'
 #' @param crossrate2  Crossover rate for genes with below 
 #'                    ``average'' fitness. 
@@ -1271,11 +1278,27 @@
 #'                  \item "RelativeErrorZero": 
 #'                       Algorithm ends if current optimum is in optimum \code{+/-} \code{terminationEps*optimum}. 
 #'                       If the optimum is \code{0}, the interval is from \code{-terminationEps} to \code{terminationEps}.
+#'                  \item "PAC": 
+#'                       Algorithm ends if current optimum is in ub \code{+/-} \code{terminationEps*optimum}. 
+#'                       If ub is \code{0}, the interval is from \code{-terminationEps} to \code{terminationEps}.
+#'   ub is an estimated upper PAC bound for the global optimum. 
+#'   The probability that the optimum is above ub is set by \code{PACdelta}.
+#'   The epsilon environment by \code{terminationEps}.
+#'                  \item "GEQ": Algorithm ends if the current optimal phenotype value is greater or equal 
+#'                               than \code{terminationThreshold}. 
+#'                  \item "LEQ": Algorithm ends if the current optimal phenotype value is less or equal 
+#'                               than \code{terminationThreshold}. 
 #'                  } 
 #'                            
 #' @param terminationEps  Fraction of the known optimal solution
 #'                     for computing termination interval. Default: \code{0.01}.
 #'                  See \link{Parabola2DEarly}.
+#' @param terminationThreshold   A threshold for terminating the algorithm. Defaul: \code{0.0}.
+#' @param worstFitness  Set the worst fitness. Default: \code{0.0}.
+#'                   Used e.g. in \code{evalgeneU()} for giving genes whose evaluation failed a very low fitness value
+#'                   to decrease their survival rate into the next generation. 
+#' @param PACdelta   \code{P(ub<opt)<PACdelta}. Default: \code{0.01}. 
+#' @param fSpace    Function space of fitness function. Default: "Hilbert". 
 #'
 #' @param cores   Number of cores used for multi-core parallel execution.
 #'                (Default: \code{NA}. \code{NA} means that the number of cores 
@@ -1421,6 +1444,7 @@
 #' @importFrom xegaPopulation TerminationFactory
 #' @importFrom xegaPopulation checkTerminationFactory
 #' @importFrom xegaPopulation xegaLogEvalsPopulation
+#' @importFrom stats qnorm
 ##### TODO
 #' @importFrom xegaPopulation MutationRateFactory 
 ##### TODO
@@ -1464,6 +1488,7 @@ xegaRun<-function(
                  reportEvalErrors=TRUE, # Report errors in fitness functions.
 		                     #
 		 genemap="Bin2Dec",  # Gene map for decoding.
+		 decoder="DecodeGene",  # Gene decoder. 
 		                     #
 		 crossrate2=0.3,     # Crossover Rate 2 
 		                     # (Probability crossover operator is used)
@@ -1553,8 +1578,15 @@ xegaRun<-function(
                                       # "NoTermination"  
                                       # "AbsoluteError"  
                                       # "RelativeError"  
+                                      # "PAC"  
+                                      # "GEQ"  
+                                      # "LEQ"  
 		 terminationEps=0.01, # fraction of known optimal solution
 		                      # for termination interval
+                 terminationThreshold=0.0,    #  a threshold for terminating the algorithm  
+                 worstFitness=0.0,    # for setting bad fitness for invalid genes    
+                PACdelta=0.01,        # For PAC termination condition
+                fSpace="Hilbert",     # For PAC Termination condition
                 cores=NA,             # Number of cores.
 		executionModel="Sequential", 
 		                     # Execution models are:
@@ -1655,7 +1687,7 @@ CutoffFit=xegaSelectGene::parm(cutoffFit),
 CBestFitness=xegaSelectGene::parm(0.0),
 CMeanFitness=xegaSelectGene::parm(0.0),
 CVarFitness=xegaSelectGene::parm(0.0),
-CWorstFitness=xegaSelectGene::parm(0.0),
+CWorstFitness=xegaSelectGene::parm(worstFitness),
 CrossRate=xegaPopulation::CrossRateFactory(method=ivcrossrate),
 CrossRate1=xegaSelectGene::parm(crossrate),
 CrossRate2=xegaSelectGene::parm(crossrate2),
@@ -1666,6 +1698,7 @@ Max=MAX,
 Offset=xegaSelectGene::parm(offset),
 Eps=xegaSelectGene::parm(eps),
 TerminationEps=xegaSelectGene::parm(terminationEps), 
+TerminationThreshold=xegaSelectGene::parm(terminationThreshold), 
 Accept=xegaPopulation::AcceptFactory(method=accept),
 Alpha=xegaSelectGene::parm(alpha),
 Beta=xegaSelectGene::parm(beta),
@@ -1699,12 +1732,13 @@ SelectMate=xegaSelectGene::SelectGeneFactory(method=mateselection),
 MutateGene=sgXMutationFactory(algorithm=algorithm, method=mutation), # gene dependent
 CrossGene=sgXCrossoverFactory(algorithm=algorithm, method=crossover), # gene dependent
 InitGene=sgXInitGeneFactory(algorithm),  # gene dependent
-DecodeGene=sgXDecodeGeneFactory(algorithm), # gene dependent 
+DecodeGene=sgXDecodeGeneFactory(algorithm, method=decoder), # gene dependent 
 GeneMap=sgXGeneMapFactory(algorithm=algorithm, method=genemap), # gene dependent
 EvalGene=xegaSelectGene::EvalGeneFactory(method=evalmethod),
 rep=xegaSelectGene::parm(evalrep),
 ReportEvalErrors=xegaSelectGene::parm(reportEvalErrors),
 ReplicateGene=sgXReplicationFactory(algorithm=algorithm, method=replication), # gene dependent
+PACdelta=xegaSelectGene::parm(PACdelta), 
 Cores=xegaSelectGene::parm(cores), # number of cores
 lapply=parApply,
 cluster=cluster,
@@ -1758,6 +1792,7 @@ popStat<-ObservePopulation(fit)
 if (logevals==TRUE)
 {evallog<-xegaLogEvalsPopulation(pop=pop, evallog=list(), generation=0, lF=lF)} # nocov  
 
+# start Termination conditions.
 ### Tentative.
 # TODO: The interface is too restricted. 
 #       Needs to see e.g. history of solutions, known optima, 
@@ -1770,9 +1805,18 @@ else
   checkTerminate<-xegaPopulation::checkTerminationFactory(terminationCondition)
   checklst<-checkTerminate(penv, max)
   lF$penv<-checklst$penv
-  }
+}
 
-#### Termination conditions.
+if (terminationCondition=="PAC") 
+{ ### a patch.
+if (fSpace=="Hilbert") 
+{
+PACopt<-popStat[1]+sqrt(popStat[7])*stats::qnorm(PACdelta, lower.tail=FALSE)
+lF$PACopt<-xegaSelectGene::parm(PACopt)
+}
+}
+
+#### end Termination conditions.
 
 # skip main loop, if generations == 1 (random sample)!
 if (generations>1)

@@ -15,3 +15,14 @@ Version 0.9.0.2 (2024-08-19)
 - Loop for repeated evaluation and aggregation of stochastic functions 
   integrated (parameter evalrep). 
 
+Version 0.9.0.3 (2024-10-01)
+
+- Option "PAC" for parameter terminationCondition added.
+- Parameters PACdelta and fSpace added for PAC termination condition.
+ 
+Version 0.9.0.4 (2025-02-13)
+
+- Parameter worstFitness added.
+- Parameter terminationThreshold added.
+- Parameter decoder added. 
+
