@@ -1394,6 +1394,11 @@
 #'         \item \code{$timer}: An attribute value list with 
 #'               the time used (in seconds) in the main blocks of the GA:
 #'               tUsed, tInit, tNext, tEval, tObserve, and tSummary.
+#'         \item 
+#'         \code{$logfn}: File name of logfile. Default: \code{NA}.
+#'         \item 
+#'         \code{$resfn}: File name of RDS-file with \code{result}. 
+#'                       Default: \code{NA}.
 #'         }
 #'
 #' @family Main Program
@@ -1884,7 +1889,9 @@ tUsed<-mainLoopTimer()
 		    evalFail=evalFail,
                     GAconfig=list(GAconfiguration$GAconf),
                     GAenv=GAconfiguration$GAenv,
-                    timer=timer)
+                    timer=timer, 
+                    logfn=NA,
+                    resfn=NA)
 
 if (lF$Verbose()==1)  {cat("\n")}
 
@@ -1893,12 +1900,14 @@ if (logevals==TRUE)
         fn<-paste(path,"xegaEvalLog", Sys.time(), ".rds", sep="") # nocov
 	fn<-chartr(old=" :", new="--", fn)                  # nocov
         saveRDS(object=evallog, file=fn)                    # nocov
+        result$logfn<-fn                                    # nocov
 }
 
 if (batch==TRUE)
 {
         fn<-paste(path,"xegaResult", Sys.time(), ".rds", sep="") # nocov
 	fn<-chartr(old=" :", new="--", fn)                 # nocov
+        result$resfn<-fn                                    # nocov
         saveRDS(object=result, file=fn)                    # nocov
 }
 

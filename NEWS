@@ -26,3 +26,7 @@ Version 0.9.0.4 (2025-02-13)
 - Parameter terminationThreshold added.
 - Parameter decoder added. 
 
+Version 0.9.0.5 (2025-03-07)
+
+- Filenames of log-file and result-file added to result.
+
