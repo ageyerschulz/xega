@@ -36,5 +36,5 @@ Version 0.9.0.6 (2025-03-09)
 
 Version 0.9.0.7 (2025-04-08)
 
-- Unique filenames for creating logs and result files avoids conflicts 
+- Exclusive filenames for creating logs and result files avoids conflicts 
   in file access on parallel/distributed systems (in xegaRun).
