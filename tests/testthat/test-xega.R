@@ -31,22 +31,25 @@ test_that("RunGA  OK",
 
 test_that("RunGA max=FALSE, profile=TRUE, batch=FALSE  OK",
  {
- a<-xegaRun(Parabola2D, max=FALSE, verbose=0, profile=TRUE, batch=FALSE)
+skip_on_cran()
+ tmp<-tempdir()
+ a<-xegaRun(Parabola2D, max=FALSE, verbose=0, 
+ profile=TRUE, batch=FALSE, path=tmp)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
     "GAconfig", "GAenv", "timer", "logfn", "resfn"))
- unlink("xegaResult*.rds")
           }
 )
 
 test_that("RunGA max=FALSE, profile=TRUE, batch=TRUE  OK",
  {
 skip_on_cran()
- a<-xegaRun(Parabola2D, max=FALSE, verbose=0, profile=TRUE, batch=TRUE)
+ tmp<-tempdir()
+ a<-xegaRun(Parabola2D, max=FALSE, verbose=0, 
+            profile=TRUE, batch=TRUE, path=tmp)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
     "GAconfig", "GAenv", "timer", "logfn", "resfn"))
- unlink("xegaResult*.rds")
           }
 )
 

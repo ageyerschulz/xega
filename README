@@ -60,15 +60,15 @@ and pressing the tabulator.
 
 You get the man page by e.g 
 
-?RunGA
+?xegaRun
 
 or 
 
-help(RunGA)
+help(xegaRun)
 
 All examples given on a man page can be executed by
 
-example(RunGA)
+example(xegaRun)
 
 Note that man pages and examples are only available, if you install 
 the package as a library.

@@ -1020,6 +1020,14 @@
 #'                    function factory \code{sgXReplicationFactory} 
 #'                    of package \code{xega}.
 #'
+#' @param initgene    Default: "InitGene".
+#'                    For algorithm "sgp", 
+#'                    \enumerate{
+#'                    \item "InitGene": Random derivation tree. 
+#'                    \item "InitGeneGe": Random derivation tree from 
+#'                                        random integer vector.
+#'                    }
+#'
 #' @param offset  Offset used in proportional selection. Default: 1. 
 #'            Used in the following functions of package \code{xegaSelectGene}: 
 #'            \code{ScaleFitness},
@@ -1350,7 +1358,7 @@
 #'        \code{xegaResult<time stamp>.rds}. Default: \code{FALSE}.
 #'
 #' @param path
-#'        Path. Default: \code{""}.
+#'        Path. Default: \code{"."}.
 #'
 #' @return Result object. A named list of 
 #'         \enumerate{
@@ -1415,10 +1423,12 @@
 #' envXOR<-NewEnvXOR()
 #' BG<-compileBNF(booleanGrammar())
 #' d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
-#'    generations=5, popsize=20, verbose=0)
-#' e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sge", genemap="Mod",  
-#'    generations=5, popsize=20, reportEvalErrors=FALSE, verbose=1)
-#' f<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
+#'    generations=4, popsize=20, verbose=0)
+#' e<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
+#'    generations=4, popsize=20, verbose=0, initgene="InitGeneGe")
+#' f<-xegaRun(penv=envXOR, grammar=BG, algorithm="sge", genemap="Mod",  
+#'    generations=4, popsize=20, reportEvalErrors=FALSE, verbose=1)
+#' g<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    genemap="Identity", mutation="MutateGeneMix")
 #' 
 #' @importFrom parallelly availableCores
@@ -1528,6 +1538,7 @@ xegaRun<-function(
 		                     # "MutateGene" or "IVM"
 		                     #
 		 replication="Kid2", # Replication method.
+                 initgene="InitGene", # Initialization method.
 		                     #
 		 offset=1,           # offset in proportional selection
 		 eps=0.01,           # Small number in proportional selection. 
@@ -1607,7 +1618,7 @@ xegaRun<-function(
 		profile=FALSE,       # If TRUE: Measure time spent in
 		                     # main blocks of GA.
 		batch=FALSE,         # If TRUE: save result to file
-                path=""              # path to files.
+                path="."              # path to files.
 		)
 {
 
@@ -1736,7 +1747,7 @@ SelectGene=xegaSelectGene::SelectGeneFactory(method=selection),
 SelectMate=xegaSelectGene::SelectGeneFactory(method=mateselection),
 MutateGene=sgXMutationFactory(algorithm=algorithm, method=mutation), # gene dependent
 CrossGene=sgXCrossoverFactory(algorithm=algorithm, method=crossover), # gene dependent
-InitGene=sgXInitGeneFactory(algorithm),  # gene dependent
+InitGene=sgXInitGeneFactory(algorithm, method=initgene),  # gene dependent
 DecodeGene=sgXDecodeGeneFactory(algorithm, method=decoder), # gene dependent 
 GeneMap=sgXGeneMapFactory(algorithm=algorithm, method=genemap), # gene dependent
 EvalGene=xegaSelectGene::EvalGeneFactory(method=evalmethod),
@@ -1897,16 +1908,18 @@ if (lF$Verbose()==1)  {cat("\n")}
 
 if (logevals==TRUE)
 {
-        fn<-paste(path,"xegaEvalLog", Sys.time(), ".rds", sep="") # nocov
-	fn<-chartr(old=" :", new="--", fn)                  # nocov
-        saveRDS(object=evallog, file=fn)                    # nocov
-        result$logfn<-fn                                    # nocov
+fn<-createExclusiveFile(fpath=path, prefix="xegaEvalLog", ext=".rds") # nocov
+    if (is.null(fn))                                    # nocov
+        stop("Cannot create an exclusive file.")          # nocov
+      saveRDS(object=evallog, file=fn)                    # nocov
+      result$logfn<-fn                                    # nocov
 }
 
 if (batch==TRUE)
 {
-        fn<-paste(path,"xegaResult", Sys.time(), ".rds", sep="") # nocov
-	fn<-chartr(old=" :", new="--", fn)                 # nocov
+  fn<-createExclusiveFile(fpath=path, prefix="xegaResult", ext=".rds") # nocov
+    if (is.null(fn))                                      # nocov
+        stop("Cannot create an exclusive file.")            # nocov
         result$resfn<-fn                                    # nocov
         saveRDS(object=result, file=fn)                    # nocov
 }
