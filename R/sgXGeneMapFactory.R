@@ -13,6 +13,7 @@
 #'     \item "sgp": "Identity". The gene map function is not used in 
 #'                                 the decoder.
 #'     \item "sge": "Mod" or "Bucket".
+#'     \item "sgede": "Identity".
 #'  }
 #'
 #' @param algorithm  Algorithm. 
@@ -42,6 +43,7 @@ sgXGeneMapFactory<-function(algorithm="sga", method="Bin2Dec")
    if (algorithm=="sge") 
        {Factory<-xegaGeGene::xegaGeGeneMapFactory}
    if (algorithm=="sgde") {Factory<-xegaDfGene::xegaDfGeneMapFactory}
+   if (algorithm=="sgede") {Factory<-xegaDfGene::xegaDfGeneMapFactory}
    if (algorithm=="sgperm") 
        {Factory<-xegaDfGene::xegaDfGeneMapFactory}
 if (!exists("Factory", inherits=FALSE))

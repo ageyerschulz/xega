@@ -145,10 +145,12 @@ for (i in 1:nrow(penv$TestCases))
 { s<-s+
 (penv$TestCases[i,ncol(penv$TestCases)]==TEST(penv$TestCases[i,]))
 }
-if (identical(gene, NULL)) {return(s)}
-  b<-xegaDerivationTrees::treeLeaves(gene$gene1, lF$Grammar$ST)
-  s<-(s+(1/(b^2)))
 return(s)
+#
+# if (identical(gene, NULL)) {return(s)}
+#  b<-xegaDerivationTrees::treeLeaves(gene$gene1, lF$Grammar$ST)
+#  s<-(s+(1/(b^2)))
+#return(s)
 }
 return(penv)
 }

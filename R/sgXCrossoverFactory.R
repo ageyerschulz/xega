@@ -15,6 +15,8 @@
 #'     \item "sge": 
 #'        "Cross2Gene", "UCross2Gene", "UPCross2Gene",
 #'        "CrossGene", "UCrossGene", "UPCrossGene".
+#'     \item "sgede": 
+#'        "CrossGene", "UCrossGene", "UPCrossGene".
 #'     \item "sgp": 
 #'        "CrossGene", "Cross2Gene", "AllCrossGene", "AllCross2Gene",
 #'        "FilterCrossGene", "FilterCross2Gene".
@@ -49,6 +51,7 @@ sgXCrossoverFactory<-function(algorithm="sga", method="CrossGene")
    if (algorithm=="sga") {Factory<-xegaGaGene::xegaGaCrossoverFactory}
    if (algorithm=="sgp") {Factory<-xegaGpGene::xegaGpCrossoverFactory}
    if (algorithm=="sge") {Factory<-xegaGaGene::xegaGaCrossoverFactory}
+   if (algorithm=="sgede") {Factory<-xegaDfGene::xegaDfCrossoverFactory}
    if (algorithm=="sgde") {Factory<-xegaDfGene::xegaDfCrossoverFactory}
    if (algorithm=="sgperm") {Factory<-xegaPermGene::xegaPermCrossoverFactory}
 if (!exists("Factory", inherits=FALSE))

@@ -3,7 +3,8 @@
 #'
 #' @description A gene-specific decoder must be provided.
 #'
-#' @param algorithm  "sga", "sgde", "sgperm", "sge", sgp". Default: "sga".
+#' @param algorithm  "sga", "sgde", "sgperm", "sge", "sgede", 
+#'                   "sgp". Default: "sga".
 #'
 #' @param method     Method. Default: "DecodeGene". 
 #'
@@ -25,6 +26,7 @@ sgXDecodeGeneFactory<-function(algorithm="sga", method="DecodeGene")
    if (algorithm=="sga") {f<-xegaGaGene::xegaGaDecodeGene}
    if (algorithm=="sgp") {f<-xegaGpGene::xegaGpDecodeGene}
    if (algorithm=="sge") {f<-xegaGeGene::xegaGeDecodeGeneFactory(method)}
+   if (algorithm=="sgede") {f<-xegaGeGene::xegaGeDecodeGeneFactory(method)}
    if (algorithm=="sgde") {f<-xegaDfGene::xegaDfDecodeGene}
    if (algorithm=="sgperm") {f<-xegaPermGene::xegaPermDecodeGene}
 if (!exists("f", inherits=FALSE))

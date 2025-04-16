@@ -20,6 +20,11 @@
 #'        \item \code{"sge"}:    Grammatical evolution (genetic algorithm 
 #'                               with binary genes and a grammar-driven
 #'                               decoder.
+#'        \item \code{"sgede"}:  Grammatical evolution (genetic algorithm 
+#'                               with real genes, genetic operators from 
+#'                               from differential evolution 
+#'                               and a grammar-driven
+#'                               decoder.
 #'        }
 #'   
 #'       The choice of the algorithm determines the gene-dependent 
@@ -188,6 +193,8 @@
 #' \strong{"sgde"}\tab Number of parameters. \tab 
 #'                     \code{length(penv$bitlength()}, 
 #'                     \code{penv$lb()}, \code{penv$ub()}\cr
+#' \strong{"sgede"}\tab Number of Codons. \tab 
+#'                     \code{codons}, \code{codonPrecision}\cr
 #' \strong{"sgperm"}\tab Number of symbols. \tab \code{penv$genelength()} \cr
 #' \strong{"sgp"}\tab Depth bound of derivation tree. \tab \code{maxdepth} \cr
 #' \strong{"sge"}\tab Number of codons and 
@@ -216,16 +223,28 @@
 #' The following table gives a working standard configuration of the pipeline of the genetic operators for each 
 #' of the five algorithms:
 #'
-#' \tabular{lccccc}{
-#' \strong{Step/Algorithm}\tab\strong{"sga"}\tab\strong{"sgde"}\tab\strong{"sgperm"}\tab\strong{"sgp"}\tab\strong{"sge"}\cr 
-#' (next) Scaling         \tab NoScaling    \tab NoScaling     \tab NoScaling       \tab NoScaling    \tab NoScaling    \cr
-#' (next) Selection       \tab  SUS         \tab  UniformP     \tab SUS             \tab   SUS        \tab  SUS         \cr
-#' (next) Replication     \tab  Kid2        \tab    DE         \tab   Kid2          \tab   Kid2       \tab  Kid2        \cr
-#' (next) Crossover       \tab  Cross2Gene  \tab  UCrossGene   \tab  Cross2Gene     \tab Cross2Gene   \tab Cross2Gene   \cr
-#' (next) Mutation        \tab  MutateGene  \tab  MutateGeneDE \tab  MutateGene     \tab MutateGene   \tab MutateGene   \cr
-#' (next) Acceptance      \tab    All       \tab   Best        \tab   All           \tab    All       \tab   All        \cr 
-#' (eval) Decoder         \tab   Bin2Dec    \tab Identity      \tab Identity        \tab     -        \tab   Mod        \cr
-#' (eval) Evaluation      \tab  EvalGeneU   \tab EvalGeneU     \tab EvalGeneU       \tab  EvalGeneU   \tab EvalGeneU 
+#' \tabular{lccc}{
+#' \strong{Step/Algorithm}\tab\strong{"sga"}\tab\strong{"sgde"}\tab\strong{"sgperm"}\cr 
+#' (next) Scaling         \tab NoScaling    \tab NoScaling     \tab NoScaling       \cr
+#' (next) Selection       \tab  SUS         \tab  UniformP     \tab SUS             \cr
+#' (next) Replication     \tab  Kid2        \tab    DE         \tab   Kid2          \cr
+#' (next) Crossover       \tab  Cross2Gene  \tab  UCrossGene   \tab  Cross2Gene     \cr
+#' (next) Mutation        \tab  MutateGene  \tab  MutateGeneDE \tab  MutateGene     \cr
+#' (next) Acceptance      \tab    All       \tab   Best        \tab   All           \cr 
+#' (eval) Decoder         \tab   Bin2Dec    \tab Identity      \tab Identity        \cr
+#' (eval) Evaluation      \tab  EvalGeneU   \tab EvalGeneU     \tab EvalGeneU      
+#' }
+#'
+#' \tabular{lccc}{
+#' \strong{Step/Algorithm}\tab\strong{"sgp"}\tab\strong{"sge"} \tab\strong{"sgede"} \cr 
+#' (next) Scaling         \tab NoScaling    \tab NoScaling     \tab NoScaling       \cr
+#' (next) Selection       \tab   SUS        \tab  SUS          \tab UniformP        \cr
+#' (next) Replication     \tab   Kid2       \tab  Kid2         \tab    DE           \cr
+#' (next) Crossover       \tab Cross2Gene   \tab Cross2Gene    \tab UCrossGene      \cr
+#' (next) Mutation        \tab MutateGene   \tab MutateGene    \tab MutateGeneDE    \cr
+#' (next) Acceptance      \tab    All       \tab   All         \tab   Best          \cr 
+#' (eval) Decoder         \tab     -        \tab   Mod         \tab Identity        \cr
+#' (eval) Evaluation      \tab  EvalGeneU   \tab EvalGeneU     \tab EvalGeneU
 #' }
 
 #' 
@@ -353,7 +372,8 @@
 #' (configured with \code{replication="Kid1"}) implements a genetic operator pipeline
 #' with an acceptance rule. 
 #'
-#' For differential evolution (algorithm "sgde"), \code{replication="DE"} 
+#' For differential evolution (algorithm "sgde") and grammatical evolution with 
+#' differential evolution operators (algorithm "sgede"), \code{replication="DE"} 
 #' must be configured.
 #' The replication method for differential evolution is configured by the function  
 #' \code{xegaDfReplicationFactory()} of package \code{xegaDfGene}.
@@ -373,7 +393,7 @@
 #'  (1 kid)   \tab 1-Point              \tab xegaGaCrossGene()              \tab "CrossGene"   \tab           \cr
 #'            \tab Uniform              \tab xegaGaUCrossGene()             \tab "UCrossGene"  \tab      \cr
 #'            \tab Parametrized Uniform \tab  xegaGaUPCrossGene()           \tab "UPCrossGene" \tab ucrossSwap  \cr
-#'  \strong{Algorithm:}  \tab \strong{"sgde"} \tab \strong{Package:}    \tab \strong{xegaDfGene}  \tab \cr
+#'  \strong{Algorithm:}  \tab \strong{"sgde"} and \strong{"sgede"} \tab \strong{Package:}    \tab \strong{xegaDfGene}  \tab \cr
 #'  (1 kid)   \tab 1-Point              \tab  xegaDfCrossGene()             \tab "CrossGene"   \tab           \cr
 #'            \tab Uniform              \tab  xegaDfCrossGene()             \tab "UCrossGene"  \tab      \cr
 #'            \tab Parametrized Uniform \tab  xegaDfUPCrossGene()           \tab "UPCrossGene" \tab ucrossSwap  \cr
@@ -408,7 +428,7 @@
 #'  Individually        \tab  xegaGaIVAdaptiveMutateGene()  \tab "IVM"  \tab bitmutrate,     \cr
 #'  Variable Bit        \tab                                \tab        \tab bitmutrate2,     \cr
 #'  Mutation            \tab                                \tab        \tab  and cutoffFit     \cr
-#'  \strong{Algorithm:}  \tab \strong{"sgde"} \tab \strong{Package:}    \tab \strong{xegaDfGene} \cr
+#'  \strong{Algorithm:}  \tab \strong{"sgde"} and \strong{"sgede"} \tab \strong{Package:}    \tab \strong{xegaDfGene} \cr
 #'  Differential \tab  xegaDfMutateGeneDE()             \tab "MutateGene" or   \tab lF$ScaleFactor() \cr
 #'  Evolution Mutation             \tab                                     \tab "MutateGeneDe"    \tab (Configurable)   \cr
 #' \strong{Algorithm:} \tab \strong{"sgperm"} \tab \strong{Package:}    \tab \strong{xegaPermGene}\cr
@@ -517,16 +537,16 @@
 #' Method              \tab "Permutation"           \tab                        \tab                      \cr
 #' }
 #'
-#' \tabular{lcc}{
-#' Algorithm:          \tab \strong{"sgp"}     \tab\strong{"sge"}                 \cr 
-#' In package:         \tab xegaGpGene         \tab xegaGeGene                    \cr
-#' Decoder Factories   \tab (Not configurable) \tab xegaGeDecodeGeneFactory()     \cr
-#' Decoder:            \tab xegaGpDecodeGene() \tab                          \cr 
-#' Method:             \tab                    \tab "DecodeGene"            \cr
-#' Method:             \tab                    \tab "DecodeGeneDT"            \cr
-#' Gene map factories: \tab (Not configurable) \tab xegaGeGeneMapFactory()        \cr
-#' Method              \tab                    \tab "Mod"                  \cr
-#' Method              \tab                    \tab "Buck"                 \cr
+#' \tabular{lccc}{
+#' Algorithm:          \tab \strong{"sgp"}     \tab\strong{"sge"}              \tab\strong{"sgede"}           \cr 
+#' In package:         \tab xegaGpGene         \tab xegaGeGene                 \tab xegaGeGene                \cr
+#' Decoder Factories   \tab (Not configurable) \tab xegaGeDecodeGeneFactory()  \tab xegaGeDecodeGeneFactory() \cr
+#' Decoder:            \tab xegaGpDecodeGene() \tab                            \tab                           \cr 
+#' Method:             \tab                    \tab "DecodeGene"               \tab "DecodeGene"              \cr
+#' Method:             \tab                    \tab "DecodeGeneDT"             \tab "DecodeGeneDT"            \cr
+#' Gene map factories: \tab (Not configurable) \tab xegaGeGeneMapFactory()     \tab xegaDfGeneMapFactory()    \cr
+#' Method              \tab                    \tab "Mod"                      \tab "Identity"                \cr
+#' Method              \tab                    \tab "Buck"                     \tab                           \cr
 #' }
 #'
 #' @section Evaluation:
@@ -615,6 +635,15 @@
 #'        HPC environments.
 #'  }
 #'
+#' @section Semantics of the local function list lF:
+#'
+#' This is experimental. The rationale is to 
+#' save on communication cost in multi-core processing.
+#' \itemize{
+#' \item byValue is the Default.
+#' \item byReference converts lF to an evironment.
+#' } 
+#'
 ### Problem Specification
 #'
 #' @param penv        Problem environment.
@@ -638,6 +667,10 @@
 #'                    \item "sgperm": Permutation representation.
 #'                    \item "sge": Binary representation. 
 #'                                 Grammatical evolution.    
+#'                                 (Not yet variable length.)
+#'                    \item "sgede": Real representation. 
+#'                          Genetic operators from differential evolution.
+#'                             Grammatical evolution.    
 #'                                 (Not yet variable length.)
 #'                    \item "sgp": Derivation tree representation. 
 #'                                 Grammar Based Genetic Programming.
@@ -1251,9 +1284,9 @@
 #' @param logevals  Boolean.
 #'        If \code{TRUE} then log all evaluations and their parameters 
 #'        in the file
-#'        \code{xegaEvalLog<time stamp>.rds}. Default: \code{FALSE}.
+#'        \code{xegaEvalLog<exclusive pattern>.rds}. Default: \code{FALSE}.
 #'        
-#'        \code{log<-readRDS(xegaEvalLog<time stamp>.rds)} reads the log.
+#'        \code{log<-readRDS(xegaEvalLog<exclusive pattern>.rds)} reads the log.
 #'        The \code{log} is a list of named lists with the following elements:
 #'         \itemize{
 #'         \item \code{$generation}:   The generation.
@@ -1355,10 +1388,18 @@
 #'
 #' @param batch    Boolean.
 #'        If \code{TRUE}, then save the result in the file
-#'        \code{xegaResult<time stamp>.rds}. Default: \code{FALSE}.
+#'        \code{xegaResult<exclusive pattern>.rds}. Default: \code{FALSE}.
 #'
 #' @param path
 #'        Path. Default: \code{"."}.
+#'
+#' @param semantics   Determines the representation 
+#'                    of the local function list \code{lF}.
+#'                    Default: "byValue".
+#'                    \itemize{
+#'                      \item "byValue": \code{lF} is a named list object.
+#'                      \item "byReference": \code{lF} is an environment.
+#'                    }
 #'
 #' @return Result object. A named list of 
 #'         \enumerate{
@@ -1428,7 +1469,12 @@
 #'    generations=4, popsize=20, verbose=0, initgene="InitGeneGe")
 #' f<-xegaRun(penv=envXOR, grammar=BG, algorithm="sge", genemap="Mod",  
 #'    generations=4, popsize=20, reportEvalErrors=FALSE, verbose=1)
-#' g<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
+#' g<-xegaRun(penv=envXOR, grammar=BG, max=TRUE, algorithm="sgede", 
+#'    popsize=20, generations=4, verbose=1, reportEvalErrors=FALSE,
+#'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene", 
+#'    genemap="Identity", replication="DE", 
+#'    selection="UniformP", mateselection="UniformP", accept="Best")
+#' h<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    genemap="Identity", mutation="MutateGeneMix")
 #' 
 #' @importFrom parallelly availableCores
@@ -1444,6 +1490,7 @@
 #' @importFrom xegaSelectGene parm
 #### TODO
 #' @importFrom xegaGeGene xegaGePrecisionFactory
+#' @importFrom xegaGeGene mLCMG 
 #' @importFrom xegaDfGene xegaDfScaleFactorFactory
 #' @importFrom xegaPopulation xegaInitPopulation
 #' @importFrom xegaPopulation xegaEvalPopulationFactory
@@ -1618,7 +1665,8 @@ xegaRun<-function(
 		profile=FALSE,       # If TRUE: Measure time spent in
 		                     # main blocks of GA.
 		batch=FALSE,         # If TRUE: save result to file
-                path="."              # path to files.
+                path=".",            # path to files.
+             semantics="byValue"     # semantics of lF
 		)
 {
 
@@ -1676,6 +1724,10 @@ else
 # We do not check the feasibility of codonPrecision.
 
 bitsOnGene<-codons*CodonPrecision
+
+### CodonPrecision for algorithm sgede:
+if (algorithm=="sgede")
+{ CodonPrecision<-100*xegaGeGene::mLCMG(grammar$PT$LHS)}
 
 # Build local configuration (local functions) 
 lF<-list(
@@ -1794,6 +1846,11 @@ NextPopulation<-xegaPopulation::xegaNextPopulation
 }
 
 # RunGA Main 
+
+### Semantics
+if (semantics=="byReference") {lF<-as.environment(lF)}
+
+###
 
 tUsed<-mainLoopTimer()
 

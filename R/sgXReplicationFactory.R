@@ -2,7 +2,7 @@
 #' Factory for configuring a gene-dependent Replication function.
 #'
 #' @param algorithm  Algorithm. 
-#'                   Available: "sga", "sgde", "sgperm", "sge", sgp". 
+#'                   Available: "sga", "sgde", "sgperm", "sge", "sgede", sgp". 
 #'                   Default: "sga".
 #'
 #' @param method     Method. 
@@ -11,7 +11,7 @@
 #'    \itemize{
 #'     \item "sga", "sgperm", "sge", sgp": 
 #'        "Kid1", "Kid2".
-#'     \item "sgde": 
+#'     \item "sgde", "sgede": 
 #'        "DE".
 #'  }
 #'
@@ -34,6 +34,7 @@ sgXReplicationFactory<-function(algorithm="sga", method="Kid1")
    if (algorithm=="sge") 
        {Factory<-xegaGaGene::xegaGaReplicationFactory}
    if (algorithm=="sgde") {Factory<-xegaDfGene::xegaDfReplicationFactory}
+   if (algorithm=="sgede") {Factory<-xegaDfGene::xegaDfReplicationFactory}
    if (algorithm=="sgperm") 
        {Factory<-xegaGaGene::xegaGaReplicationFactory}
 if (!exists("Factory", inherits=FALSE))

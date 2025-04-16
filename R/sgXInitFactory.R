@@ -19,6 +19,7 @@
 #'@importFrom xegaGpGene xegaGpInitGeneFactory
 #'@importFrom xegaGeGene xegaGeInitGene
 #'@importFrom xegaDfGene xegaDfInitGene
+#'@importFrom xegaDfGene xegaGedeInitGene
 #'@importFrom xegaPermGene xegaPermInitGene
 #'@export
 sgXInitGeneFactory<-function(algorithm="sga", method="InitGene")
@@ -26,6 +27,7 @@ sgXInitGeneFactory<-function(algorithm="sga", method="InitGene")
    if (algorithm=="sga") {f<-xegaGaGene::xegaGaInitGene}
    if (algorithm=="sgp") {f<-xegaGpGene::xegaGpInitGeneFactory(method)}
    if (algorithm=="sge") {f<-xegaGeGene::xegaGeInitGene}
+   if (algorithm=="sgede") {f<-xegaDfGene::xegaGedeInitGene}
    if (algorithm=="sgde") {f<-xegaDfGene::xegaDfInitGene}
    if (algorithm=="sgperm") {f<-xegaPermGene::xegaPermInitGene}
 if (!exists("f", inherits=FALSE))

@@ -12,6 +12,7 @@
 #'     \item "sga": "MutateGene", "IVM".
 #'     \item "sge": "MutateGene", "IVM".
 #'     \item "sgp": "MutateGene", "MutateAllGene", "MutateFilterGene".
+#'     \item "sgede": "MutateGene", "MutateGeneDE".
 #'     \item "sgde": "MutateGene", "MutateGeneDE".
 #'     \item "sgperm": "MutateGene", "MutateGeneOrderBased", 
 #'           "MutateGenekInversion", "MutateGene2Opt", "MutateGenekOptLK",
@@ -45,6 +46,7 @@ sgXMutationFactory<-function(algorithm="sga", method="MutateGene")
        {Factory<-xegaGpGene::xegaGpMutationFactory}
    if (algorithm=="sge") 
        {Factory<-xegaGaGene::xegaGaMutationFactory}
+   if (algorithm=="sgede") {Factory<-xegaDfGene::xegaDfMutationFactory}
    if (algorithm=="sgde") {Factory<-xegaDfGene::xegaDfMutationFactory}
    if (algorithm=="sgperm") 
        {Factory<-xegaPermGene::xegaPermMutationFactory}
