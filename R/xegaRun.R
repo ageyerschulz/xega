@@ -361,7 +361,8 @@
 #'
 #' For genetic algorithms ("sga", "sgp", sgperm", and "sge") 
 #' in the replication process of a gene the crossover operator may 
-#' by configured to produce one new gene (\code{replication="Kid1"})  
+#' by configured to produce one new gene (\code{replication="Kid1"}
+#' or \code{replication="Kid1Pipeline"})  
 #' or two new genes (\code{replication="Kid2"}). The first version  
 #' loses genetic information in the crossover operation, whereas the second version 
 #' retains the genetic material in the population.
@@ -370,17 +371,27 @@
 #' The replication method is configured by the function  
 #' \code{xegaGaReplicationFactory()} of package \code{xegaGaGene}.
 #'
-#' Note that only the function \code{xegaGaReplicateGene} of \code{xegaGaGene} 
-#' (configured with \code{replication="Kid1"}) implements a genetic operator pipeline
+#' Note that only the functions \code{xegaGaReplicateGene} 
+#' or \code{xegaGaReplicateGenePipeline} of \code{xegaGaGene} 
+#' (configured with \code{replication="Kid1"} or 
+#' with \code{replicate="Kid1Pipeline"} implement a genetic operator pipeline
 #' with an acceptance rule. 
 #'
 #' For differential evolution (algorithm "sgde") and grammatical evolution with 
-#' differential evolution operators (algorithm "sgede"), \code{replication="DE"} 
+#' differential evolution operators (algorithm "sgede"), 
+#' \code{replication="DE"} or \code{replication="DEPipeline"} 
 #' must be configured.
 #' The replication method for differential evolution is configured by the function  
 #' \code{xegaDfReplicationFactory()} of package \code{xegaDfGene}.
 #' It implements a configurable acceptance rule. For classic differential evolution, 
 #' use \code{accept="Best"}. 
+#'
+#' For the pipeline versions, add \code{pipeline=TRUE}. 
+#'
+#' The pipeline versions build function closures of genetic operator pipelines which
+#' are evaluated in the evaluation phase of the genetic algorithm. 
+#' This implies that the complete genetic mechanism except the selection of genes 
+#' can be parallelized. 
 #'
 #' @section Crossover:
 #'
@@ -464,7 +475,10 @@
 #' into the next population.
 #' 
 #' An acceptance rule is only executed as part of the genetic operator pipeline, if 
-#' \code{replicate="Kid1"} or \code{replicate="DE"}.
+#' \code{replicate="Kid1"}, 
+#' \code{replicate="Kid1Pipeline"}, 
+#' \code{replicate="DE"}.
+#' or \code{replicate="DEPipeline"}.
 #' 
 #' Two classes of acceptance rules are provided: 
 #' \itemize{
@@ -1049,7 +1063,7 @@
 #'                    "Kid1Pipeline" means a function closure with a genetic operator pipeline is returned.
 #'                    "Kid2" means a crossover operator with two kids.
 #'                     
-#'                     For algorithm "sgde", \code{replication} must be 
+#'                     For algorithms "sgde" and "sgede", \code{replication} must be 
 #'                     set to "DE" or "DEPipeline". 
 #'
 #'                    The Pipeline versions of replication generate a genetic operator pipeline as a function closure.
