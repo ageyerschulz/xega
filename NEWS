@@ -49,3 +49,18 @@ Version 0.9.0.8 (2025-04-14)
 - NewEnvXOR: Dependency on gene representation removed.
              Can be optimized by "sgp", "sge" and "sgede".
 
+Version 0.9.0.9 (2025-04-14)
+
+- xegaRun: Column names added to $popStat.
+
+Version 0.9.0.10 (2025-05-01)
+
+- xegaRun: Self reporting of actual number of cores used.
+
+Version 0.9.0.11 (2025-06-29)
+
+- xegaRun: pipeline=TRUE implies that the population is 
+           converted into a list of genetic operator pipelines.
+           When parallelized, the genetic operator pipelines are 
+           evaluated in parallel. 
+ 
