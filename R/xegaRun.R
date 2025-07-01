@@ -1952,6 +1952,11 @@ if (generations>1)
 {
 for(i in 1:generations)
 {
+if (anytime==TRUE) 
+{ tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer(); 
+      xegaAnyTimeResult(mainLoopTimer, pp=pop, ft=fit, lF=lF, 
+               allsolutions=allsolutions, popStat=popStat, evalFail=evalFail, 
+               GAconfiguration=GAconfiguration, path=path)} 
 	rc<-SummaryPopulation(pop, fit, lF, i)
 	if (scaling %in% c("ThresholdScaling", "ContinuousScaling"))
 	{lF$RDM<-xegaSelectGene::parm(xegaSelectGene::DispersionRatio(
@@ -1978,11 +1983,7 @@ if (logevals==TRUE)
 #	cat("new Temperature:", newTemperature, "\n")
 	lF$TempK<-parm(newTemperature)
 ###  Before end of main loop.
-if (anytime==TRUE) 
-{ tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer(); 
-      xegaAnyTimeResult(mainLoopTimer, pp=pop, ft=fit, lF=lF, 
-               allsolutions=allsolutions, popStat=popStat, evalFail=evalFail, 
-               GAconfiguration=GAconfiguration, path=path)} 
+
 # end of main loop
 }
 # end of skip
