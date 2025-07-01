@@ -64,3 +64,8 @@ Version 0.9.0.11 (2025-06-29)
            When parallelized, the genetic operator pipelines are 
            evaluated in parallel. 
  
+           anytime=TRUE to write  a xegaResult after each generation
+           in a result file.
+
+- xegaAnyTimeResult() writes a xegaResult file.
+

@@ -649,6 +649,8 @@
 #'        into another directory. The existence of the directory specified by \code{path} is not checked.
 #'        \code{batch=TRUE} combined with \code{verbose=TRUE} should be used in batch environments on 
 #'        HPC environments.
+#'  \item \code{anytime=TRUE} writes the result object \code{path/xegaAnyTimeResult.rds} after each generation. 
+#'        Only the most recent result is available.
 #'  }
 #'
 #' @section Semantics of the local function list lF:
@@ -1367,7 +1369,7 @@
 #'                is set by \code{parallelly:availableCores()} 
 #'                if the execution model is "MultiCore" or "MultiCoreHet".
 #'                  
-#' @param pipeline    If \code{TRUE}, the extended genetic machinery generates  
+#' @param pipeline  Boolean.  If \code{TRUE}, the extended genetic machinery generates  
 #'                    a population of genetic operator pipelines which can be 
 #'                    executed in parallel. Default: \code{FALSE}.
 #'
@@ -1413,7 +1415,11 @@
 #'
 #' @param batch    Boolean.
 #'        If \code{TRUE}, then save the result in the file
-#'        \code{xegaResult<exclusive pattern>.rds}. Default: \code{FALSE}.
+#'        \code{path/xegaResult<exclusive pattern>.rds}. Default: \code{FALSE}.
+#'
+#' @param anytime  Boolean.
+#'        If \code{TRUE}, then save the current best result in the file
+#'        \code{path/xegaAnyTimeResult.rds}. Default: \code{FALSE}.
 #'
 #' @param path
 #'        Path. Default: \code{"."}.
@@ -1712,6 +1718,7 @@ xegaRun<-function(
 		profile=FALSE,       # If TRUE: Measure time spent in
 		                     # main blocks of GA.
 		batch=FALSE,         # If TRUE: save result to file
+		anytime=FALSE,         # If TRUE: save result to file
                 path=".",            # path to files.
              semantics="byValue"     # semantics of lF
 		)
@@ -1970,10 +1977,16 @@ if (logevals==TRUE)
 	newTemperature<-force(lF$Cooling(i, lF))
 #	cat("new Temperature:", newTemperature, "\n")
 	lF$TempK<-parm(newTemperature)
-} 
+###  Before end of main loop.
+if (anytime==TRUE) 
+{ tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer(); 
+      xegaAnyTimeResult(mainLoopTimer, pp=pop, ft=fit, lF=lF, 
+               allsolutions=allsolutions, popStat=popStat, evalFail=evalFail, 
+               GAconfiguration=GAconfiguration, path=path)} 
 # end of main loop
 }
 # end of skip
+}
 
 # set up return values.
 
@@ -1995,7 +2008,7 @@ tUsed<-mainLoopTimer()
 	timer[["cObservePopulation"]]<-observePopulationTimer("Count")
 	timer[["cSummaryPopulation"]]<-summaryPopulationTimer("Count")
 
-        rc<-xegaBestInPopulation(pop, fit, lF, allsolutions)
+        rc<-xegaPopulation::xegaBestInPopulation(pop, fit, lF, allsolutions)
 
        if (generations>1) {fit=NULL}
 
