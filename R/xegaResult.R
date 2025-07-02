@@ -43,8 +43,12 @@ xegaAnyTimeResult<-function(mlT,
                     logfn=NA,
                     resfn=NA)
 
-   fn<-"xegaAnyTimeResult.rds"
-   pfn<-file.path(path, fn)    
-   saveRDS(object=result, file=pfn)
+   fn1<-"tmp0AnyTimeResult.rds"
+   fn2<-"xegaAnyTimeResult.rds"
+   pfn1<-file.path(path, fn1)    
+   pfn2<-file.path(path, fn2)    
+   saveRDS(object=result, file=pfn1)
+   if (!file.rename(pfn1, pfn2)) 
+      {stop("file.rename in xegaAnyTimeResult failed.")}
    invisible(0)
 }
