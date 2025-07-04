@@ -363,8 +363,10 @@
 #' in the replication process of a gene the crossover operator may 
 #' by configured to produce one new gene (\code{replication="Kid1"}
 #' or \code{replication="Kid1Pipeline"})  
-#' or two new genes (\code{replication="Kid2"}). The first version  
-#' loses genetic information in the crossover operation, whereas the second version 
+#' or two new genes (\code{replication="Kid2"} or 
+#' \code{replication="Kid2Pipeline"}). The first version  
+#' loses genetic information in the crossover operation, 
+#' whereas the second version 
 #' retains the genetic material in the population.
 #' There is a dependency between \code{replication} and \code{crossover}:
 #' \code{"Kid2"} requires a crossover operator which produces two kids.
@@ -477,6 +479,7 @@
 #' An acceptance rule is only executed as part of the genetic operator pipeline, if 
 #' \code{replicate="Kid1"}, 
 #' \code{replicate="Kid1Pipeline"}, 
+#' \code{replicate="Kid2Pipeline"}, 
 #' \code{replicate="DE"}.
 #' or \code{replicate="DEPipeline"}.
 #' 
@@ -1059,18 +1062,33 @@
 #'        }
 #'                    } 
 #'
-#' @param replication "Kid1", "Kid1Pipeline" or "Kid2". Default: "Kid1".
+#' @param replication "Kid1", "Kid1Pipeline", "Kid2" or 
+#'                    "Kid2Pipeline". Default: "Kid1".
 #'                    For algorithms "sga", "sgPerm", "sgp", and "sge":
 #'                    "Kid1" means a crossover operator with one kid.
-#'                    "Kid1Pipeline" means a function closure with a genetic operator pipeline is returned.
+#'                    "Kid1Pipeline" means a function closure 
+#'                     with a genetic operator pipeline is returned.
 #'                    "Kid2" means a crossover operator with two kids.
+#'                    "Kid2Pipeline" means a function closure 
+#'                     with a genetic operator pipeline is returned.
 #'                     
-#'                     For algorithms "sgde" and "sgede", \code{replication} must be 
+#'                     For algorithms "sgde" and "sgede", 
+#'                     \code{replication} must be 
 #'                     set to "DE" or "DEPipeline". 
 #'
-#'                    The Pipeline versions of replication generate a genetic operator pipeline as a function closure.
-#'                    The execution of the function closures is shifted to the evaluation step and, thus, can 
+#'                     The pipeline version of replication 
+#'                     requires to set \code{pipeline=TRUE} too.
+#'
+#'                    The pipeline versions of replication 
+#'                    generate a genetic operator pipeline 
+#'                    as a function closure.
+#'                    The execution of the function closures 
+#'                    is shifted to the evaluation step and, thus, can 
 #'                    be parallelized.
+#'
+#'                    When genetic operator pipelines are used,
+#'                    the population vector cycles between function 
+#'                    elements and named lists as elements.
 #'
 #'                    Used as the \code{method} argument of the 
 #'                    function factory \code{sgXReplicationFactory} 
@@ -1485,7 +1503,9 @@
 #'         
 #' @examples
 #' a<-xegaRun(penv=Parabola2D, generations=10, popsize=20, verbose=0)
-#' b<-xegaRun(penv=Parabola2D, algorithm="sga", generations=10, popsize=20, max=FALSE, 
+#' b<-xegaRun(penv=Parabola2D, algorithm="sga", 
+#'    generations=10, popsize=20, max=FALSE, 
+#'    replication="Kid2Pipeline", crossover="Cross2Gene", pipeline=TRUE,
 #'    verbose=1, replay=5, profile=TRUE)
 #' c<-xegaRun(penv=Parabola2D, max=FALSE, algorithm="sgde", 
 #'    popsize=20, generations=10, 
@@ -1963,12 +1983,17 @@ if (anytime==TRUE)
 		matrix(popStat, byrow=TRUE, ncol=8), lF$DispersionMeasure, lF))
 	       }
 	pop<-NextPopulation(pop, lF$ScalingFitness(fit, lF), lF)
+#        cat("after next population\n")
+#        print(pop)
 	popfit<-EvalPopulation(pop, lF)
+#        cat("after eval population\n")
+#        print(popfit)
 	pop<-popfit$pop
 	fit<-popfit$fit
 	evalFail<-evalFail+popfit$evalFail
 	if (length(fit)<popsize) 
-	{return(popfit)} # nocov
+	{warning("fit and pop do not match. Gene representation OK?") 
+         return(popfit)} # nocov
 	popStat<-ObservePopulation(fit, popStat)
 if (logevals==TRUE)
 {evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=i, lF=lF)} # nocov  
