@@ -973,6 +973,17 @@
 #'                      \item "Const":  Constant scale factor. 
 #'                      \item "Uniform": A random scale factor in the interval 
 #'                             from \code{0.000001} to \code{1.0}.
+#'                      \item "DERSF": A random scale factor in the interval 
+#'                             from \code{0.5} to \code{1.0}.
+#'                      \item "DETVSF": The scale factor is linear 
+#'                            decaying from an upper bound 
+#'                            (\code{scalefactor1==0.9}) to a lower bound 
+#'                            (\code{scalefactor2==0.2}) with the 
+#'                            number of \code{generations}.
+#'                      \item "CauchySF": Bounded 
+#'                            Cauchy distributed scale factor 
+#'                            with a scale parameter which increases
+#'                            with the number of \code{generations}.
 #'                       }
 #' @param cutoffFit   Cutoff for fitness.      Default: \code{0.5}. 
 #'                    (\code{"sga"} and \code{"sge"}).
@@ -1847,6 +1858,7 @@ Beta=xegaSelectGene::parm(beta),
 Cooling=xegaPopulation::CoolingFactory(method=cooling),
 CoolingPower=xegaSelectGene::parm(coolingPower),
 Generations=xegaSelectGene::parm(generations),
+cGeneration=xegaSelectGene::parm(0),
 Temp0=xegaSelectGene::parm(temp0),
 TempK=xegaSelectGene::parm(temp0),
 TempN=xegaSelectGene::parm(tempN),

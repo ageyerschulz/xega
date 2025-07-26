@@ -69,3 +69,11 @@ Version 0.9.0.11 (2025-06-29)
 
 - xegaAnyTimeResult() writes a xegaResult file.
 
+Version 0.9.0.12 (2025-07-26)
+
+- Pipeline now correct for crossover operators with 2 kids.
+
+- Options 
+  (DERSF, DETVSF, and CauchySF)  
+  for scale factors for differential evolution added.
+
