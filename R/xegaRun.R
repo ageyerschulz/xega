@@ -580,11 +580,46 @@
 #' evolution without gene repair this should be set to \code{FALSE}. 
 #' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
 #'
-#' @section Distributed and Parallel Processing:
+#' @section The Concept of Genetic Operator Pipelines:
 #'
-#' The current scope of parallelization is the parallel evaluation of genes (the steps marked with (eval) in the 
-#' genetic operator pipeline. This strategy is less efficient for differential evolution and permutation-based genetic
-#' algorithms because of the embedding of repeated evaluations into genetic operators. 
+#' In the gene life cycle, a gene is 
+#' \enumerate{
+#'   \item  modified by the genetic machinery and then 
+#'   \item  evaluated (expressed as a phenotype and 
+#'          its fitness measured with regard to an environment).
+#'   }   
+#'
+#' In the current version of \code{xegaRun()} the genetic operations 
+#' are evaluated sequentially, whereas the fitness evaluation can be 
+#' parallelized. The drawback of this is that for algorithms as e.g. 
+#' differential evolution is that in order to accept a modified gene in the 
+#' population, its performance has to be better than that of its parent.
+#' This implies that for such algorithms the sequential part dominates 
+#' the execution times and the benefits from parallelization remain marginal.
+#'
+#' Genetic operator pipelines are function closures which embed 
+#' a sequence of basic genetic operations. In \code{xegaRun()}, 
+#' by setting the option \code{pipeline=TRUE} together with 
+#' \code{replication} to one of "Kid1Pipeline", "Kid2Pipeline", or 
+#' "DEPipeline", the selected replication function performs a set 
+#' of random experiments to select the proper genes and based on their 
+#' results compiles a function closure which embeds the genetic operator 
+#' pipeline. These function closures are then executed in the evaluation  
+#' step. This mechanism shifts the actual computation of all genetic 
+#' operations but the selection of genes to the evaluation step.
+#'   
+#' The effect of genetic operator pipelines are
+#' \enumerate{
+#' \item moderate for seqential execution. The net effect depends on the relative cost 
+#'       of the compilation process to the evaluation process. By compiling minimal genetic 
+#'       operating pipelines, moderate savings are achieved. 
+#' \item potentially high for parallel and distributed execution. The net effect depends on the 
+#'       cost of the compilation process, the cost of communication and the cost of the evaluation process.
+#'       The compilation process usually shifts more than 90 percent of the computational load to the 
+#'       evaluation phase of the genetic algorithm (which can be parallelized).
+#' }
+#'
+#' @section Distributed and Parallel Processing:
 #'
 #' In general, distributed and parallel processing requires a sequence of three steps:  
 #' \enumerate{
@@ -970,7 +1005,8 @@
 #'                      (Default: \code{0.2}). (\code{"sgde"}).
 #' @param scalefactor   Method for setting scale factor (\code{"sgde"}):
 #'                      \itemize{
-#'                      \item "Const":  Constant scale factor. 
+#'                      \item "Const":  Constant scale factor configured by
+#'                             \code{scalefactor1}.
 #'                      \item "Uniform": A random scale factor in the interval 
 #'                             from \code{0.000001} to \code{1.0}.
 #'                      \item "DERSF": A random scale factor in the interval 
@@ -984,6 +1020,13 @@
 #'                            Cauchy distributed scale factor 
 #'                            with a scale parameter which increases
 #'                            with the number of \code{generations}.
+#'                      \item "FBSASF": Fitness based self adaptive 
+#'                            scale factor.
+#'                      \item "RGSF": Random Gaussian 
+#'                            scale factor (Random pick of a random 
+#'                            number from either  
+#'                            \code{abs(rnorm(1, 0.3, 0.3))} or
+#'                            \code{abs(rnorm(1, 0.7, 0.3))}.
 #'                       }
 #' @param cutoffFit   Cutoff for fitness.      Default: \code{0.5}. 
 #'                    (\code{"sga"} and \code{"sge"}).
@@ -1556,7 +1599,7 @@
 #' j<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    popsize=20, generations=5, max2opt=20,
 #'    genemap="Identity",  mutation="MutateGeneMix", 
-#'    executionModel="MultiCore", replication="Kid1Pipeline", pipeline=TRUE, verbose=1) 
+#'    executionModel="Sequential", replication="Kid1Pipeline", pipeline=TRUE, verbose=1) 
 #' cat("t(s) h:", h$timer$tMainLoop, "i:", i$timer$tMainLoop, "j:", j$timer$tMainLoop, "\n")  
 #' 
 #' @importFrom parallelly availableCores
@@ -1590,6 +1633,7 @@
 #' @importFrom xegaPopulation checkTerminationFactory
 #' @importFrom xegaPopulation xegaLogEvalsPopulation
 #' @importFrom stats qnorm
+#' @importFrom stats var
 ##### TODO
 #' @importFrom xegaPopulation MutationRateFactory 
 ##### TODO
@@ -1990,11 +2034,19 @@ if (anytime==TRUE)
                allsolutions=allsolutions, popStat=popStat, evalFail=evalFail, 
                GAconfiguration=GAconfiguration, path=path)} 
 	rc<-SummaryPopulation(pop, fit, lF, i)
+
+# for adaptive operators.
+        lF$CBestFitness<-xegaSelectGene::parm(max(fit))
+        lF$CMeanFitness<-xegaSelectGene::parm(mean(fit))
+        lF$CVarFitness<-xegaSelectGene::parm(stats::var(fit))
+        lF$CWorstFitness<-xegaSelectGene::parm(min(fit))
+
 	if (scaling %in% c("ThresholdScaling", "ContinuousScaling"))
 	{lF$RDM<-xegaSelectGene::parm(xegaSelectGene::DispersionRatio(
 		matrix(popStat, byrow=TRUE, ncol=8), lF$DispersionMeasure, lF))
 	       }
 	pop<-NextPopulation(pop, lF$ScalingFitness(fit, lF), lF)
+        lF$cGeneration<-xegaSelectGene::parm(i)
 #        cat("after next population\n")
 #        print(pop)
 	popfit<-EvalPopulation(pop, lF)
@@ -2002,6 +2054,7 @@ if (anytime==TRUE)
 #        print(popfit)
 	pop<-popfit$pop
 	fit<-popfit$fit
+
 	evalFail<-evalFail+popfit$evalFail
 	if (length(fit)<popsize) 
 	{warning("fit and pop do not match. Gene representation OK?") 

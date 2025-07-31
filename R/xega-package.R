@@ -52,6 +52,43 @@
 #' if the \code{solution} meets a condition for early 
 #' termination.
 #'
+#' @section Genetic Operator Pipelines:
+#'
+#' In \code{xega} the extended gene life-cycle is:
+#'
+#' \itemize{
+#' \item (sequential) 
+#' ... -> gene (data structure) -> select -> replicate(crossover -> mutate -> accept) 
+#' \item (parallelizable)
+#'     -> decode -> evaluate -> gene (data structure) -> ...
+#' }
+#'
+#' Only the decode -> evaluate phase can be parallelized. 
+#' The select -> crossover -> mutate -> accept phases are executed sequentially. 
+#' For algorithms which require e.g. evaluation during the accept phase 
+#' (simulated annealing variants), this organization implies 
+#' that the improvement by parallel or distributed execution models
+#' is negligible.
+#'
+#' A genetic operator pipeline embeds 
+#' the crossover -> mutate -> accept -> decode -> evaluate phases 
+#' into a function closure
+#' per gene. The evaluation of a population of genes can be evaluated in parallel 
+#' with potentially high reductions in total run-time.  
+#'
+#' The gene life-cycle with genetic operator pipelines in \code{xega} is:
+#'
+#' \itemize{
+#' \item (sequential) 
+#' ... -> gene (data structure) -> select -> replicate pipeline -> gene (function closure) 
+#' \item (parallelizable)
+#'     -> evaluate -> gene (data structure) ...
+#' }
+#'
+#' This shifts the execution of the  
+#' crossover -> mutate -> accept -> decode -> evaluate phases to the parallizable
+#' evaluation of a function closure.
+#'
 #' @section Parallel and Distributed Execution:
 #'
 #' Several implementations of a parallel \code{lapply()} function 
