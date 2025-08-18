@@ -85,3 +85,8 @@ Version 0.9.0.13 (2025-08-17)
        Extract penv and grammar from solution object.
        Output of R-script to repeat run.
       
+Version 0.9.0.14 (2025-08-17)
+
+- Bug fix for pipelines with algorithm="sgp"
+  Rebuilt with package xegaGpGene 1.0.0.3
+ 
