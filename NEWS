@@ -77,3 +77,11 @@ Version 0.9.0.12 (2025-07-26)
   (DERSF, DETVSF, CauchySF, FBASF, RGSF)  
   for scale factors for differential evolution added.
 
+Version 0.9.0.13 (2025-08-17)
+
+- xegaRun: Variable GAconfig changed.
+
+- xegaReRun: 
+       Extract penv and grammar from solution object.
+       Output of R-script to repeat run.
+      
