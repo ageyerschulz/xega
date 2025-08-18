@@ -2047,11 +2047,18 @@ if (anytime==TRUE)
 	       }
 	pop<-NextPopulation(pop, lF$ScalingFitness(fit, lF), lF)
         lF$cGeneration<-xegaSelectGene::parm(i)
+#
+#if (pipeline==TRUE) {
 #        cat("after next population\n")
 #        print(pop)
+#        l<-list()
+#        l$pop<-pop
+#        l$lF<-lF
+#        return(l)
+#}
 	popfit<-EvalPopulation(pop, lF)
-#        cat("after eval population\n")
-#        print(popfit)
+#       cat("after eval population\n")
+#       print(popfit)
 	pop<-popfit$pop
 	fit<-popfit$fit
 
