@@ -94,4 +94,8 @@ Version 0.9.0.15 (2025-08-19)
 
 - Bug fix in xegaReRun: Call to xegaRun.
 - xegaRun: element xegaVersion added. 
+- Documentation sgXFactory corrected.
+- Documentation xegaRun corrected.
+   Crossover default is "Cross2Gene".
+   1 kid crossover: "AllCrossGene".
 

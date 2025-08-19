@@ -423,7 +423,7 @@
 #'            \tab Derivation Trees     \tab                              \tab                    \tab mincrossdepth, \cr
 #'            \tab                      \tab                              \tab                    \tab maxdepth, \cr
 #'            \tab                      \tab                              \tab                    \tab and maxtrials \cr
-#'  (1 kid)   \tab of Derivation Trees  \tab  xegaGpAllCrossGene()       \tab "CrossGene" \tab maxcrossdepth, \cr
+#'  (1 kid)   \tab of Derivation Trees  \tab  xegaGpAllCrossGene()       \tab "AllCrossGene" \tab maxcrossdepth, \cr
 #'            \tab                      \tab                              \tab            \tab maxdepth, \cr
 #'            \tab                      \tab                              \tab            \tab and maxtrials \cr
 #'            \tab of Depth-Filtered    \tab  xegaGpFilterCrossGene()    \tab "FilterCrossGene" \tab maxcrossdepth, \cr
@@ -885,7 +885,7 @@
 #'                      \code{xegaGpCrossGene} and \code{xegaGpCross2Gene}
 #'                     in package xegaGpGene. 
 #'
-#' @param crossover   Crossover method. Default: "CrossGene".
+#' @param crossover   Crossover method. Default: "Cross2Gene".
 #'                    The choice of crossover methods depends on the 
 #'                    setting of the argument \code{algorithm}.
 #'                    Used as the \code{method} argument in function factory
@@ -917,7 +917,7 @@
 #'                    \itemize{
 #'                    \item Crossover operators with 1 kid:
 #'                    \itemize{
-#'                    \item "CrossGene"  position-based one-point crossover. 
+#'                    \item "AllCrossGene"  position-based one-point crossover. 
 #'                    }
 #'                    \item Crossover operators with 2 kids:
 #'                    \itemize{
