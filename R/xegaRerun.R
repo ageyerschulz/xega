@@ -75,10 +75,10 @@
 xegaReRun<-function(solution, script=FALSE, fn="xegaRunScript")
 { 
 z<-solution$GAconfig[[1]]
-i1<-gregexpr("penv=", z)
-e1<-i1[[1]]+attr(i1[[1]], "match.length")-1
-nz<-substring(z, 1, e1)
-nz<-paste0(nz,"solution$GAenv$penv,grammar=solution$GAenv$grammar")
+#i1<-gregexpr("penv=", z)
+#e1<-i1[[1]]+attr(i1[[1]], "match.length")-1
+#nz<-substring(z, 1, e1)
+nz<-paste0("xegaRun(solution$GAenv$penv,grammar=solution$GAenv$grammar")
 i1<-gregexpr(",max=", z)
 s1<-i1[[1]]
 rest<-substring(z, s1, nchar(z))

@@ -90,3 +90,8 @@ Version 0.9.0.14 (2025-08-17)
 - Bug fix for pipelines with algorithm="sgp"
   Rebuilt with package xegaGpGene 1.0.0.3
  
+Version 0.9.0.15 (2025-08-19)
+
+- Bug fix in xegaReRun: Call to xegaRun.
+- xegaRun: element xegaVersion added. 
+

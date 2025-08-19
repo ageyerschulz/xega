@@ -6,7 +6,7 @@ test_that("RunGA  OK",
  a<-xegaRun(Parabola2D, max=FALSE, verbose=1)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
-    "GAconfig", "GAenv", "timer", "logfn", "resfn"))
+    "GAconfig", "GAenv", "timer", "logfn", "resfn", "xegaVersion"))
           }
 )
 
@@ -15,7 +15,7 @@ test_that("RunGA  OK",
  a<-xegaRun(Parabola2DEarly, generations=100, popsize=500, max=FALSE, verbose=0)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
-    "GAconfig", "GAenv", "timer", "logfn", "resfn"))
+    "GAconfig", "GAenv", "timer", "logfn", "resfn", "xegaVersion"))
           }
 )
 
@@ -25,7 +25,7 @@ test_that("RunGA  OK",
 	   scaling="ThresholdScaling", verbose=0)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
-    "GAconfig", "GAenv", "timer", "logfn", "resfn"))
+    "GAconfig", "GAenv", "timer", "logfn", "resfn", "xegaVersion"))
           }
 )
 
@@ -37,7 +37,7 @@ skip_on_cran()
  profile=TRUE, batch=FALSE, path=tmp)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
-    "GAconfig", "GAenv", "timer", "logfn", "resfn"))
+    "GAconfig", "GAenv", "timer", "logfn", "resfn", "xegaVersion"))
           }
 )
 
@@ -49,7 +49,7 @@ skip_on_cran()
             profile=TRUE, batch=TRUE, path=tmp)
  expect_identical(names(a), 
   c("popStat", "fit", "solution", "evalFail", 
-    "GAconfig", "GAenv", "timer", "logfn", "resfn"))
+    "GAconfig", "GAenv", "timer", "logfn", "resfn", "xegaVersion"))
           }
 )
 

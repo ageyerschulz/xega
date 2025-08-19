@@ -1551,6 +1551,8 @@
 #'         \item 
 #'         \code{$resfn}: File name of RDS-file with \code{result}. 
 #'                       Default: \code{NA}.
+#'         \item
+#'         \code{$xegaVersion}: xega version used.
 #'         }
 #'
 #' @family Main Program
@@ -2123,7 +2125,8 @@ tUsed<-mainLoopTimer()
                     GAenv=GAconfiguration$GAenv,
                     timer=timer, 
                     logfn=NA,
-                    resfn=NA)
+                    resfn=NA, 
+                    xegaVersion=xegaVersion(verbose=FALSE))
 
 if (lF$Verbose()==1)  {cat("\n")}
 
