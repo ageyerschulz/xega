@@ -99,3 +99,11 @@ Version 0.9.0.15 (2025-08-19)
    Crossover default is "Cross2Gene".
    1 kid crossover: "AllCrossGene".
 
+Version 0.9.0.16 (2025-08-20)
+
+- Rebuilt with packages xegaGaGene 1.0.0.5 and 
+  xegaDfGene 1.0.0.6. Smaller function closures 
+  of genetic operator pipelines for less 
+  communication overhead in distributed settings.
+
+
