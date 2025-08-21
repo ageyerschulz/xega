@@ -1,6 +1,6 @@
 Package: xega 
 Title: Extended Evolutionary and Genetic Algorithms
-Version: 0.9.0.16
+Version: 0.9.0.17
 Authors@R: 
     person(given = "Andreas",
            family = "Geyer-Schulz",
@@ -17,8 +17,10 @@ Description:
         differential evolution (Price, Kenneth V., Storn, Rainer M. and Lampinen, Jouni A. (2005)
         <doi:10.1007/3-540-31306-0>), simulated annealing (Aarts, E., and Korst, J.
         (1989, ISBN:0-471-92146-7)), grammar-based genetic programming 
-        (Geyer-Schulz (1997, ISBN:978-3-7908-0830-X)), and grammatical evolution 
-        (Ryan, C., O'Neill, M., and Collins, J. J. (2018) <doi:10.1007/978-3-319-78717-6>).
+        (Geyer-Schulz (1997, ISBN:978-3-7908-0830-X)), grammatical evolution 
+        (Ryan, C., O'Neill, M., and Collins, J. J. (2018) <doi:10.1007/978-3-319-78717-6>), 
+        and grammatical differential evolution (O'Neill, M. and Brabazon, A. (2006) in  
+        Arabinia, H. (2006, ISBN:978-193-241596-3).
         All algorithms reuse basic adaptive mechanisms for performance optimization.
         Sequential or parallel execution (on multi-core machines, 
         local clusters, and high-performance computing environments) 

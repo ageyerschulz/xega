@@ -19,12 +19,12 @@
 #'                               derivation-tree genes.
 #'        \item \code{"sge"}:    Grammatical evolution (genetic algorithm 
 #'                               with binary genes and a grammar-driven
-#'                               decoder.
+#'                               decoder).
 #'        \item \code{"sgede"}:  Grammatical evolution (genetic algorithm 
 #'                               with real genes, genetic operators from 
 #'                               from differential evolution 
 #'                               and a grammar-driven
-#'                               decoder.
+#'                               decoder). 
 #'        }
 #'   
 #'       The choice of the algorithm determines the gene-dependent 
