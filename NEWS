@@ -113,5 +113,14 @@ Version 0.9.0.17 (2025-08-21)
   with different selection mechanisms.
 - Reference to Grammatical Differential Evolution added.
 
+Version 0.9.0.18 (2025-09-14)
   
-  
+- Updated xegaVersion() to 0.9.0.18.
+- Updated examples/executionModel/mpi
+  with a user supplied parallel apply function 
+  for mpi in XORGPRmpiPipeline.R.
+  Adds serialization and unserialization for function closures
+  with non-empty environments.
+
+
+    

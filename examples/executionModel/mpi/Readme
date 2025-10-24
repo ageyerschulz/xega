@@ -8,6 +8,21 @@ rmpiLapply<-function(pop, EvalGene, lF)
    Rmpi::mpi.parLapply(pop, FUN=EvalGene, lF=lF)
 }
 
+# The user defined parallel apply function
+# which must be used with pipeline compilation
+
+# The user defined parallel apply function
+# Multiple R-slave processes may need a lot of memory:
+# Trigger garbage collection with gc() in master and slaves more often.
+rmpiLapply<-function(pop, EvalGene, lF)
+{ gc()
+  newpop<-lapply(pop, FUN=serialize, connection=NULL)
+  newEvalGene<-function(gene, lF) {gc(); pipe<-unserialize(gene);pipe(lF)}
+  Rmpi::mpi.parLapply(newpop, FUN=newEvalGene, lF=lF)
+}
+
+Use XORGPRmpiPipeline.R!
+
 Scripts:
 
 1. Notebook (Sequential):

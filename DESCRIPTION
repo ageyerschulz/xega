@@ -1,6 +1,6 @@
 Package: xega 
 Title: Extended Evolutionary and Genetic Algorithms
-Version: 0.9.0.17
+Version: 0.9.0.18
 Authors@R: 
     person(given = "Andreas",
            family = "Geyer-Schulz",
@@ -30,7 +30,7 @@ License: MIT + file LICENSE
 URL: https://github.com/ageyerschulz/xega
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Depends: R (>= 3.5.0), parallelly, filelock
 Imports:
 	xegaSelectGene,
