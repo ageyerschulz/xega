@@ -1,0 +1,13 @@
+citHeader("To cite the 'xega' R package in publications, please use:")
+
+bibentry(
+  bibtype      = "Article",
+  title        = "xegaX. A Family of R-Packages for Genetic and Evolutionary Algorithms with Multiple Genome Representations",
+  author       = person(given="Andreas", family="Geyer-Schulz"),
+  journal      = "Archives of Data Science, Series (A)",
+  year         = "2025",
+  volume       = "10",
+  number       = "1",
+  pages        = "1--37",
+  doi          = "10.5445/IR/1000187255"
+)

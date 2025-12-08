@@ -1441,10 +1441,12 @@
 #'                is set by \code{parallelly:availableCores()} 
 #'                if the execution model is "MultiCore" or "MultiCoreHet".
 #'                  
+### TODO
 #' @param pipeline  Boolean.  If \code{TRUE}, the extended genetic machinery generates  
 #'                    a population of genetic operator pipelines which can be 
 #'                    executed in parallel. Default: \code{FALSE}.
 #'
+###
 #' @param executionModel  Execution model of fitness function evaluation.
 #'        Available:
 #'        \itemize{
@@ -1504,6 +1506,9 @@
 #'                      \item "byReference": \code{lF} is an environment.
 #'                    }
 #'
+#' @param debug       Boolean. Default: \code{FALSE}. 
+#'                    Debug (show) progress in xegaRun main loop.
+#'
 #' @return Result object. A named list of 
 #'         \enumerate{
 #'         \item
@@ -1558,11 +1563,15 @@
 #' @family Main Program
 #'         
 #' @examples
-#' a<-xegaRun(penv=Parabola2D, generations=10, popsize=20, verbose=0)
+#' a<-xegaRun(penv=Parabola2D, generations=3, popsize=5, verbose=0, debug=TRUE)
 #' b<-xegaRun(penv=Parabola2D, algorithm="sga", 
 #'    generations=10, popsize=20, max=FALSE, 
-#'    replication="Kid2Pipeline", crossover="Cross2Gene", pipeline=TRUE,
-#'    verbose=1, replay=5, profile=TRUE)
+#'    replication="Kid2Pipeline", crossover="Cross2Gene", pipeline="PipeC",
+#'    verbose=1, replay=5, profile=TRUE, debug=FALSE)
+#' b1<-xegaRun(penv=Parabola2D, algorithm="sga", 
+#'    generations=10, popsize=20, max=FALSE, 
+#'    replication="Kid1PipelineG", crossover="Cross2Gene", pipeline="PipeG",
+#'    verbose=1, replay=5, profile=TRUE, debug=FALSE)
 #' c<-xegaRun(penv=Parabola2D, max=FALSE, algorithm="sgde", 
 #'    popsize=20, generations=10, 
 #'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene", 
@@ -1571,8 +1580,13 @@
 #' c1<-xegaRun(penv=Parabola2D, max=FALSE, algorithm="sgde", 
 #'    popsize=20, generations=10, elitist=TRUE,
 #'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene", 
-#'    genemap="Identity", replication="DEPipeline", pipeline=TRUE, 
+#'    genemap="Identity", replication="DEPipeline", pipeline="PipeC", 
 #'    selection="UniformP", mateselection="UniformP", accept="Best")
+#' c2<-xegaRun(penv=Parabola2D, max=FALSE, algorithm="sgde", 
+#'    popsize=20, generations=10, elitist=TRUE,
+#'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene", 
+#'    genemap="Identity", replication="DEPipelineG", pipeline="PipeG", 
+#'    selection="UniformP", mateselection="UniformP", accept="Best", debug=FALSE)
 #' envXOR<-NewEnvXOR()
 #' BG<-compileBNF(booleanGrammar())
 #' d<-xegaRun(penv=envXOR, grammar=BG, algorithm="sgp",  
@@ -1589,7 +1603,7 @@
 #' g1<-xegaRun(penv=envXOR, grammar=BG, max=TRUE, algorithm="sgede",
 #'    popsize=20, generations=4, verbose=1, reportEvalErrors=FALSE,
 #'    mutation="MutateGeneDE", scalefactor="Uniform", crossover="UCrossGene",
-#'    genemap="Identity", replication="DEPipeline", pipeline=TRUE,
+#'    genemap="Identity", replication="DEPipelineG", pipeline="PipeG",
 #'    selection="UniformP", mateselection="UniformP", accept="Best")
 #' h<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    popsize=20, generations=5, max2opt=20,
@@ -1597,11 +1611,11 @@
 #' i<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    popsize=20, generations=5, max2opt=20,
 #'    genemap="Identity",  mutation="MutateGeneMix", 
-#'    executionModel="Sequential", replication="Kid1Pipeline", pipeline=TRUE) 
+#'    executionModel="Sequential", replication="Kid1Pipeline", pipeline="PipeC") 
 #' j<-xegaRun(penv=lau15, max=FALSE, algorithm="sgperm", 
 #'    popsize=20, generations=5, max2opt=20,
 #'    genemap="Identity",  mutation="MutateGeneMix", 
-#'    executionModel="Sequential", replication="Kid1Pipeline", pipeline=TRUE, verbose=1) 
+#'    executionModel="Sequential", replication="Kid1PipelineG", pipeline="PipeG", verbose=1) 
 #' cat("t(s) h:", h$timer$tMainLoop, "i:", i$timer$tMainLoop, "j:", j$timer$tMainLoop, "\n")  
 #' 
 #' @importFrom parallelly availableCores
@@ -1621,7 +1635,7 @@
 #' @importFrom xegaDfGene xegaDfScaleFactorFactory
 #' @importFrom xegaPopulation xegaInitPopulation
 #' @importFrom xegaPopulation xegaEvalPopulationFactory
-#' @importFrom xegaPopulation asPipeline
+#' @importFrom xegaPopulation xegaAsPipelineFactory
 #' @importFrom xegaPopulation xegaObservePopulation
 #' @importFrom xegaPopulation xegaSummaryPopulation
 #' @importFrom xegaPopulation xegaNextPopulation
@@ -1780,7 +1794,7 @@ xegaRun<-function(
                 PACdelta=0.01,        # For PAC termination condition
                 fSpace="Hilbert",     # For PAC Termination condition
                 cores=NA,             # Number of cores.
-                pipeline=FALSE,       # Shift evaluation of extended genetic operator pipelines. 
+                pipeline="NoPipe",    # Shift evaluation of extended genetic operator pipelines. 
 		executionModel="Sequential", 
 		                     # Execution models are:
 	                             # "Sequential"
@@ -1797,7 +1811,8 @@ xegaRun<-function(
 		batch=FALSE,         # If TRUE: save result to file
 		anytime=FALSE,         # If TRUE: save result to file
                 path=".",            # path to files.
-             semantics="byValue"     # semantics of lF
+             semantics="byValue",    # semantics of lF
+                debug=FALSE          # debug progress in xegaRun main loop.
 		)
 {
 
@@ -1941,6 +1956,7 @@ ReplicateGene=sgXReplicationFactory(algorithm=algorithm, method=replication), # 
 PACdelta=xegaSelectGene::parm(PACdelta), 
 Cores=xegaSelectGene::parm(cores), # number of cores
 Pipeline=xegaSelectGene::parm(pipeline), 
+AsPipeline=xegaPopulation::xegaAsPipelineFactory(pipeline),
 lapply=parApply,
 cluster=cluster,
 path=xegaSelectGene::parm(path)
@@ -1987,16 +2003,25 @@ if (semantics=="byReference") {lF<-as.environment(lF)}
 
 tUsed<-mainLoopTimer()
 
+xegaDebug(debug, msg="xegaDebug: InitPopulation")
+
 pop<-InitPopulation(popsize, lF)
 
-if (pipeline==TRUE) 
-    {pop<-force(xegaPopulation::asPipeline(pop, lF)) }
+xegaDebug(debug, msg="xegaDebug: lF$AsPipeline")
+
+pop<-lF$AsPipeline(pop, lF)
+
+xegaDebug(debug, msg="xegaDebug: pop[[1]]", obj=pop[[1]])
+
+xegaDebug(debug, msg="xegaDebug: EvalPopulation")
 
 popfit<-EvalPopulation(pop, lF)
 
 pop<-popfit$pop
 fit<-popfit$fit
 evalFail<-popfit$evalFail
+
+xegaDebug(debug, msg="xegaDebug: ObservePopulation")
 
 popStat<-ObservePopulation(fit)
 
@@ -2039,6 +2064,11 @@ if (anytime==TRUE)
       xegaAnyTimeResult(mainLoopTimer, pp=pop, ft=fit, lF=lF, 
                allsolutions=allsolutions, popStat=popStat, evalFail=evalFail, 
                GAconfiguration=GAconfiguration, path=path)} 
+
+xegaDebug(debug, msg=paste0("xegaDebug: Main Loop: Generation ", i))
+
+xegaDebug(debug, msg="xegaDebug: Main Loop [SummaryPopulation]")
+
 	rc<-SummaryPopulation(pop, fit, lF, i)
 
 # for adaptive operators.
@@ -2051,10 +2081,19 @@ if (anytime==TRUE)
 	{lF$RDM<-xegaSelectGene::parm(xegaSelectGene::DispersionRatio(
 		matrix(popStat, byrow=TRUE, ncol=8), lF$DispersionMeasure, lF))
 	       }
+
+xegaDebug(debug, msg="xegaDebug: Main Loop [NextPopulation]")
+
 	pop<-NextPopulation(pop, lF$ScalingFitness(fit, lF), lF)
         lF$cGeneration<-xegaSelectGene::parm(i)
 
+xegaDebug(debug, msg="xegaDebug: pop[[1]]", obj=pop[[1]])
+xegaDebug(debug, msg="xegaDebug: pop[[2]]", obj=pop[[2]])
+
+xegaDebug(debug, msg="xegaDebug: Main Loop [EvalPopulation]")
+
 	popfit<-EvalPopulation(pop, lF)
+
 	pop<-popfit$pop
 	fit<-popfit$fit
 
@@ -2062,6 +2101,9 @@ if (anytime==TRUE)
 	if (length(fit)<popsize) 
 	{warning("fit and pop do not match. Gene representation OK?") 
          return(popfit)} # nocov
+
+xegaDebug(debug, msg="xegaDebug: Main Loop [ObservePopulation]")
+
 	popStat<-ObservePopulation(fit, popStat)
 if (logevals==TRUE)
 {evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=i, lF=lF)} # nocov  
