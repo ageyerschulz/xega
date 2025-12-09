@@ -1442,10 +1442,19 @@
 #'                if the execution model is "MultiCore" or "MultiCoreHet".
 #'                  
 ### TODO
-#' @param pipeline  Boolean.  If \code{TRUE}, the extended genetic machinery generates  
-#'                    a population of genetic operator pipelines which can be 
-#'                    executed in parallel. Default: \code{FALSE}.
-#'
+#' @param pipeline Method of pipeline compilation. 
+#'                 Default: "NoPipe".
+#'               \itemize{
+#'               \item "NoPipe": No pipeline compilation.
+#'               \item "PipeC": Pipeline compilation generates  
+#'                    a population of function closures of 
+#'                    genetic operator pipelines which can be 
+#'                    executed in parallel. 
+#'               \item "PipeG": Pipeline compilation generates  
+#'                    a population of genes with embedded 
+#'                    genetic operator pipelines which can be 
+#'                    executed in parallel. 
+#'                    }
 ###
 #' @param executionModel  Execution model of fitness function evaluation.
 #'        Available:
