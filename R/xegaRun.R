@@ -1116,38 +1116,52 @@
 #'        }
 #'                    } 
 #'
-#' @param replication "Kid1", "Kid1Pipeline", "Kid2" or 
-#'                    "Kid2Pipeline". Default: "Kid1".
+#' @param replication "Kid1", "Kid1Pipeline", "Kid1PipelineG", "Kid2", "Kid2Pipeline" or 
+#'                    "Kid2PipelineG". Default: "Kid1".
 #'                    For algorithms "sga", "sgPerm", "sgp", and "sge":
 #'                    "Kid1" means a crossover operator with one kid.
 #'                    "Kid1Pipeline" means a function closure 
 #'                     with a genetic operator pipeline is returned.
+#'                    "Kid1PipelineG" means a gene 
+#'                     with a genetic operator pipeline embdded is returned.
 #'                    "Kid2" means a crossover operator with two kids.
 #'                    "Kid2Pipeline" means a function closure 
 #'                     with a genetic operator pipeline is returned.
+#'                    "Kid2PipelineG" means a gene
+#'                     with a genetic operator pipeline embedded is returned.
 #'                     
 #'                     For algorithms "sgde" and "sgede", 
 #'                     \code{replication} must be 
-#'                     set to "DE" or "DEPipeline". 
+#'                     set to "DE", "DEPipeline", or "DEPipelineG". 
 #'
-#'                     The pipeline version of replication 
-#'                     requires to set \code{pipeline=TRUE} too.
+#'                     The pipeline versions of replication 
+#'                     requires to set \code{pipeline="PipeC"} or \code{pipeline="PipeG"} too.
 #'
 #'                    The pipeline versions of replication 
-#'                    generate a genetic operator pipeline 
-#'                    as a function closure.
-#'                    The execution of the function closures 
+#'                    generate either a genetic operator pipeline 
+#'                    as a function closure or a genetic operator pipeline embedded in a gene.
+#'                    We call this transformation pipeline compilation.
+#'                    The execution of the function closures or of the gene embedded pipelines
 #'                    is shifted to the evaluation step and, thus, can 
 #'                    be parallelized.
 #'
 #'                    When genetic operator pipelines are used,
-#'                    the population vector cycles between function 
-#'                    elements and named lists as elements.
+#'                    the gene representation of the  population vector cycles 
+#'                    \itemize{
+#'                    \item either between function closures
+#'                          and named lists as elements (\code{pipeline="PipeC"})
+#'                    \item or between genes extended with a list element \code{$Pipeline()} 
+#'                          with the genetic operator pipeline and the needed additional 
+#'                          genes (1 for crossover, 3 for differential evolution)
+#'                          and a normal gene without these elements
+#'                          (\code{pipeline="PipeG"}).
+#'                    }
 #'
 #'                    Used as the \code{method} argument of the 
 #'                    function factory \code{sgXReplicationFactory} 
 #'                    of package \code{xega}.
 #'
+#####
 #' @param initgene    Default: "InitGene".
 #'                    For algorithm "sgp", 
 #'                    \enumerate{
@@ -1441,7 +1455,6 @@
 #'                is set by \code{parallelly:availableCores()} 
 #'                if the execution model is "MultiCore" or "MultiCoreHet".
 #'                  
-### TODO
 #' @param pipeline Method of pipeline compilation. 
 #'                 Default: "NoPipe".
 #'               \itemize{
@@ -1455,7 +1468,6 @@
 #'                    genetic operator pipelines which can be 
 #'                    executed in parallel. 
 #'                    }
-###
 #' @param executionModel  Execution model of fitness function evaluation.
 #'        Available:
 #'        \itemize{
