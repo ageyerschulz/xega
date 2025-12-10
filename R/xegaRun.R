@@ -360,15 +360,20 @@
 #'
 #' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
 #'
-##### CONTINUE HERE
+### START 
 #' @section Replication:
 #'
 #' For genetic algorithms ("sga", "sgp", sgperm", and "sge") 
 #' in the replication process of a gene the crossover operator may 
-#' by configured to produce one new gene (\code{replication="Kid1"}
-#' or \code{replication="Kid1Pipeline"})  
-#' or two new genes (\code{replication="Kid2"} or 
-#' \code{replication="Kid2Pipeline"}). The first version  
+#' by configured to produce 
+#' \enumerate{
+#' \item \strong{one} new gene (\code{replication="Kid1"}, 
+#' \code{replication="Kid1Pipeline"}, or \code{replication="Kid1PipelineG"})  
+#' \item or \strong{two} new genes (\code{replication="Kid2"},
+#' \code{replication="Kid2Pipeline"}, or \code{replication="Kid2PipelineG"}). 
+#' }
+### HERE
+#' The first version  
 #' loses genetic information in the crossover operation, 
 #' whereas the second version 
 #' retains the genetic material in the population.
