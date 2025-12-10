@@ -130,14 +130,6 @@
 #' The adaptive mechanisms described in the following are based on threshold
 #' rules which determine how a parameter of the genetic operator is adapted.
 #' The threshold conditions are based on population statistics: 
-#' \itemize{
-#' \item
-#'  For scaling, on thresholds of a ratio of a dispersion measure (RDM) at generation 
-#'  \code{k} and a dispersion measure at generation \code{k-1}. 
-#' \item For the global
-#'  crossover and mutation rates, on a comparison of a gene's fitness with 
-#'  a population statistic. 
-#' }
 #'
 #' \strong{Adaptive Scaling.} For adaptive scaling, select a dynamic scaling method,
 #'                   e.g. \code{scaling="ThresholdScaling"}.
@@ -211,6 +203,7 @@
 #'
 #' The pipeline of genetic operators merges the pipeline of a genetic algorithm with the pipeline of 
 #' evolutionary algorithms and simulated annealing by adding an acceptance step: 
+#'
 #' \itemize{
 #' \item For evolutionary algorithms,
 #' the acceptance rule \code{accept="Best"} means that the fitter gene out of a parent and its kid survives
@@ -220,7 +213,14 @@
 #' means that the survival probability of a kid with a fitness
 #' worse than its parent decreases as the number of generations executed increases. 
 #' \item The evaluation of the operator pipeline can be shifted to the 
-#'       evaluation phase \code{pipeline=TRUE}. 
+#'       evaluation phase by pipeline compilation: 
+#'       \itemize{
+#'       \item \code{pipeline="PipeC"}: 
+#'       (population of function closures of genetic operator pipelines)
+#'       or 
+#'       \item \code{pipeline="PipeG"}:
+#'       (population of genes with embedded genetic operator pipelines).
+#'       }
 #' }
 #'
 #' Proper configuration of the pipeline allows the configuration of new algorithm variants which mix elements
@@ -252,7 +252,6 @@
 #' (eval) Decoder         \tab     -        \tab   Mod         \tab Identity        \cr
 #' (eval) Evaluation      \tab  EvalGeneU   \tab EvalGeneU     \tab EvalGeneU
 #' }
-
 #' 
 #' @section Scaling:
 #' 
@@ -361,6 +360,7 @@
 #'
 #' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
 #'
+##### CONTINUE HERE
 #' @section Replication:
 #'
 #' For genetic algorithms ("sga", "sgp", sgperm", and "sge") 
