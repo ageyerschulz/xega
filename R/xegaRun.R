@@ -130,10 +130,14 @@
 #' The adaptive mechanisms described in the following are based on threshold
 #' rules which determine how a parameter of the genetic operator is adapted.
 #' The threshold conditions are based on population statistics: 
-#  For scaling, on thresholds of a ratio of a dispersion measure (RDM) at generation 
-#  \code{k} and a dispersion measure at generation \code{k-1}. For the global
-#  crossover and mutation rates, on a comparison of a gene's fitness with 
-#  a population statistic. 
+#' \itemize{
+#' \item
+#'  For scaling, on thresholds of a ratio of a dispersion measure (RDM) at generation 
+#'  \code{k} and a dispersion measure at generation \code{k-1}. 
+#' \item For the global
+#'  crossover and mutation rates, on a comparison of a gene's fitness with 
+#'  a population statistic. 
+#' }
 #'
 #' \strong{Adaptive Scaling.} For adaptive scaling, select a dynamic scaling method,
 #'                   e.g. \code{scaling="ThresholdScaling"}.
