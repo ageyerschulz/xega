@@ -360,7 +360,6 @@
 #'
 #' See package \code{xegaSelectGene} <https://CRAN.R-project.org/package=xegaSelectGene>
 #'
-### START 
 #' @section Replication:
 #'
 #' For genetic algorithms ("sga", "sgp", sgperm", and "sge") 
@@ -372,38 +371,37 @@
 #' \item or \strong{two} new genes (\code{replication="Kid2"},
 #' \code{replication="Kid2Pipeline"}, or \code{replication="Kid2PipelineG"}). 
 #' }
-### HERE
 #' The first version  
 #' loses genetic information in the crossover operation, 
 #' whereas the second version 
 #' retains the genetic material in the population.
 #' There is a dependency between \code{replication} and \code{crossover}:
-#' \code{"Kid2"} requires a crossover operator which produces two kids.
+#' \code{"Kid2"}, \code{Kid2Pipeline}, and \code{Kid2PipelineG} require a crossover operator which produces two kids.
 #' The replication method is configured by the function  
 #' \code{xegaGaReplicationFactory()} of package \code{xegaGaGene}.
 #'
-#' Note that only the functions \code{xegaGaReplicateGene} 
-#' or \code{xegaGaReplicateGenePipeline} of \code{xegaGaGene} 
-#' (configured with \code{replication="Kid1"} or 
-#' with \code{replicate="Kid1Pipeline"} implement a genetic operator pipeline
-#' with an acceptance rule. 
-#'
 #' For differential evolution (algorithm "sgde") and grammatical evolution with 
-#' differential evolution operators (algorithm "sgede"), 
-#' \code{replication="DE"} or \code{replication="DEPipeline"} 
+#' differential evolution operators (algorithm "sgede"), one of
+#' \itemize{
+#' \item \code{replication="DE", pipeline="NoPipe"} or 
+#' \item \code{replication="DEPipeline", pipeline="PipeC"} or 
+#' \item \code{replication="DEPipelineG", pipeline="PipeG"} 
+#' }
 #' must be configured.
+#'
 #' The replication method for differential evolution is configured by the function  
 #' \code{xegaDfReplicationFactory()} of package \code{xegaDfGene}.
 #' It implements a configurable acceptance rule. For classic differential evolution, 
 #' use \code{accept="Best"}. 
 #'
-#' For the pipeline versions, add \code{pipeline=TRUE}. 
-#'
-#' The pipeline versions build function closures of genetic operator pipelines which
-#' are evaluated in the evaluation phase of the genetic algorithm. 
-#' This implies that the complete genetic mechanism except the selection of genes 
+#' The pipeline pipeline compilation (configured by \code{pipeline="PipeC"} or \code{pipeline="PipeG"})  
+#' builds either a population of function closures of genetic operator pipelines
+#' or a population of genes with embedded genetic operator pipelines.
+#' As a consequence, the complete genetic mechanism except the selection of genes 
 #' can be parallelized. 
 #'
+### START 
+### HERE
 #' @section Crossover:
 #'
 #' The table below summarizes the crossover operators available in the current version.
