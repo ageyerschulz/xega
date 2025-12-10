@@ -111,9 +111,9 @@
 #'       and conditional on this optimize the (few) remaining global 
 #'       parameters.
 #' \item For parallelization, specialized 
-#' gene processing pipelines can be built and more efficiently executed, 
-#' because the global parameters \code{crossrate} and \code{mutrate} decide 
-#' which genes survive 
+#'       gene processing pipelines can be built and more efficiently executed, 
+#'       because the global parameters \code{crossrate} and \code{mutrate} decide 
+#'       which genes survive 
 #' \enumerate{
 #'    \item unchanged, 
 #'    \item mutated, 
@@ -123,7 +123,7 @@
 #' 
 #' To mimic a classic genetic algorithm with crossover and bit mutation rate, 
 #' the probability of applying the mutation operator to a gene 
-#' should be set to \code{1}.
+#' should be set to \code{mutrate=1}.
 #'
 #' @section Global Adaptive Mechanisms:
 #'
