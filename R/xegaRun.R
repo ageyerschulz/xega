@@ -598,20 +598,21 @@
 #'
 #' When using \code{xegaRun()} with default parameters,  the genetic operations 
 #' are evaluated sequentially, whereas the fitness evaluation can be 
-#' parallelized. The drawback of this is that for algorithms as e.g. 
-#' differential evolution that in order to accept a modified gene in the 
-#' population, its performance has to be better than that of its parent.
-#' The comparison of the fitness of the parent gene with the fitness of its kid
-#' requires an evalution of the fitness as part of the genetic operations.
-#' However, this implies that for such algorithms the sequential part dominates 
-#' the execution times and the benefits from parallelization remain marginal.
+#' parallelized. For some algorithms, as e.g. 
+#' differential evolution, fitness evaluation must be performed as 
+#' part of the genetic machinery. Differential evoluation uses an accpetance 
+#' rule which compares the modified gene with its parent and returns the better 
+#' one.However, this implies that for such algorithms the sequential part dominates 
+#' the execution time and the benefits from parallelization remain marginal.
+#' Other examples are the integration of randomized numerical gradients as genetic operators 
+#' or the integration of local search heuristics like the Kernighan-Lin heuristic for traveling-salesman
+#' problems. 
 #'
 #' Genetic operator pipelines are 
 #' \enumerate{
 #' \item either implemented as function closures which embed 
-#' a sequence of basic genetic operations \code{pipeline="PipeC"}   
-#' \item or they (and all the genes they need) are embedded in a gene
-#' \code{pipeline="PipeG"}.
+#' a sequence of basic genetic operations
+#' \item or they (and all the genes they need) are embedded in a gene.
 #' }
 #' 
 #' \code{xega} provides two versions of pipeline compilation:
