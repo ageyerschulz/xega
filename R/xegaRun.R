@@ -614,7 +614,9 @@
 #' \code{pipeline="PipeG"}.
 #' }
 #' 
-#### HERE
+#' \code{xega} provides two versions of pipeline compilation:
+#' \enumerate{
+#' \item Compile genetic operator pipelines to function closures.
 #' In \code{xegaRun()}, 
 #' by setting the option \code{pipeline="PipeC"} together with 
 #' \code{replication} to one of "Kid1Pipeline", "Kid2Pipeline", or 
@@ -622,7 +624,23 @@
 #' of random experiments to select the proper genes and based on their 
 #' results compiles a function closure which embeds the genetic operator 
 #' pipeline. These function closures are then executed in the evaluation  
-#' step. This mechanism shifts the actual computation of all genetic 
+#' step. 
+#' \strong{Warning.} This version requires proper serialization of function 
+#' closures together with all objects in the evironment of the function closure.
+#' E.g. for the package \code{rmpi}, serialization of function closures is not 
+#' implemented. 
+#' \item Compile genetic operator pipelines be embedding into a gene.
+#' In \code{xegaRun()}, 
+#' the option \code{pipeline="PipeG"} must be used together with 
+#' \code{replication} to one of "Kid1PipelineG", "Kid2PipelineG", or 
+#' "DEPipelinG". 
+#' In the replication phase, the randomly selected genetic operator pipeline  
+#' together with all genes needed is embedded into a gene.
+#' In the evaluation phase, this embedded genetic operator pipeline is 
+#' executed.  
+#' }
+#' 
+#' This mechanism shifts the actual computation of all genetic 
 #' operations but the selection of genes to the evaluation step.
 #'   
 #' The effect of genetic operator pipelines are
@@ -630,8 +648,9 @@
 #' \item moderate for seqential execution. The net effect depends on the relative cost 
 #'       of the compilation process to the evaluation process. By compiling minimal genetic 
 #'       operating pipelines, moderate savings are achieved. 
-#' \item potentially high for parallel and distributed execution. The net effect depends on the 
-#'       cost of the compilation process, the cost of communication and the cost of the evaluation process.
+#' \item potentially high for parallel and distributed execution. The net effect depends on  
+#'       the necessity to evaluate the fitness of one or more genes in the genetic machinery,
+#'       the cost of the compilation process, the cost of communication and the cost of the evaluation process.
 #'       The compilation process usually shifts more than 90 percent of the computational load to the 
 #'       evaluation phase of the genetic algorithm (which can be parallelized).
 #' }
