@@ -400,8 +400,6 @@
 #' As a consequence, the complete genetic mechanism except the selection of genes 
 #' can be parallelized. 
 #'
-### START 
-### HERE
 #' @section Crossover:
 #'
 #' The table below summarizes the crossover operators available in the current version.
@@ -475,6 +473,7 @@
 #'                       \tab                              \tab                 \tab  and maxmutinsertiondepth \cr
 #' }
 #'
+### START
 #' @section Acceptance:
 #'
 #' Acceptance rules are extensions of genetic and evolutionary algorithms 
@@ -486,9 +485,11 @@
 #' An acceptance rule is only executed as part of the genetic operator pipeline, if 
 #' \code{replicate="Kid1"}, 
 #' \code{replicate="Kid1Pipeline"}, 
+#' \code{replicate="Kid1PipelineG"},
 #' \code{replicate="Kid2Pipeline"}, 
 #' \code{replicate="DE"}.
-#' or \code{replicate="DEPipeline"}.
+#' \code{replicate="DEPipeline"},
+#' or \code{replicate="DEPipelineG"}.
 #' 
 #' Two classes of acceptance rules are provided: 
 #' \itemize{
@@ -546,6 +547,7 @@
 #'
 #' See package \code{xegaPopulation} <https://CRAN.R-project.org/package=xegaPopulation>
 #'
+### HERE
 #' @section Decoder:
 #'
 #' Decoders are algorithm and task-dependent. Their implementation often makes use of a gene map. 
