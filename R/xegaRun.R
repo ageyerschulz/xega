@@ -473,7 +473,6 @@
 #'                       \tab                              \tab                 \tab  and maxmutinsertiondepth \cr
 #' }
 #'
-### START
 #' @section Acceptance:
 #'
 #' Acceptance rules are extensions of genetic and evolutionary algorithms 
@@ -547,7 +546,6 @@
 #'
 #' See package \code{xegaPopulation} <https://CRAN.R-project.org/package=xegaPopulation>
 #'
-### HERE
 #' @section Decoder:
 #'
 #' Decoders are algorithm and task-dependent. Their implementation often makes use of a gene map. 
@@ -598,17 +596,27 @@
 #'          its fitness measured with regard to an environment).
 #'   }   
 #'
-#' In the current version of \code{xegaRun()} the genetic operations 
+#' When using \code{xegaRun()} with default parameters,  the genetic operations 
 #' are evaluated sequentially, whereas the fitness evaluation can be 
 #' parallelized. The drawback of this is that for algorithms as e.g. 
-#' differential evolution is that in order to accept a modified gene in the 
+#' differential evolution that in order to accept a modified gene in the 
 #' population, its performance has to be better than that of its parent.
-#' This implies that for such algorithms the sequential part dominates 
+#' The comparison of the fitness of the parent gene with the fitness of its kid
+#' requires an evalution of the fitness as part of the genetic operations.
+#' However, this implies that for such algorithms the sequential part dominates 
 #' the execution times and the benefits from parallelization remain marginal.
 #'
-#' Genetic operator pipelines are function closures which embed 
-#' a sequence of basic genetic operations. In \code{xegaRun()}, 
-#' by setting the option \code{pipeline=TRUE} together with 
+#' Genetic operator pipelines are 
+#' \enumerate{
+#' \item either implemented as function closures which embed 
+#' a sequence of basic genetic operations \code{pipeline="PipeC"}   
+#' \item or they (and all the genes they need) are embedded in a gene
+#' \code{pipeline="PipeG"}.
+#' }
+#' 
+#### HERE
+#' In \code{xegaRun()}, 
+#' by setting the option \code{pipeline="PipeC"} together with 
 #' \code{replication} to one of "Kid1Pipeline", "Kid2Pipeline", or 
 #' "DEPipeline", the selected replication function performs a set 
 #' of random experiments to select the proper genes and based on their 
