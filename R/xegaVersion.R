@@ -17,9 +17,9 @@
 #' @export
 xegaVersion<-function(verbose=TRUE)
 {
-        version<-"0.9.0.20"
+        version<-"0.9.0.21"
         if (verbose)
-	{cat('Package xega. Version', version, 'As of 2025/12/06 \n')
+	{cat('Package xega. Version', version, 'As of 2025/12/22 \n')
 	cat('(c) 2025 Andreas Geyer-Schulz\n')}
         invisible(version)
 
