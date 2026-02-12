@@ -1,6 +1,6 @@
 Package: xega 
 Title: Extended Evolutionary and Genetic Algorithms
-Version: 0.9.0.21
+Version: 0.9.0.22
 Authors@R: 
     person(given = "Andreas",
            family = "Geyer-Schulz",

@@ -145,4 +145,7 @@ Version 0.9.0.21 (2025-12-22)
                     in distributed environments for configurations 
                     of hardware via external scripts.
 
+Version 0.9.0.22 (2026-02-12)
 
+- xegaRun:   Option topK=1 added. 
+             Documentation of options selection and mateselection. 

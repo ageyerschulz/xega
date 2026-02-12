@@ -352,6 +352,9 @@
 #'       The maximal target sampling rate is configured by \code{maxTSR} 
 #'       (should be between \code{1} and \code{2}).
 #' \item Stochastic universal sampling (configured by \code{"SUS"}).
+#' \item The best (worst) k genes (comfigured by \code{"TopK"}.
+#'       \code{k} is configured by \code{topK}. 
+#'       Useful for convex functions and for gene migration. 
 #' }
 #'
 #' If \code{selectionContinuation=TRUE}, then selection functions are computed exactly once 
@@ -1324,6 +1327,8 @@
 #'                  Default: 1.5.
 #'                    Used in package \code{xegaSelectGene} function
 #'         \code{SelectLinearRankTSR}.
+#'
+#' @param topK      Controls the number of the best genes selected. 
 ##         \code{\link[xegaSelectGene:SelectLinearRankTSR]{SelectLinearRankTSR}},
 #'
 #' @param selection      Selection method for the first parent of crossover. 
@@ -1342,6 +1347,7 @@
 #' \item Stochastic universal sampling: "SUS", 
 #' \item Tournament selection: "Duel" (fastest), "Tournament", "STournament",  
 #' \item Rank selection: "LRSelective" (fastest), "LRTSR".
+#' \item Best k genes: "TopK".
 #' }
 #'                    Argument of function factory 
 #'                    \code{SelectGeneFactory} in package \code{xegaSelectGene}.
@@ -1799,6 +1805,7 @@ xegaRun<-function(
 		 maxTSR=1.5,         # selection pressure for Grefenstette
 		                     #  and Bakers linear rank selection 
 		                     # method 
+                 topK=1,             # select best k genes
 		 selection="SUS", # Selection Method: 
 		 mateselection="SUS", # Selection Method: 
 		            # "Proportional": proportional to fitness
@@ -2004,6 +2011,7 @@ Verbose=xegaSelectGene::parm(verbose),
 TournamentSize=xegaSelectGene::parm(tournamentSize),
 SelectionBias=xegaSelectGene::parm(selectionBias),
 MaxTSR=xegaSelectGene::parm(maxTSR),
+TopK=xegaSelectGene::parm(topK),
 SelectGene=xegaSelectGene::SelectGeneFactory(method=selection),
 SelectMate=xegaSelectGene::SelectGeneFactory(method=mateselection),
 MutateGene=sgXMutationFactory(algorithm=algorithm, method=mutation), # gene dependent
