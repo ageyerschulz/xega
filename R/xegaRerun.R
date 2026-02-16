@@ -24,7 +24,8 @@
 #'
 #'          If \code{executionModel} matches neither \code{"Sequential"} nor \code{"MultiCore"}
 #'          or \code{!is.null(uParApply)==TRUE},   
-#'          a warning is printed, and the previous solution is returned.
+#'          a warning is printed, and \code{xegaReRun()} attempts the execution, but may fail, 
+#'          because the set up of the parallel environment has not been performed before \code{xegaReRun}.
 #'
 #' @param  solution  The solution of a 
 #'                   previous run of \code{xegaRun()}.
@@ -32,6 +33,8 @@
 #'                   If TRUE, write an R script to repeat the xega run
 #'                   with the command in the solution object.
 #' @param  fn        Filename of R script. Default: xegaRunScript.R
+#'
+#' @param  ...       List of named arguments of xega, you want to override.        
 #'
 #' @return A list of 
 #'         \enumerate{
@@ -72,7 +75,7 @@
 #' b<-xegaReRun(c)
 #'
 #' @export
-xegaReRun<-function(solution, script=FALSE, fn="xegaRunScript")
+xegaReRun<-function(solution, script=FALSE, fn="xegaRunScript", ...)
 { 
 z<-solution$GAconfig[[1]]
 #i1<-gregexpr("penv=", z)
@@ -99,11 +102,60 @@ return(solution)
 }
 
 if (!is.null(solution$GAenv$uParApply)) 
-{warning("Error: Re-run of configuration with a user supplied parallel apply not supported."); return(solution)}
+{warning("Warning: Re-run of configuration with a user supplied parallel apply may not work.") 
+i1<-gregexpr(",uParApply=", nz)
+i2<-gregexpr(",Cluster=", nz)
+p1<-substring(nz, 1, i1)
+p2<-"uParApply=solution$GAenv$uParApply"
+p3<-substring(nz, i2, nchar(nz))
+nz<-paste0(p1, p2, p3)
+
+}
+
 if (!(solution$GAenv$executionModel %in% c("Sequential", "MultiCore", "MultiCoreHet"))) 
-{warning("Error: Re-run of parallel or distributed configurations not possible."); return(solution)}
+{warning("Warning: Re-run of parallel or distributed configurations may not work.")}
+
+# replace xegaArgs in ...
+
+nargs<-...length()
+
+if (!nargs==0) {
+# cat("Working args!\n")
+xegaArgs<-names(solution$GAenv)
+newArgList<-eval(substitute(alist(...)))
+newArgs<-names(newArgList)
+# cat(rep("=", 19), "\n")
+# print(newArgs)
+# cat(rep("=", 19), "\n")
+# print(newArgList)
+# cat(rep("=", 19), "\n")
+for (i in (1:nargs)) 
+{ ind<-(1:length(xegaArgs))[xegaArgs %in% newArgs[i]]
+#   cat(i, "xega arg:", xegaArgs[ind], "\n")
+  if (!0==length(ind))
+  {
+    pat1<-paste0(",",newArgs[i],"=")
+    pat2<-paste0(",",xegaArgs[ind+1],"=")
+    
+    i1<-gregexpr(pat1, nz)
+    i2<-gregexpr(pat2, nz)
+    p1<-substring(nz, 1, i1)
+ #    cat("p1", "\n")
+  #   cat(p1, "\n")
+    val<-unlist(newArgList[i])
+    if (is.character(val)) {val<-paste0("\"", val, "\"")}
+    p2<-paste0(newArgs[i], "=", val)
+#     cat("p2", "\n")
+#     cat(p2, "\n")
+    p3<-substring(nz, i2, nchar(nz))
+#     cat("p3", "\n")
+#     cat(p3, "\n")
+    nz<-paste0(p1, p2, p3)
+  }
+}
+# cat(rep("=", 19), "\n")
+}
 
 eval(parse(text=nz)) 
 }
-
 
