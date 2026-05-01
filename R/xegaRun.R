@@ -352,7 +352,7 @@
 #'       The maximal target sampling rate is configured by \code{maxTSR} 
 #'       (should be between \code{1} and \code{2}).
 #' \item Stochastic universal sampling (configured by \code{"SUS"}).
-#' \item The best (worst) k genes (comfigured by \code{"TopK"}.
+#' \item The best (worst) k genes (configured by \code{"TopK"}.
 #'       \code{k} is configured by \code{topK}. 
 #'       Useful for convex functions and for gene migration. 
 #' }
@@ -637,7 +637,7 @@
 #' In \code{xegaRun()}, 
 #' the option \code{pipeline="PipeG"} must be used together with 
 #' \code{replication} to one of "Kid1PipelineG", "Kid2PipelineG", or 
-#' "DEPipelinG". 
+#' "DEPipelineG". 
 #' In the replication phase, the randomly selected genetic operator pipeline  
 #' together with all genes needed is embedded into a gene.
 #' In the evaluation phase, this embedded genetic operator pipeline is 
@@ -1329,6 +1329,7 @@
 #'         \code{SelectLinearRankTSR}.
 #'
 #' @param topK      Controls the number of the best genes selected. 
+#'                  Default: 1.
 ##         \code{\link[xegaSelectGene:SelectLinearRankTSR]{SelectLinearRankTSR}},
 #'
 #' @param selection      Selection method for the first parent of crossover. 
@@ -1534,6 +1535,7 @@
 #'                 and the specification of an exit handler to 
 #'                 shutdown the cluster.
 #'              For tasks with a high variance in execution time.
+#'        \item "mpi": Needs the apply function RmpiFNS$mpi.parLapply().
 #'         }
 #'        Default: "Sequential".
 #'        
@@ -1575,6 +1577,44 @@
 #'
 #' @param debug       Boolean. Default: \code{FALSE}. 
 #'                    Debug (show) progress in xegaRun main loop.
+#'
+#' @param migrate       Boolean. Default: \code{FALSE}. 
+#'                      If \code{TRUE}, island model with gene migration.
+#'
+#' @param migrateEvery  Integer. Default: 1. 
+#'                      Gene migration, 
+#'                      if \code{0==mod(generation, migrateEvery)}.
+#'
+#' @param Nmigrants     Number of migrants. Default: 1.
+#'
+#' @param nrecv         Number of receivers. Default: 1.
+#'
+#' @param pid           Process identifier. (pid in 0:(npid-1)).
+#'                      Default: 0.
+#' 
+#' @param npid          Number of processes. Default: 10.
+#'
+#' @param SelMigrant    Selection method for emigrant. Default: "TopK".
+#'
+#' @param SelReplace    Selection method for genes replaced by 
+#'                      immigrants. Default: "TopK".
+#'
+#' @param CommunicationTopology  Communcation topolopgy. Default: "ring".
+#'
+#' @param RmpiFNS       Named list of rmpi-Functions used in send/receive 
+#'                      functions: RmpiFNS$mpi.send.Robj(), RmpiFNS$mpi.iprobe(), 
+#'                      RmpiFNS$mpi.probe(),
+#'                      RmpiFNS$mpi.any.source(), 
+#'                      and RmpiFNS$mpi.recv.Robj() as well as RmpiFNS$mpi.parLapply() for parallel apply.
+#'                      The functions of this list must be bound with the functions of package Rmpi. 
+#' 
+#' @param Send          Message send method. Default: "rds".
+#'
+#' @param Receive       Message receive method. Default: "rds".
+#'
+#' @param Configuration Boolean. Default: \code{FALSE}. 
+#'                      If \code{TRUE}, return the current configuration
+#'                      without executing it. 
 #'
 #' @param lastArgument Not used. Default: \code{0}.
 #' 
@@ -1619,7 +1659,7 @@
 #'         \code{$GAenv}: Attribute value list of GAconfig.
 #'         \item \code{$timer}: An attribute value list with 
 #'               the time used (in seconds) in the main blocks of the GA:
-#'               tUsed, tInit, tNext, tEval, tObserve, and tSummary.
+#'               tUsed, tInit, tNext, tEval, tObserve, tMigrate, and tSummary.
 #'         \item 
 #'         \code{$logfn}: File name of logfile. Default: \code{NA}.
 #'         \item 
@@ -1883,6 +1923,21 @@ xegaRun<-function(
                 path=".",            # path to files.
              semantics="byValue",    # semantics of lF
                 debug=FALSE,         # debug progress in xegaRun main loop.
+## Begin Migration
+                migrate=FALSE,       # Island model?
+                migrateEvery=1,      # Generations?
+                Nmigrants=1,         # Number migrants. 
+                nrecv=1,             # Number of receivers.
+                pid=0,               # Process id.
+                npid=10,             # Number of parallel island processes.
+            SelMigrant="TopK",       # Selection method for emigrants.
+            SelReplace="TopK",       # Section method for genes replaced.
+   CommunicationTopology="ring",     # Communcation topology.
+            RmpiFNS="Unused",        # list with rmpi functions for send/receive pair
+            Send="rds",              # Method of message send.
+           Receive="rds",            # Method of message receive.         
+           Configuration=FALSE,      # If TRUE, return configuration.
+## End Migration
                 comment=NULL,        # A text field. 
               lastArgument=0         # Unused
 		)
@@ -1897,6 +1952,20 @@ GAconfiguration<-xegaPopulation::xegaConfiguration("xegaRun",
 					       substitute(penv), 
 					       substitute(grammar), 
 					       environment())
+
+if (Configuration) {                  
+   result<-list(popStat=NA,
+		    fit=NA,
+                    solution=NA,
+		    evalFail=NA,
+                    GAconfig=list(GAconfiguration$GAconf),
+                    GAenv=GAconfiguration$GAenv,
+                    timer=NA, 
+                    logfn=NA,
+                    resfn=NA, 
+                    xegaVersion=xegaVersion(verbose=FALSE))
+                  return(result) 
+                   }
 
 #parm<-function(x){function() {return(x)}}
 # Random number generator: TODO. At the moment just for reporting ... 
@@ -2032,6 +2101,16 @@ Pipeline=xegaSelectGene::parm(pipeline),
 AsPipeline=xegaPopulation::xegaAsPipelineFactory(pipeline),
 lapply=parApply,
 cluster=cluster,
+Nmigrants=xegaSelectGene::parm(Nmigrants),
+nrecv=xegaSelectGene::parm(nrecv),
+pid=xegaSelectGene::parm(pid),
+npid=xegaSelectGene::parm(npid),
+SelMigrant=xegaSelectGene::SelectGeneFactory(method=SelMigrant),
+SelReplace=xegaSelectGene::SelectGeneFactory(method=SelReplace),
+CommunicationTopology=xegaCommunicationTopologyFactory(method=CommunicationTopology),
+RmpiFNS=RmpiFNS,
+Send=xegaSendFactory(method=Send),
+Receive=xegaReceiveFactory(method=Receive),
 path=xegaSelectGene::parm(path)
 )
 
@@ -2041,6 +2120,7 @@ mainLoopTimer<-xegaSelectGene::newTimer()
 initPopulationTimer<-xegaSelectGene::newTimer()
 evalPopulationTimer<-xegaSelectGene::newTimer()
 observePopulationTimer<-xegaSelectGene::newTimer()
+migrateTimer<-xegaSelectGene::newTimer()
 summaryPopulationTimer<-xegaSelectGene::newTimer()
 nextPopulationTimer<-xegaSelectGene::newTimer()
 
@@ -2056,6 +2136,7 @@ EvalPopulation<-xegaSelectGene::Timed(evalpopfn, evalPopulationTimer)
 ObservePopulation<-xegaSelectGene::Timed(xegaPopulation::xegaObservePopulation, observePopulationTimer)
 SummaryPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaSummaryPopulation, summaryPopulationTimer)
 NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPopulationTimer)
+Migrate<-xegaSelectGene::Timed(xegaMigrate, migrateTimer)
 }
 
 if (profile==FALSE)
@@ -2065,6 +2146,7 @@ EvalPopulation<-evalpopfn
 ObservePopulation<-xegaPopulation::xegaObservePopulation
 SummaryPopulation<-xegaPopulation::xegaSummaryPopulation
 NextPopulation<-xegaPopulation::xegaNextPopulation
+Migrate<-xegaMigrate
 }
 
 # RunGA Main 
@@ -2132,6 +2214,7 @@ if (generations>1)
 {
 for(i in 1:generations)
 {
+        lF$cGeneration<-xegaSelectGene::parm(i)
 if (anytime==TRUE) 
 { tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer(); 
       xegaAnyTimeResult(mainLoopTimer, pp=pop, ft=fit, lF=lF, 
@@ -2158,7 +2241,6 @@ xegaDebug(debug, msg="xegaDebug: Main Loop [SummaryPopulation]")
 xegaDebug(debug, msg="xegaDebug: Main Loop [NextPopulation]")
 
 	pop<-NextPopulation(pop, lF$ScalingFitness(fit, lF), lF)
-        lF$cGeneration<-xegaSelectGene::parm(i)
 
 xegaDebug(debug, msg="xegaDebug: pop[[1]]", obj=pop[[1]])
 xegaDebug(debug, msg="xegaDebug: pop[[2]]", obj=pop[[2]])
@@ -2192,6 +2274,11 @@ if (logevals==TRUE)
 	lF$TempK<-parm(newTemperature)
 ###  Before end of main loop.
 
+# migration.
+if ((migrate==TRUE) && (0 == i %% migrateEvery))
+    {pop<-Migrate(pop, fit, lF) 
+     fit<-unlist(lapply(pop, function(x) { x$fit })) }
+
 # end of main loop
 }
 # end of skip
@@ -2209,12 +2296,14 @@ tUsed<-mainLoopTimer()
 	timer[["tNextPopulation"]]<-nextPopulationTimer("TimeUsed")
 	timer[["tEvalPopulation"]]<-evalPopulationTimer("TimeUsed")
 	timer[["tObservePopulation"]]<-observePopulationTimer("TimeUsed")
+        timer[["tMigrate"]]<-migrateTimer("TimeUsed") 
 	timer[["tSummaryPopulation"]]<-summaryPopulationTimer("TimeUsed")
 	timer[["cMainLoop"]]<-mainLoopTimer("Count")
 	timer[["cInitPopulation"]]<-initPopulationTimer("Count")
 	timer[["cNextPopulation"]]<-nextPopulationTimer("Count")
 	timer[["cEvalPopulation"]]<-evalPopulationTimer("Count")
 	timer[["cObservePopulation"]]<-observePopulationTimer("Count")
+        timer[["cMigrate"]]<-migrateTimer("Count") 
 	timer[["cSummaryPopulation"]]<-summaryPopulationTimer("Count")
 
         rc<-xegaPopulation::xegaBestInPopulation(pop, fit, lF, allsolutions)

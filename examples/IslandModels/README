@@ -1,0 +1,97 @@
+
+Island Models. 
+
+Steps:
+
+0. R-Profiles:
+
+     rmpiProfile.R
+
+The results will be stored in the four existing 
+directories
+
+mpiHetResult, mpiHomResult,
+rdsHetResult, rdsHomResult.
+
+The script cleanDirectories.sh deletes all files in this directories.
+
+======================
+
+Warnings: (1-5-2026)
+- The current asynchronous implementation does not consume all 
+  messages properly and the termination of the fastest islands
+  destroys communication.
+
+- The synchronous implementation has hanging deadlocked processes.
+
+======================
+
+1. Generate StartConfigurations.
+
+   Rscript buildTSPlin105.R
+
+    generates two configuration files:
+
+1a. TSPlin105HomConfig.rds  for homogeneous islands
+1b. TSPlin105Het4Config.rds for heterogeneous islands
+
+2. Scripts for mpi.
+
+2A. Batch scripts.
+
+    The R-script must load the R-profile rmpiProfile.R    
+
+2Aa. For homogeneous islands:
+
+    ./mpiRun.sh mpiTSPlin105Hom.R
+
+    Results in directory mpiHomResult
+
+2Ab. For heterogeneous islands:
+
+    ./mpiRun.sh mpiTSPlin105Het.R
+
+    Results in directory mpiHetResult
+
+2B. Start scripts in 4 terminals.
+
+2Ba. For homogeneous islands:
+
+    ./mpiTerminals.sh mpiTSPlin105Hom.R
+
+2Bb. For heterogeneous islands:
+
+    ./mpiTerminals.sh mpiTSPlin105Het.R
+
+    Blocking:     
+
+   ./mpiTerminals.sh mpibTSPlin105Het.R
+
+3. Scripts for rds
+
+3A. Batch scripts.
+    - R-scripts must take pid and npid from the commandline.
+    
+3Aa For homogeneous islands:
+
+    ./rdsRun.sh rdsTSPlin105Hom.R
+
+    Results in directory rdsHomResult
+
+3Ab For heterogeneous islands:
+
+    ./rdsRun.sh rdsTSPlin105Het.R
+
+    Results in directory rdsHetResult
+
+
+3B. Start scripts in 4 terminals.
+
+3Ba. For homogeneous islands:
+
+    ./rdsTerminals.sh rdsTSPlin105Hom.R
+
+3Bb. For heterogeneous islands:
+
+    ./rdsTerminals.sh rdsTSPlin105Het.R
+

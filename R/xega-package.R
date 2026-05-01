@@ -91,9 +91,11 @@
 #'
 #' @section Parallel and Distributed Execution:
 #'
+#' Parallel apply functions implement the master-slave pattern.
 #' Several implementations of a parallel \code{lapply()} function 
 #' are provided. They support
 #' the parallel and distributed execution of fitness functions
+#' or genetic operator pipelines
 #' on several combinations of hard- and software architectures.
 #' A parallel \code{lapply()}-function 
 #' must have the following abstract interface:
@@ -121,6 +123,11 @@
 #' Example scripts for using the \code{Rmpi::mpi.parLapply()} function
 #' of the \code{Rmpi} package are provided for an HPC environment with Slurm
 #' as well as on a notebook. 
+#'
+#' @section Island Models:
+#'
+#' Island models based on message send/receive protocols between 
+#' processes are supported. Currently, mpi and rds-files are supported.  
 #'
 #' @section The Architecture of the xegaX-Packages:
 #' 

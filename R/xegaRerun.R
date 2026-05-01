@@ -29,12 +29,15 @@
 #'
 #' @param  solution  The solution of a 
 #'                   previous run of \code{xegaRun()}.
+#'                   Or a configuration or a list of configurations.
 #' @param  script    Boolean. Default: FALSE. 
 #'                   If TRUE, write an R script to repeat the xega run
 #'                   with the command in the solution object.
 #' @param  fn        Filename of R script. Default: xegaRunScript.R
 #'
 #' @param  ...       List of named arguments of xega, you want to override.        
+#'                   If solution is a configuration list, the process id must be 
+#'                   be specified. It is used as an index to select the configuration. 
 #'
 #' @return A list of 
 #'         \enumerate{
@@ -62,7 +65,7 @@
 #'         \code{$GAenv}:  Attribute value list of GAconfig.
 #'         \item \code{$timer}: An attribute value list with 
 #'               the time used (in seconds) in the main blocks of the GA:
-#'               tUsed, tInit, tNext, tEval, tObserve, and tSummary.
+#'               tUsed, tInit, tNext, tEval, tObserve, tMigrate, and tSummary.
 #'         }
 #'         
 #' @family Main Program
@@ -77,11 +80,21 @@
 #' @export
 xegaReRun<-function(solution, script=FALSE, fn="xegaRunScript", ...)
 { 
-z<-solution$GAconfig[[1]]
+iSolution<-solution
+
+#### solution is a configuration list.
+if (is.null(names(solution))) 
+{
+newArgList<-eval(substitute(alist(...)))
+#### we pick the solution for the pid.
+iSolution<-solution[[1+newArgList$pid]]
+}
+
+z<-iSolution$GAconfig[[1]]
 #i1<-gregexpr("penv=", z)
 #e1<-i1[[1]]+attr(i1[[1]], "match.length")-1
 #nz<-substring(z, 1, e1)
-nz<-paste0("xegaRun(solution$GAenv$penv,grammar=solution$GAenv$grammar")
+nz<-paste0("xegaRun(iSolution$GAenv$penv,grammar=iSolution$GAenv$grammar")
 i1<-gregexpr(",max=", z)
 s1<-i1[[1]]
 rest<-substring(z, s1, nchar(z))
@@ -91,28 +104,28 @@ if (script)
 {
 sfn<-paste0(fn, "solution.rds")
 rfn<-paste0(fn,".R")
-saveRDS(solution, file=sfn)
+saveRDS(iSolution, file=sfn)
 nz<-paste0("r<-",nz)
 nz<-paste0("\n library(xega) \n solution<-readRDS(file=\"", 
            sfn, "\" ) \n\n", nz)
 nz<-gsub(",", ",\n    ", nz)
 writeLines(nz, con=rfn)
 
-return(solution)
+return(iSolution)
 }
 
-if (!is.null(solution$GAenv$uParApply)) 
+if (!is.null(iSolution$GAenv$uParApply)) 
 {warning("Warning: Re-run of configuration with a user supplied parallel apply may not work.") 
 i1<-gregexpr(",uParApply=", nz)
 i2<-gregexpr(",Cluster=", nz)
 p1<-substring(nz, 1, i1)
-p2<-"uParApply=solution$GAenv$uParApply"
+p2<-"uParApply=iSolution$GAenv$uParApply"
 p3<-substring(nz, i2, nchar(nz))
 nz<-paste0(p1, p2, p3)
 
 }
 
-if (!(solution$GAenv$executionModel %in% c("Sequential", "MultiCore", "MultiCoreHet"))) 
+if (!(iSolution$GAenv$executionModel %in% c("Sequential", "MultiCore", "MultiCoreHet"))) 
 {warning("Warning: Re-run of parallel or distributed configurations may not work.")}
 
 # replace xegaArgs in ...
@@ -121,7 +134,7 @@ nargs<-...length()
 
 if (!nargs==0) {
 # cat("Working args!\n")
-xegaArgs<-names(solution$GAenv)
+xegaArgs<-names(iSolution$GAenv)
 newArgList<-eval(substitute(alist(...)))
 newArgs<-names(newArgList)
 # cat(rep("=", 19), "\n")

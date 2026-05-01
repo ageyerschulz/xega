@@ -154,3 +154,14 @@ Version 0.9.0.23 (2026-02-16)
 
 - xegaReRun: Raise warning, but attempt to execute non-standard parallel versions. 
  
+Version 0.9.0.24 (2026-04-30)
+
+- xegaMigrate: Island models.
+- xegaSendFactory: Send genes for island models.
+- xegaReceiveFactory: Receive genes for island models. Blocking and non-blocking.
+- xegaTopologyFactory: Communication topologies for island models.
+- xegaRun options for island models:
+  migrate, migrateEvery, Nmigrants, pid, npid, 
+  SelMigrant, SelReplace, CommunicationTopology, RmpiFNS, 
+  Send, Receive, Configuration.
+
