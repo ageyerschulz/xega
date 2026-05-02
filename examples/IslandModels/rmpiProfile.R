@@ -16,6 +16,7 @@ RmpiFNS$mpi.iprobe<-Rmpi::mpi.iprobe
 RmpiFNS$mpi.probe<-Rmpi::mpi.probe
 RmpiFNS$mpi.any.source<-Rmpi::mpi.any.source
 RmpiFNS$mpi.parLapply<-Rmpi::mpi.parLapply
+RmpiFNS$mpi.barrier<-Rmpi::mpi.barrier
 
 # Duplicate communicator 0 (created by default) to 
 # communicator 1 (used as default communicator by mpi methods).

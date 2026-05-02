@@ -17,12 +17,11 @@ The script cleanDirectories.sh deletes all files in this directories.
 
 ======================
 
-Warnings: (1-5-2026)
+Warnings: (2026-05-2)
+
 - The current asynchronous implementation does not consume all 
   messages properly and the termination of the fastest islands
   destroys communication.
-
-- The synchronous implementation has hanging deadlocked processes.
 
 ======================
 

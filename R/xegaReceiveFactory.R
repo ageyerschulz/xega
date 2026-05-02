@@ -97,13 +97,15 @@ mpiReceiveGenesBlocking<-function(lF)
 { genes<-list()
 ### while (Rmpi::mpi.probe(source=Rmpi::mpi.any.source(), tag=9, comm=1, status=0))
 ### { g<-Rmpi::mpi.recv.Robj(source=Rmpi::mpi.any.source(), tag=9, comm=1, status=0)
-cat("Receive ...\n")
-if (lF$Rmpi$mpi.probe(source=lF$Rmpi$mpi.any.source(),  tag=9, comm=1, status=0)) {
+cat("Receive (barrier) ...\n")
+##if (lF$Rmpi$mpi.probe(source=lF$Rmpi$mpi.any.source(),  tag=9, comm=1, status=0)) {
+invisible(lF$Rmpi$mpi.barrier())
+cat("After barrier.\n")
    while (lF$Rmpi$mpi.iprobe(source=lF$Rmpi$mpi.any.source(), tag=9, comm=1, status=0))
    { g<-lF$Rmpi$mpi.recv.Robj(source=lF$Rmpi$mpi.any.source(), tag=9, comm=1, status=0)
      genes<-c(genes, g) 
      cat("Received Genes. \n") }
-}
+##}
 return(genes)
 }
 
