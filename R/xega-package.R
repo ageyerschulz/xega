@@ -128,6 +128,14 @@
 #'
 #' Island models based on message send/receive protocols between 
 #' processes are supported. Currently, mpi and rds-files are supported.  
+#' The R-package \code{xega} is detached from the R-package \code{Rmpi} 
+#' by injecting the function list \code{RmpiFNS} with the following elements:
+#' \itemize{
+#'         \item \code{RmpiFNS$mpi.any.source()}
+#'         \item \code{RmpiFNS$mpi.iprobe()} and \code{RmpiFNS$mpi.iprobe()}
+#'         \item \code{RmpiFNS$mpi.recv.Robj()} and \code{RmpiFNS$mpi.send.Robj()}
+#'         \item \code{RmpiFNS$mpi.parLapply()} (for master-slave parallelization only).
+#'         } 
 #'
 #' @section The Architecture of the xegaX-Packages:
 #' 

@@ -43,12 +43,6 @@ for (i in (1:length(fns)))
    file.remove(fn)}
 return(genes) }
 
-
-### Documentation missing.
-## mpi receive
-# receive all pending messages with gene lists (tag=9)
-
-
 #' Receive genes from neighbor processes (non-blocking).
 #'
 #' @description Multiple mpi messages are received, if they exist
@@ -62,16 +56,11 @@ return(genes) }
 #'
 #' @family Migration
 #'
-### @importFrom Rmpi mpi.any.source
-### @importFrom Rmpi mpi.iprobe
-### @importFrom Rmpi mpi.recv.Robj
 #' @export
 mpiReceiveGenes<-function(lF)
 { genes<-list()
-### while (Rmpi::mpi.iprobe(source=Rmpi::mpi.any.source(), tag=9, comm=1, status=0))
-### { g<-Rmpi::mpi.recv.Robj(source=Rmpi::mpi.any.source(), tag=9, comm=1, status=0)
-while (lF$Rmpi$mpi.iprobe(source=lF$Rmpi$mpi.any.source(), tag=9, comm=1, status=0))
-{ g<-lF$Rmpi$mpi.recv.Robj(source=lF$Rmpi$mpi.any.source(), tag=9, comm=1, status=0)
+while (lF$RmpiFNS$mpi.iprobe(source=lF$RmpiFNS$mpi.any.source(), tag=9, comm=1, status=0))
+{ g<-lF$RmpiFNS$mpi.recv.Robj(source=lF$RmpiFNS$mpi.any.source(), tag=9, comm=1, status=0)
 genes<-c(genes, g) }
 return(genes)
 }
@@ -89,23 +78,14 @@ return(genes)
 #'
 #' @family Migration
 #'
-### @importFrom Rmpi mpi.any.source
-### @importFrom Rmpi mpi.probe
-### @importFrom Rmpi mpi.recv.Robj
 #' @export
 mpiReceiveGenesBlocking<-function(lF)
 { genes<-list()
-### while (Rmpi::mpi.probe(source=Rmpi::mpi.any.source(), tag=9, comm=1, status=0))
-### { g<-Rmpi::mpi.recv.Robj(source=Rmpi::mpi.any.source(), tag=9, comm=1, status=0)
-cat("Receive (barrier) ...\n")
-##if (lF$Rmpi$mpi.probe(source=lF$Rmpi$mpi.any.source(),  tag=9, comm=1, status=0)) {
-invisible(lF$Rmpi$mpi.barrier())
-cat("After barrier.\n")
-   while (lF$Rmpi$mpi.iprobe(source=lF$Rmpi$mpi.any.source(), tag=9, comm=1, status=0))
-   { g<-lF$Rmpi$mpi.recv.Robj(source=lF$Rmpi$mpi.any.source(), tag=9, comm=1, status=0)
+invisible(lF$RmpiFNS$mpi.barrier())
+   while (lF$RmpiFNS$mpi.iprobe(source=lF$RmpiFNS$mpi.any.source(), tag=9, comm=1, status=0))
+   { g<-lF$RmpiFNS$mpi.recv.Robj(source=lF$RmpiFNS$mpi.any.source(), tag=9, comm=1, status=0)
      genes<-c(genes, g) 
-     cat("Received Genes. \n") }
-##}
+   }
 return(genes)
 }
 

@@ -68,7 +68,8 @@ invisible(0)
 
 #' Send genes to neighbor process.
 #'
-#' @description Uses Rmpi::mpi.send.Robj().
+#' @description Expects \code{Rmpi::mpi.send.Robj} bound to 
+#'              \code{lF$RmpiFNS$mpi.send.Robj}. 
 #'
 #' @param genes   A gene list.
 #' @param lF      Local function configuration.
@@ -77,14 +78,12 @@ invisible(0)
 #'
 #' @family Migration
 #'
-### @importFrom Rmpi mpi.send.Robj
 #' @export
 mpiSendGenes<-function(genes, lF)
 {
 # tag=9 9 is integer for gene lists.
 dest<-lF$CommunicationTopology(lF)
 for (i in (1:length(dest)))
-### { Rmpi::mpi.send.Robj(obj=genes, dest=dest[i], tag=9, comm=1) }
 { lF$RmpiFNS$mpi.send.Robj(obj=genes, dest=dest[i], tag=9, comm=1) }
 invisible(0)
 }
