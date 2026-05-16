@@ -165,10 +165,18 @@ Version 0.9.0.24 (2026-04-30)
   SelMigrant, SelReplace, CommunicationTopology, RmpiFNS, 
   Send, Receive, Configuration.
 
-Version 0.9.0.25 (2026-05-5)
+Version 0.9.0.25 (2026-05-6)
 
 - DESCRIPTION         xega needs xegaSelection 1.0.0.4 or higher. 
 - xegaReceiveFactory: Receive genes for island models. Blocking and non-blocking.
-                      Blocking implemented by Rmpi::mpi.barrier().
-                     
+                      Blocking implemented by Rmpi::mpi.barrier(). Does not work 
+                      for early Termination.
+- xegaTopologyFactory: Family of generalized Petersen Graphs added.                     
+
+Version 0.9.0.26 (2026-05-8)
+
+- xegaRun             Main loop type changed and loop counter and limit renamed.
+- xegaRun             Termination handling generalized for island models.                  
+- xegaMigrate         Rucksack and proper termination predicates (LTP and DTP) 
+
 

@@ -3,10 +3,10 @@ source("rmpiProfile.R")
 
 library(xega) 
 
-Config<-readRDS(file="TSPlin105Het4Config.rds") 
+Config<-readRDS(file="TSPlin105Het4EarlyConfig.rds") 
 
 demeResult<-xegaReRun(Config[[1+mpi.comm.rank()]], 
-                      AdaptLimit="Id",
+                      generations=1000,
                       RmpiFNS=RmpiFNS,
                       pid=mpi.comm.rank(),
                       npid=mpi.comm.size(),

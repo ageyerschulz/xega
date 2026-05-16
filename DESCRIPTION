@@ -1,6 +1,6 @@
 Package: xega 
 Title: Extended Evolutionary and Genetic Algorithms
-Version: 0.9.0.25
+Version: 0.9.0.26
 Authors@R: 
     person(given = "Andreas",
            family = "Geyer-Schulz",
@@ -43,6 +43,7 @@ Imports:
 	xegaGeGene,
 	xegaDfGene,
 	xegaPermGene,
-        xegaPopulation (>= 1.0.0.12)
+        xegaPopulation (>= 1.0.0.12),
+        xegaMigration
 Suggests: 
         testthat (>= 3.0.0)

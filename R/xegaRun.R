@@ -1589,6 +1589,10 @@
 #'
 #' @param nrecv         Number of receivers. Default: 1.
 #'
+#' @param GPn           Parameter n of the generalized Petersen graph GP(n, k). Default: \code{5}.
+#'
+#' @param GPk           Parameter k of the generalited Petersen graph GP(n, k). Default: \code{2}.
+#'
 #' @param pid           Process identifier. (pid in 0:(npid-1)).
 #'                      Default: 0.
 #' 
@@ -1599,7 +1603,23 @@
 #' @param SelReplace    Selection method for genes replaced by 
 #'                      immigrants. Default: "TopK".
 #'
-#' @param CommunicationTopology  Communcation topolopgy. Default: "ring".
+#' @param CommunicationTopology  Communication topology. Default: "ring".
+#'                      \itemize{
+#'                      \item "ring":   Ring of processors. Messages sent from \code{i} to \code{i+1}.
+#'                      \item "random": Select one or more receivers randomly. 
+#'                            Number of receivers set by \code{nrecv} (Default: 1).  
+#'                      \item "gPetersen": A generalized Petersen graph. 
+#'                            The default is the classic Petersen graph GP(5, 2) for 10 processes.
+#'                      }
+#'
+#' 
+#' @param AdaptLimit    Adapt the number of generations (Default: "Slowest").
+#'                      \itemize{
+#'                      \item "Slowest": Adapt generation limit so that this process uses approximately
+#'                                       the same execution time as the slowest process of the island genetic 
+#'                                       algorithm. Maximizes number of evaluations in the ensemble of processes.
+#'                      \item "Id":      Keep the generation limit as configured by the parameter \code{generations}.
+#'                      }                      
 #'
 #' @param RmpiFNS       Named list of rmpi-Functions used in send/receive 
 #'                      functions: RmpiFNS$mpi.send.Robj(), RmpiFNS$mpi.iprobe(), 
@@ -1757,6 +1777,12 @@
 #' @importFrom xegaPopulation TerminationFactory
 #' @importFrom xegaPopulation checkTerminationFactory
 #' @importFrom xegaPopulation xegaLogEvalsPopulation
+#' @importFrom xegaMigration  xegaAdaptGenerationLimitFactory
+#' @importFrom xegaMigration  xegaCommunicationTopologyFactory
+#' @importFrom xegaMigration  xegaSendFactory
+#' @importFrom xegaMigration  xegaReceiveFactory
+#' @importFrom xegaMigration  xegaProbeTermFactory
+#' @importFrom xegaMigration  xegaMigrate
 #' @importFrom stats qnorm
 #' @importFrom stats var
 ##### TODO
@@ -1928,11 +1954,14 @@ xegaRun<-function(
                 migrateEvery=1,      # Generations?
                 Nmigrants=1,         # Number migrants. 
                 nrecv=1,             # Number of receivers.
+                GPn=5,               # n for GP(n, k)
+                GPk=2,               # k for GP(n, k)
                 pid=0,               # Process id.
                 npid=10,             # Number of parallel island processes.
             SelMigrant="TopK",       # Selection method for emigrants.
             SelReplace="TopK",       # Section method for genes replaced.
-   CommunicationTopology="ring",     # Communcation topology.
+   CommunicationTopology="ring",     # Communication topology.
+           AdaptLimit="Slowest",     # Adapt generation limit to slowest process.
             RmpiFNS="Unused",        # list with rmpi functions for send/receive pair
             Send="rds",              # Method of message send.
            Receive="rds",            # Method of message receive.         
@@ -2103,14 +2132,19 @@ lapply=parApply,
 cluster=cluster,
 Nmigrants=xegaSelectGene::parm(Nmigrants),
 nrecv=xegaSelectGene::parm(nrecv),
+GPn=xegaSelectGene::parm(GPn),
+GPk=xegaSelectGene::parm(GPk),
 pid=xegaSelectGene::parm(pid),
 npid=xegaSelectGene::parm(npid),
 SelMigrant=xegaSelectGene::SelectGeneFactory(method=SelMigrant),
 SelReplace=xegaSelectGene::SelectGeneFactory(method=SelReplace),
-CommunicationTopology=xegaCommunicationTopologyFactory(method=CommunicationTopology),
+CommunicationTopology=xegaMigration::xegaCommunicationTopologyFactory(method=CommunicationTopology),
+adaptGenerationLimit=xegaMigration::xegaAdaptGenerationLimitFactory(method=AdaptLimit),
 RmpiFNS=RmpiFNS,
-Send=xegaSendFactory(method=Send),
-Receive=xegaReceiveFactory(method=Receive),
+Send=xegaMigration::xegaSendFactory(method=Send),
+Receive=xegaMigration::xegaReceiveFactory(method=Receive),
+ProbeTerm=xegaMigration::xegaProbeTermFactory(method=Send),
+BroadcastTerm=xegaMigration::xegaBroadcastTermFactory(method=Send),
 path=xegaSelectGene::parm(path)
 )
 
@@ -2136,7 +2170,7 @@ EvalPopulation<-xegaSelectGene::Timed(evalpopfn, evalPopulationTimer)
 ObservePopulation<-xegaSelectGene::Timed(xegaPopulation::xegaObservePopulation, observePopulationTimer)
 SummaryPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaSummaryPopulation, summaryPopulationTimer)
 NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPopulationTimer)
-Migrate<-xegaSelectGene::Timed(xegaMigrate, migrateTimer)
+Migrate<-xegaSelectGene::Timed(xegaMigration::xegaMigrate, migrateTimer)
 }
 
 if (profile==FALSE)
@@ -2146,7 +2180,7 @@ EvalPopulation<-evalpopfn
 ObservePopulation<-xegaPopulation::xegaObservePopulation
 SummaryPopulation<-xegaPopulation::xegaSummaryPopulation
 NextPopulation<-xegaPopulation::xegaNextPopulation
-Migrate<-xegaMigrate
+Migrate<-xegaMigration::xegaMigrate
 }
 
 # RunGA Main 
@@ -2157,6 +2191,9 @@ if (semantics=="byReference") {lF<-as.environment(lF)}
 ###
 
 tUsed<-mainLoopTimer()
+
+########## Initialization START.
+# TODO: Proper paralellization. Combine initialization and evaluation. 
 
 xegaDebug(debug, msg="xegaDebug: InitPopulation")
 
@@ -2183,7 +2220,10 @@ popStat<-ObservePopulation(fit)
 if (logevals==TRUE)
 {evallog<-xegaLogEvalsPopulation(pop=pop, evallog=list(), generation=0, lF=lF)} # nocov  
 
-# start Termination conditions.
+########## Initialization END.
+# TODO: If migration, setup test for distributed early termination.
+
+# Configure Termination conditions. START.
 ### Tentative.
 # TODO: The interface is too restricted. 
 #       Needs to see e.g. history of solutions, known optima, 
@@ -2207,25 +2247,32 @@ lF$PACopt<-xegaSelectGene::parm(PACopt)
 }
 }
 
-#### end Termination conditions.
+#### Configure Termination conditions. END.
 
 # skip main loop, if generations == 1 (random sample)!
 if (generations>1)
 {
-for(i in 1:generations)
+DTP<-FALSE
+generationLimit<-generations
+currentGeneration<-1
+lF$slowestTime<-xegaSelectGene::parm(0.0000001)
+lF$slowestPid<-xegaSelectGene::parm(pid)
+#for(i in 1:generations)
+repeat
 {
-        lF$cGeneration<-xegaSelectGene::parm(i)
+        lF$cGeneration<-xegaSelectGene::parm(currentGeneration)
 if (anytime==TRUE) 
 { tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer(); 
       xegaAnyTimeResult(mainLoopTimer, pp=pop, ft=fit, lF=lF, 
                allsolutions=allsolutions, popStat=popStat, evalFail=evalFail, 
                GAconfiguration=GAconfiguration, path=path)} 
 
-xegaDebug(debug, msg=paste0("xegaDebug: Main Loop: Generation ", i))
+xegaDebug(debug, 
+        msg=paste0("xegaDebug: Main Loop: Generation ", currentGeneration))
 
 xegaDebug(debug, msg="xegaDebug: Main Loop [SummaryPopulation]")
 
-	rc<-SummaryPopulation(pop, fit, lF, i)
+	rc<-SummaryPopulation(pop, fit, lF, currentGeneration)
 
 # for adaptive operators.
         lF$CBestFitness<-xegaSelectGene::parm(max(fit))
@@ -2261,23 +2308,75 @@ xegaDebug(debug, msg="xegaDebug: Main Loop [ObservePopulation]")
 
 	popStat<-ObservePopulation(fit, popStat)
 if (logevals==TRUE)
-{evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=i, lF=lF)} # nocov  
+{evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=currentGeneration, lF=lF)} # nocov  
 
-        if (Terminate(xegaBestInPopulation(pop, fit, lF, FALSE), lF)==TRUE) 
-		{generations<-i;break}    # nocov
-
-	# Cooling schedule for Metropolis acceptance rule. Abstract out?
+# Cooling schedule for Metropolis acceptance rule. Abstract out?
 #	cat("Temperature:", lF$TempK(), "\n")
 #	cat("new Temperature:", lF$TempK(), "\n")
-	newTemperature<-force(lF$Cooling(i, lF))
+	newTemperature<-force(lF$Cooling(currentGeneration, lF))
 #	cat("new Temperature:", newTemperature, "\n")
 	lF$TempK<-parm(newTemperature)
 ###  Before end of main loop.
 
+###########
+##        if (Terminate(xegaBestInPopulation(pop, fit, lF, FALSE), lF)==TRUE) 
+##                         {generations<-currentGeneration;break}    # nocov
 # migration.
-if ((migrate==TRUE) && (0 == i %% migrateEvery))
-    {pop<-Migrate(pop, fit, lF) 
-     fit<-unlist(lapply(pop, function(x) { x$fit })) }
+
+# set local termination predicate.
+LTP<-Terminate(xegaBestInPopulation(pop, fit, lF, FALSE), lF) 
+
+if ((migrate==TRUE) && (LTP))
+   {# cat("xegaRun: Broadcasting.\n")
+    lF$LTP<-xegaSelectGene::parm(LTP) 
+    lF$BroadcastTerm(lF)}
+
+if ((migrate==TRUE) && (0 == currentGeneration %% migrateEvery))
+    {
+     tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer()
+     timeUsed<-mainLoopTimer("TimeUsed")
+     lF$LTP<-xegaSelectGene::parm(LTP)
+     lF$avgTime<-xegaSelectGene::parm(force(timeUsed/currentGeneration))
+     mig<-Migrate(pop, fit, lF) 
+     pop<-mig$pop
+     fit<-unlist(lapply(pop, function(x) { x$fit })) 
+     DTP<-mig$rucksack$DTP
+     generationLimit<-mig$rucksack$generationLimit
+     # cat("xegaRun: generationLimit:", generationLimit, "\n")
+     lF$slowestTime<-xegaSelectGene::parm(mig$rucksack$slowestTime) 
+     lF$slowestPid<-xegaSelectGene::parm(mig$rucksack$slowestPid) 
+    }
+
+# 1st and 2nd condition: Local or distributed termination condition true.
+if (LTP || DTP) 
+		{
+     xegaDebug(debug, msg="xegaDebug: Main Loop [Termination]")
+     xegaDebug(debug, msg="(1/2) Terminate: Early Termination. \n")
+         
+          break}    # nocov
+
+currentGeneration<-currentGeneration+1
+
+# Slowest process shuts down 
+if ((migrate==TRUE) && 
+   (currentGeneration>=lF$Generations()) && 
+   (lF$pid()==lF$slowestPid()))
+   {
+    LTP<-TRUE
+    xegaDebug(debug, msg="xegaDebug: Main Loop [Termination]")
+    xegaDebug(debug, msg="xegaDebug: Slowest process broadcasts termination.\n")
+    lF$LTP<-xegaSelectGene::parm(LTP) 
+    lF$BroadcastTerm(lF)
+    break}
+
+# 3rd termination condition: computational resources are exhausted.
+if (currentGeneration>=generationLimit) 
+   {
+     xegaDebug(debug, msg="xegaDebug: Main Loop [Termination]")
+     msg<-paste0("(3) Terminate: currentGeneration(",
+        currentGeneration,")>=generationLimit(",generationLimit,")\n")  
+   xegaDebug(debug, msg=msg)
+    break}
 
 # end of main loop
 }
@@ -2286,7 +2385,7 @@ if ((migrate==TRUE) && (0 == i %% migrateEvery))
 
 # set up return values.
 
-	rc<-SummaryPopulation(pop, fit, lF, generations)
+	rc<-SummaryPopulation(pop, fit, lF, currentGeneration)
 
 tUsed<-mainLoopTimer()
 

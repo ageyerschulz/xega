@@ -17,14 +17,6 @@ The script cleanDirectories.sh deletes all files in this directories.
 
 ======================
 
-Warnings: (2026-05-2)
-
-- The current asynchronous implementation does not consume all 
-  messages properly and the termination of the fastest islands
-  destroys communication.
-
-======================
-
 1. Generate StartConfigurations.
 
    Rscript buildTSPlin105.R
@@ -33,6 +25,10 @@ Warnings: (2026-05-2)
 
 1a. TSPlin105HomConfig.rds  for homogeneous islands
 1b. TSPlin105Het4Config.rds for heterogeneous islands
+
+   And cleanup directories for results.
+
+   ./cleanDirectories.sh
 
 2. Scripts for mpi.
 
@@ -43,6 +39,8 @@ Warnings: (2026-05-2)
 2Aa. For homogeneous islands:
 
     ./mpiRun.sh mpiTSPlin105Hom.R
+
+    ./mpiRun.sh mpiTSPlin105HomAdapt.R
 
     Results in directory mpiHomResult
 
@@ -59,8 +57,12 @@ Warnings: (2026-05-2)
     ./mpiTerminals.sh mpiTSPlin105Hom.R
 
 2Bb. For heterogeneous islands:
-
+Rscript buildTSPlin105.R
     ./mpiTerminals.sh mpiTSPlin105Het.R
+
+    ./mpiTerminals.sh mpiTSPlin105HetAdapt.R
+
+    ./mpiTerminals.sh mpiTSPlin105HetEarly.R
 
     Blocking:     
 
@@ -81,6 +83,10 @@ Warnings: (2026-05-2)
 
     ./rdsRun.sh rdsTSPlin105Het.R
 
+    ./rdsRun.sh rdsTSPlin105HetAdapt.R
+
+    ./rdsRun.sh rdsTSPlin105HetEarly.R 
+
     Results in directory rdsHetResult
 
 
@@ -93,4 +99,6 @@ Warnings: (2026-05-2)
 3Bb. For heterogeneous islands:
 
     ./rdsTerminals.sh rdsTSPlin105Het.R
+
+    ./rdsTerminals.sh rdsTSPlin105HetEarly.R
 

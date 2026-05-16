@@ -29,7 +29,7 @@ deme0<-xegaRun(STSPlin105,
     max=FALSE,
     algorithm="sgperm",
     popsize=200,
-    generations=100,
+    generations=200,
     crossrate=0.05,
     mutrate=0.5,
     elitist=TRUE,
@@ -54,14 +54,17 @@ deme0<-xegaRun(STSPlin105,
     migrateEvery=2,
     pid=0, 
     npid=4, 
-    CommunicationTopology="ring",
+    Send="rds",
+    Receive="rds",
+    CommunicationTopology="random",
+    AdaptLimit="Id",
     Configuration=TRUE)
 
 deme1<-xegaReRun(deme0, 
     mutation="MutateGene2Opt", max2opt=20, pid=0)
 
 deme2<-xegaReRun(deme0, 
-    mutation="MutateGenekOptLK", max2opt=20, pid=1)
+    mutation="MutateGenekOptLK", max2opt=200, pid=1)
 
 deme3<-xegaReRun(deme0, 
     mutation="MutateGenekInversion",
@@ -70,11 +73,20 @@ deme3<-xegaReRun(deme0,
 deme4<-xegaReRun(deme0, 
     mutation="MutateGeneGreedy", pid=3)
 
-demeConfig<-list(deme1, deme2, deme3, deme4)
+deme5<-xegaReRun(deme0, 
+    mutation="MutateGeneGreedy", pid=3,
+    terminationCondition="LEQ", terminationThreshold=16000)
+
+demeConfig1<-list(deme1, deme2, deme3, deme4)
+
+demeConfig2<-list(deme1, deme2, deme3, deme5)
 
 # Same configuration n-times.
 saveRDS(deme0, "TSPlin105HomConfig.rds")
 
 # 4 different configurations.
-saveRDS(demeConfig, "TSPlin105Het4Config.rds")
+saveRDS(demeConfig1, "TSPlin105Het4Config.rds")
+
+# 4 different configurations. Early Termination
+saveRDS(demeConfig2, "TSPlin105Het4EarlyConfig.rds")
 

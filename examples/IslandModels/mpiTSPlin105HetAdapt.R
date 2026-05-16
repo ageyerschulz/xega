@@ -6,7 +6,7 @@ library(xega)
 Config<-readRDS(file="TSPlin105Het4Config.rds") 
 
 demeResult<-xegaReRun(Config[[1+mpi.comm.rank()]], 
-                      AdaptLimit="Id",
+                      AdaptLimit="Slowest",
                       RmpiFNS=RmpiFNS,
                       pid=mpi.comm.rank(),
                       npid=mpi.comm.size(),

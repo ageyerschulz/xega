@@ -1,6 +1,10 @@
 #!/bin/sh
-rm -f mpiHetResult/*
-rm -f mpiHomResult/*
-rm -f rdsHetResult/*
-rm -f rdsHomResult/*
+rm -rf ./mpiHetResult/
+mkdir ./mpiHetResult
+rm -rf ./mpiHomResult/
+mkdir ./mpiHomResult
+rm -rf ./rdsHetResult/
+mkdir ./rdsHetResult
+rm -rf ./rdsHomResult/
+mkdir ./rdsHomResult
 
