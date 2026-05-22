@@ -64,7 +64,7 @@ deme1<-xegaReRun(deme0,
     mutation="MutateGene2Opt", max2opt=20, pid=0)
 
 deme2<-xegaReRun(deme0, 
-    mutation="MutateGenekOptLK", max2opt=200, pid=1)
+    mutation="MutateGenekOptLK", max2opt=100, pid=1)
 
 deme3<-xegaReRun(deme0, 
     mutation="MutateGenekInversion",

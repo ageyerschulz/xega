@@ -167,6 +167,8 @@ for (i in (1:nargs))
   }
 }
 # cat(rep("=", 19), "\n")
+# cat("nz\n", nz, "\n")
+#return(nz)
 }
 
 eval(parse(text=nz)) 

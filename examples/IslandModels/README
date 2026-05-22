@@ -61,6 +61,7 @@ Rscript buildTSPlin105.R
     ./mpiTerminals.sh mpiTSPlin105Het.R
 
     ./mpiTerminals.sh mpiTSPlin105HetAdapt.R
+    ./mpiTerminals.sh mpiTSPlin105HetAdaptOptimist.R
 
     ./mpiTerminals.sh mpiTSPlin105HetEarly.R
 

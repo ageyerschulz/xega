@@ -43,7 +43,7 @@ Imports:
 	xegaGeGene,
 	xegaDfGene,
 	xegaPermGene,
-        xegaPopulation (>= 1.0.0.12),
+        xegaPopulation (>= 1.0.0.15),
         xegaMigration
 Suggests: 
         testthat (>= 3.0.0)

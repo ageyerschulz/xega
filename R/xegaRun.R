@@ -1621,6 +1621,13 @@
 #'                      \item "Id":      Keep the generation limit as configured by the parameter \code{generations}.
 #'                      }                      
 #'
+#' @param MigrationStrategy  Termination protocol needed?
+#'                      \itemize{
+#'                      \item "Optimist":  No termination protocol needed. We rely on forecasts.
+#'                      \item "Pessimist": The slowest process invokes termination of other island processes 
+#'                                         as soon as it reaches its generation limit. 
+#'                      } 
+#' 
 #' @param RmpiFNS       Named list of rmpi-Functions used in send/receive 
 #'                      functions: RmpiFNS$mpi.send.Robj(), RmpiFNS$mpi.iprobe(), 
 #'                      RmpiFNS$mpi.probe(),
@@ -1642,9 +1649,11 @@
 #'         \enumerate{
 #'         \item
 #'         \code{$popStat}: A matrix with mean, min, Q1, median, Q3, max,
-#'                         variance, and median absolute deviation
-#'                          of population fitness as columns:
-#'                          i-th row for the measures of the i-th generation.
+#'                         variance, median absolute deviation
+#'                         of population fitness and 
+#'                         number of identical genes
+#'                         as columns:
+#'                         i-th row for the measures of the i-th generation.
 #'         \item 
 #'         \code{$fit}: Fitness vector if \code{generations<=1} else: NULL.
 #'         \item
@@ -1962,6 +1971,7 @@ xegaRun<-function(
             SelReplace="TopK",       # Section method for genes replaced.
    CommunicationTopology="ring",     # Communication topology.
            AdaptLimit="Slowest",     # Adapt generation limit to slowest process.
+    MigrationStrategy="Pessimist",    # "Optimist" | "Pessimist"
             RmpiFNS="Unused",        # list with rmpi functions for send/receive pair
             Send="rds",              # Method of message send.
            Receive="rds",            # Method of message receive.         
@@ -2140,6 +2150,7 @@ SelMigrant=xegaSelectGene::SelectGeneFactory(method=SelMigrant),
 SelReplace=xegaSelectGene::SelectGeneFactory(method=SelReplace),
 CommunicationTopology=xegaMigration::xegaCommunicationTopologyFactory(method=CommunicationTopology),
 adaptGenerationLimit=xegaMigration::xegaAdaptGenerationLimitFactory(method=AdaptLimit),
+migrationStrategy=xegaSelectGene::parm(force(("Pessimist"==MigrationStrategy))),
 RmpiFNS=RmpiFNS,
 Send=xegaMigration::xegaSendFactory(method=Send),
 Receive=xegaMigration::xegaReceiveFactory(method=Receive),
@@ -2163,7 +2174,7 @@ if (evalrep==1)
 else
 {evalpopfn<-xegaPopulation::xegaEvalPopulationFactory(method="RepEvalPopulation")}
 
-if (profile==TRUE)
+if ((profile==TRUE) || (migrate==TRUE))
 {
 InitPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaInitPopulation, initPopulationTimer)
 EvalPopulation<-xegaSelectGene::Timed(evalpopfn, evalPopulationTimer)
@@ -2173,7 +2184,7 @@ NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPo
 Migrate<-xegaSelectGene::Timed(xegaMigration::xegaMigrate, migrateTimer)
 }
 
-if (profile==FALSE)
+if ((profile==FALSE) && (migrate==FALSE))
 {
 InitPopulation<-xegaPopulation::xegaInitPopulation
 EvalPopulation<-evalpopfn
@@ -2253,6 +2264,7 @@ lF$PACopt<-xegaSelectGene::parm(PACopt)
 if (generations>1)
 {
 DTP<-FALSE
+lF$DTP<-xegaSelectGene::parm(DTP)
 generationLimit<-generations
 currentGeneration<-1
 lF$slowestTime<-xegaSelectGene::parm(0.0000001)
@@ -2282,7 +2294,7 @@ xegaDebug(debug, msg="xegaDebug: Main Loop [SummaryPopulation]")
 
 	if (scaling %in% c("ThresholdScaling", "ContinuousScaling"))
 	{lF$RDM<-xegaSelectGene::parm(xegaSelectGene::DispersionRatio(
-		matrix(popStat, byrow=TRUE, ncol=8), lF$DispersionMeasure, lF))
+		matrix(popStat, byrow=TRUE, ncol=9), lF$DispersionMeasure, lF))
 	       }
 
 xegaDebug(debug, msg="xegaDebug: Main Loop [NextPopulation]")
@@ -2363,10 +2375,12 @@ if ((migrate==TRUE) &&
    (lF$pid()==lF$slowestPid()))
    {
     LTP<-TRUE
-    xegaDebug(debug, msg="xegaDebug: Main Loop [Termination]")
-    xegaDebug(debug, msg="xegaDebug: Slowest process broadcasts termination.\n")
-    lF$LTP<-xegaSelectGene::parm(LTP) 
-    lF$BroadcastTerm(lF)
+    xegaDebug(debug, msg="xegaDebug: Main Loop [Termination] I am slowest process.")
+    if (lF$migrationStrategy()) 
+       {
+        xegaDebug(debug, msg="xegaDebug: Broadcast termination.\n")
+        xegaDebug(debug, msg=paste0("xegaDebug: MigrationStrategy:", MigrationStrategy,"\n"))
+        lF$BroadcastTerm(lF)}
     break}
 
 # 3rd termination condition: computational resources are exhausted.
@@ -2409,8 +2423,16 @@ tUsed<-mainLoopTimer()
 
        if (generations>1) {fit=NULL}
 
-   popS<-matrix(popStat, byrow=TRUE, ncol=8)
-   colnames(popS)<-c("mean", "min", "Q1", "median", "Q3", "max", "var", "mad")
+   popS<-matrix(popStat, byrow=TRUE, ncol=9)
+   colnames(popS)<-c("mean", 
+                      "min", 
+                      "Q1", 
+                  "median", 
+                      "Q3", 
+                     "max", 
+                     "var", 
+                     "mad",
+                     "numberOfGenesWithSameFitness")
 
    GAconfiguration$GAenv$cores<-cores
 

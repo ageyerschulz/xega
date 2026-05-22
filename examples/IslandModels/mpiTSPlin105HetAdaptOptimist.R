@@ -7,6 +7,7 @@ Config<-readRDS(file="TSPlin105Het4Config.rds")
 
 demeResult<-xegaReRun(Config[[1+mpi.comm.rank()]], 
                       AdaptLimit="Slowest",
+                      MigrationStrategy="Optimist",
                       RmpiFNS=RmpiFNS,
                       pid=mpi.comm.rank(),
                       npid=mpi.comm.size(),
@@ -14,5 +15,5 @@ demeResult<-xegaReRun(Config[[1+mpi.comm.rank()]],
                       Receive="mpi",
                       Configuration=FALSE,
                       path="./mpiHetResult", 
-                      debug=TRUE)
+                      debug=FALSE)
 
