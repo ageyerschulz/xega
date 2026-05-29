@@ -1637,7 +1637,21 @@
 #' 
 #' @param Send          Message send method. Default: "rds".
 #'
+#' Avalailable methods: 
+#' \enumerate{
+#'  \item "rds": Message sending via rds-file I/O.
+#'  \item "mpi": Message senging via mpi. Code with comments.
+#'  }
+#'
 #' @param Receive       Message receive method. Default: "rds".
+#'
+#'                      Avalailable methods: 
+#'                      \enumerate{
+#'                      \item "rds": Message receiving via rds-file I/O. Non-blocking.
+#'                      \item "rdsb": Message receiving via rds-file I/O. Blocking.
+#'                      \item "mpi": Message receiving via mpi. Code with comments. Non-blocking.
+#'                      \item "mpib": Message receiving via mpi. Code with comments. Blocking.
+#'  }
 #'
 #' @param Configuration Boolean. Default: \code{FALSE}. 
 #'                      If \code{TRUE}, return the current configuration

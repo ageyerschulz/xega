@@ -179,4 +179,8 @@ Version 0.9.0.26 (2026-05-8)
 - xegaRun             Termination handling generalized for island models.                  
 - xegaMigrate         Rucksack and proper termination predicates (LTP and DTP) 
 
+Version 0.9.0.27 (2026-05-28)
+
+- xegaRun             Options for asynchronous and synchronous communication migration models added.
+
 

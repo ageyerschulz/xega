@@ -12,5 +12,6 @@ demeResult<-xegaReRun(Config[[1+mpi.comm.rank()]],
                       Send="mpi",
                       Receive="mpib",
                       Configuration=FALSE,
+                      debug=TRUE,
                       path="./mpiHetResult")
 

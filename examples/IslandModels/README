@@ -90,6 +90,9 @@ Rscript buildTSPlin105.R
 
     Results in directory rdsHetResult
 
+Blocking:
+
+   ./rdsRun.sh rdsbTSPlin105HetAdapt.R
 
 3B. Start scripts in 4 terminals.
 
@@ -102,4 +105,8 @@ Rscript buildTSPlin105.R
     ./rdsTerminals.sh rdsTSPlin105Het.R
 
     ./rdsTerminals.sh rdsTSPlin105HetEarly.R
+
+    Blocking:
+
+    ./rdsTerminals.sh rdsbTSPlin105HetAdapt.R
 
