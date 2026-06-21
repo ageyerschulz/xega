@@ -182,5 +182,7 @@ Version 0.9.0.26 (2026-05-8)
 Version 0.9.0.27 (2026-05-28)
 
 - xegaRun             Options for asynchronous and synchronous communication migration models added.
+- xegaRun             Options for result collection of island models added.
 
+- xegaMigrate         Result collection functions for island models.
 

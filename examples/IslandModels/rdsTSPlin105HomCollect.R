@@ -1,0 +1,19 @@
+
+args = commandArgs(trailingOnly=TRUE)
+
+pid=as.integer(args[1])
+npid=as.integer(args[2])
+
+library(xega) 
+
+Config<-readRDS(file="TSPlin105HomConfig.rds" ) 
+
+demeResult<-xegaReRun(Config, 
+                      pid=pid,
+                      npid=npid,
+                      Send="rds",
+                      Receive="rds",
+                      Configuration=FALSE,
+                      collect=TRUE,
+                      path="./rdsHomResult") 
+

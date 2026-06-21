@@ -45,6 +45,7 @@ make_build<-function(make_document=TRUE, binary=FALSE) {
 }
 make_install<-function() {
 	library(devtools)
+	options(pkg.use_bioconductor = FALSE)
 	install()
 }
 make_clean<-function() {

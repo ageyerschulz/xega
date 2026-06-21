@@ -1591,8 +1591,10 @@
 #'
 #' @param GPn           Parameter n of the generalized Petersen graph GP(n, k). Default: \code{5}.
 #'
-#' @param GPk           Parameter k of the generalited Petersen graph GP(n, k). Default: \code{2}.
+#' @param GPk           Parameter k of the generalized Petersen graph GP(n, k). Default: \code{2}.
 #'
+#' @param torusX        Number of processors in X-axes of torus. Default: 1.
+#' @param torusY        Number of processors in Y-axes of torus. Default: 1.
 #' @param pid           Process identifier. (pid in 0:(npid-1)).
 #'                      Default: 0.
 #' 
@@ -1605,7 +1607,10 @@
 #'
 #' @param CommunicationTopology  Communication topology. Default: "ring".
 #'                      \itemize{
-#'                      \item "ring":   Ring of processors. Messages sent from \code{i} to \code{i+1}.
+#'                      \item "ring": Ring of processors. Messages sent from \code{i} to \code{i+1}.
+#'                      \item "ring2": Ring of processors. 
+#'                        Messages sent from \code{i} to \code{i+1} and to \code{i-1}. 
+#'                      \item "torus2D": 2D torus of processors. 
 #'                      \item "random": Select one or more receivers randomly. 
 #'                            Number of receivers set by \code{nrecv} (Default: 1).  
 #'                      \item "gPetersen": A generalized Petersen graph. 
@@ -1653,13 +1658,27 @@
 #'                      \item "mpib": Message receiving via mpi. Code with comments. Blocking.
 #'  }
 #'
+#' @param collectResult Result collection method. Default: "rds".
+#'                      Avalailable methods: 
+#'                      \enumerate{
+#'                      \item "rds": Collect rds-files of results of island models  .
+#'                      \item "mpi": Collect results of island models by mpi.
+#'                      }
+#'
+#' @param maxDelay      Maximal waiting time for termination of island models.
+#'                      Terminates result collection after \code{maxDelay} 
+#'                      seconds.
+#' @param collect       Boolean. Default: \code{FALSE}.  
+#'                      If \code{FALSE}, skip collection of results of 
+#'                      island models. 
 #' @param Configuration Boolean. Default: \code{FALSE}. 
 #'                      If \code{TRUE}, return the current configuration
 #'                      without executing it. 
 #'
 #' @param lastArgument Not used. Default: \code{0}.
 #' 
-#' @return Result object. A named list of 
+#' @return Result object. 
+#'         A named list with the following elements:
 #'         \enumerate{
 #'         \item
 #'         \code{$popStat}: A matrix with mean, min, Q1, median, Q3, max,
@@ -1712,6 +1731,15 @@
 #'         \code{$xegaVersion}: xega version used.
 #'         }
 #'
+#'         Or, for island models, a named list with
+#'         \enumerate{
+#'         \item \code{$results}: A list of xegaRun result objects. 
+#'         \item \code{$rc}: The return code. 
+#'               A return code of \code{0} means that the results of all 
+#'               processes have been collected. 
+#'               A return code of \code{-1} means that not all results 
+#'               have been collected within a specified time interval.
+#'         }
 #' @family Main Program
 #'         
 #' @examples
@@ -1806,6 +1834,7 @@
 #' @importFrom xegaMigration  xegaReceiveFactory
 #' @importFrom xegaMigration  xegaProbeTermFactory
 #' @importFrom xegaMigration  xegaMigrate
+#' @importFrom xegaMigration  xegaCollectFactory
 #' @importFrom stats qnorm
 #' @importFrom stats var
 ##### TODO
@@ -1979,6 +2008,8 @@ xegaRun<-function(
                 nrecv=1,             # Number of receivers.
                 GPn=5,               # n for GP(n, k)
                 GPk=2,               # k for GP(n, k)
+                torusX=1,            # x axes on torus
+                torusY=1,            # y axes on torus
                 pid=0,               # Process id.
                 npid=10,             # Number of parallel island processes.
             SelMigrant="TopK",       # Selection method for emigrants.
@@ -1989,6 +2020,9 @@ xegaRun<-function(
             RmpiFNS="Unused",        # list with rmpi functions for send/receive pair
             Send="rds",              # Method of message send.
            Receive="rds",            # Method of message receive.         
+           collectResult="rds",      # Method for result collection.
+           maxDelay=0,               # Seconds to wait until termination.
+           collect=FALSE,            # Skip result collection method?
            Configuration=FALSE,      # If TRUE, return configuration.
 ## End Migration
                 comment=NULL,        # A text field. 
@@ -2158,6 +2192,8 @@ Nmigrants=xegaSelectGene::parm(Nmigrants),
 nrecv=xegaSelectGene::parm(nrecv),
 GPn=xegaSelectGene::parm(GPn),
 GPk=xegaSelectGene::parm(GPk),
+torusX=xegaSelectGene::parm(torusX),
+torusY=xegaSelectGene::parm(torusY),
 pid=xegaSelectGene::parm(pid),
 npid=xegaSelectGene::parm(npid),
 SelMigrant=xegaSelectGene::SelectGeneFactory(method=SelMigrant),
@@ -2168,6 +2204,8 @@ migrationStrategy=xegaSelectGene::parm(force(("Pessimist"==MigrationStrategy))),
 RmpiFNS=RmpiFNS,
 Send=xegaMigration::xegaSendFactory(method=Send),
 Receive=xegaMigration::xegaReceiveFactory(method=Receive),
+collectResult=xegaMigration::xegaCollectFactory(method=collectResult),
+maxDelay=xegaSelectGene::parm(maxDelay),
 ProbeTerm=xegaMigration::xegaProbeTermFactory(method=Send),
 BroadcastTerm=xegaMigration::xegaBroadcastTermFactory(method=Send),
 path=xegaSelectGene::parm(path)
@@ -2467,7 +2505,7 @@ if (logevals==TRUE)
 {
 fn<-createExclusiveFile(fpath=path, prefix="xegaEvalLog", ext=".rds") # nocov
     if (is.null(fn))                                    # nocov
-        stop("Cannot create an exclusive file.")          # nocov
+        stop("Cannot create an exclusive file (xegaEvalLog).") # nocov
       saveRDS(object=evallog, file=fn)                    # nocov
       result$logfn<-fn                                    # nocov
 }
@@ -2476,12 +2514,33 @@ if (batch==TRUE)
 {
   fn<-createExclusiveFile(fpath=path, prefix="xegaResult", ext=".rds") # nocov
     if (is.null(fn))                                      # nocov
-        stop("Cannot create an exclusive file.")            # nocov
+        stop("Cannot create an exclusive file (xegaResult).")   # nocov
         result$resfn<-fn                                    # nocov
         saveRDS(object=result, file=fn)                    # nocov
 }
 
-        return(result)
+if ((collect==TRUE) && (!pid==0) && (Send=="mpi"))
+  {
+  # cat("xega pid: ", pid, "send mpi results\n")  
+  result<-lF$collectResult(result=result, lF=lF)
+  # cat("xega pid: ", pid, "after send mpi results\n")  
+  }
+
+if ((collect==TRUE) && (pid==0))
+  {
+  # cat("xega pid: ", pid, "receive results\n")  
+  result<-lF$collectResult(result=result, lF=lF)
+  fn<-createExclusiveFile(fpath=path, prefix="xegaIResult", ext=".rds") # nocov
+    if (is.null(fn))                                      # nocov
+        stop("Cannot create an exclusive file (xegaIResult).")   # nocov
+        result$resfn<-fn                                    # nocov
+        saveRDS(object=result, file=fn)                    # nocov
+  # cat("xega pid: ", pid, "after receive results\n")  
+  }
+
+  # cat("xega pid: ", pid, "before return\n")  
+
+  return(result)
 
 }
 

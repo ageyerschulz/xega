@@ -100,6 +100,8 @@ Blocking:
 
     ./rdsTerminals.sh rdsTSPlin105Hom.R
 
+    ./rdsTerminals.sh rdsTSPlin105HomCollect.R
+
 3Bb. For heterogeneous islands:
 
     ./rdsTerminals.sh rdsTSPlin105Het.R
