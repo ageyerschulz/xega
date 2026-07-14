@@ -1668,9 +1668,14 @@
 #' @param maxDelay      Maximal waiting time for termination of island models.
 #'                      Terminates result collection after \code{maxDelay} 
 #'                      seconds.
+#'
 #' @param collect       Boolean. Default: \code{FALSE}.  
 #'                      If \code{FALSE}, skip collection of results of 
 #'                      island models. 
+#'
+#' @param migrationDebug  Boolean. Default: \code{FALSE}.
+#'                        If \code{TRUE}, print emigrants and immigrants for each generation.
+#'
 #' @param Configuration Boolean. Default: \code{FALSE}. 
 #'                      If \code{TRUE}, return the current configuration
 #'                      without executing it. 
@@ -2023,6 +2028,7 @@ xegaRun<-function(
            collectResult="rds",      # Method for result collection.
            maxDelay=0,               # Seconds to wait until termination.
            collect=FALSE,            # Skip result collection method?
+           migrationDebug=FALSE,     # Print communication between islands to console.
            Configuration=FALSE,      # If TRUE, return configuration.
 ## End Migration
                 comment=NULL,        # A text field. 
@@ -2208,6 +2214,7 @@ collectResult=xegaMigration::xegaCollectFactory(method=collectResult),
 maxDelay=xegaSelectGene::parm(maxDelay),
 ProbeTerm=xegaMigration::xegaProbeTermFactory(method=Send),
 BroadcastTerm=xegaMigration::xegaBroadcastTermFactory(method=Send),
+migrationDebug=xegaSelectGene::parm(migrationDebug),
 path=xegaSelectGene::parm(path)
 )
 
