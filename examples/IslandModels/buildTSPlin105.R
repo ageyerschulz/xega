@@ -3,9 +3,9 @@
 # xegaRun configurations for TSP lin105 for island models.
 #
 
-library(TSP)
-library(xegaSelectGene)
-library(xega) 
+suppressPackageStartupMessages(library(TSP))
+suppressPackageStartupMessages(library(xegaSelectGene))
+suppressPackageStartupMessages(library(xega))
 
 distance<-function( coord, i, j)
 { xd<-coord[i, 1]-coord[j,1]
@@ -28,10 +28,10 @@ STSPlin105<-newTSP(y, Name="STSPlin105", Cities=NA, Solution=14379)
 deme0<-xegaRun(STSPlin105,
     max=FALSE,
     algorithm="sgperm",
-    popsize=200,
-    generations=200,
-    crossrate=0.05,
-    mutrate=0.5,
+    popsize=100,
+    generations=50,
+    crossrate=0.1,
+    mutrate=0.6,
     elitist=TRUE,
     evalmethod="Deterministic",
     reportEvalErrors=TRUE,
@@ -50,8 +50,9 @@ deme0<-xegaRun(STSPlin105,
     executionModel="MultiCore",
     profile=TRUE,
     batch=TRUE,
-    migrate=TRUE,
+    migrate="OnImprovement",
     migrateEvery=1,
+    migrationDebug=TRUE,
     pid=0, 
     npid=4, 
     Send="rds",

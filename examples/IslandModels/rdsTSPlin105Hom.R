@@ -4,7 +4,7 @@ args = commandArgs(trailingOnly=TRUE)
 pid=as.integer(args[1])
 npid=as.integer(args[2])
 
-library(xega) 
+suppressPackageStartupMessages(library(xega))
 
 Config<-readRDS(file="TSPlin105HomConfig.rds" ) 
 

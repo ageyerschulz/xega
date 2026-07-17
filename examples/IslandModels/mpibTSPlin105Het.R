@@ -1,7 +1,7 @@
 
 source("rmpiProfile.R")
 
-library(xega) 
+suppressPackageStartupMessages(library(xega))
 
 Config<-readRDS(file="TSPlin105Het4Config.rds") 
 
@@ -12,6 +12,6 @@ demeResult<-xegaReRun(Config[[1+mpi.comm.rank()]],
                       Send="mpi",
                       Receive="mpib",
                       Configuration=FALSE,
-                      debug=TRUE,
+                      debug=FALSE,
                       path="./mpiHetResult")
 

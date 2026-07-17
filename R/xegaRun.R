@@ -1578,8 +1578,13 @@
 #' @param debug       Boolean. Default: \code{FALSE}. 
 #'                    Debug (show) progress in xegaRun main loop.
 #'
-#' @param migrate       Boolean. Default: \code{FALSE}. 
-#'                      If \code{TRUE}, island model with gene migration.
+#' @param migrate     Determines the type of migration.  
+#'                     Default: "No". 
+#'                     \itemize{
+#'                     \item "No":  No migration.
+#'                     \item "Yes": Migration in regular intervals. 
+#'                     \item "OnImprovement": Migration of the best gene(s) only if the fitness has improved.
+#'                      }
 #'
 #' @param migrateEvery  Integer. Default: 1. 
 #'                      Gene migration, 
@@ -1593,8 +1598,9 @@
 #'
 #' @param GPk           Parameter k of the generalized Petersen graph GP(n, k). Default: \code{2}.
 #'
-#' @param torusX        Number of processors in X-axes of torus. Default: 1.
-#' @param torusY        Number of processors in Y-axes of torus. Default: 1.
+#' @param torusX        Number of processors in X-axes of torus. Default: 5.
+#' @param torusY        Number of processors in Y-axes of torus. Default: 2.
+#' @param torusZ        Number of processors in Y-axes of torus. Default: 1.
 #' @param pid           Process identifier. (pid in 0:(npid-1)).
 #'                      Default: 0.
 #' 
@@ -1611,6 +1617,7 @@
 #'                      \item "ring2": Ring of processors. 
 #'                        Messages sent from \code{i} to \code{i+1} and to \code{i-1}. 
 #'                      \item "torus2D": 2D torus of processors. 
+#'                      \item "torus3D": 3D torus of processors. 
 #'                      \item "random": Select one or more receivers randomly. 
 #'                            Number of receivers set by \code{nrecv} (Default: 1).  
 #'                      \item "gPetersen": A generalized Petersen graph. 
@@ -2007,14 +2014,15 @@ xegaRun<-function(
              semantics="byValue",    # semantics of lF
                 debug=FALSE,         # debug progress in xegaRun main loop.
 ## Begin Migration
-                migrate=FALSE,       # Island model?
+                migrate="No",       # Island model? "No", "Yes", "OnImprovement"
                 migrateEvery=1,      # Generations?
                 Nmigrants=1,         # Number migrants. 
                 nrecv=1,             # Number of receivers.
                 GPn=5,               # n for GP(n, k)
                 GPk=2,               # k for GP(n, k)
-                torusX=1,            # x axes on torus
-                torusY=1,            # y axes on torus
+                torusX=5,            # x axes on torus
+                torusY=2,            # y axes on torus
+                torusZ=1,            # y axes on torus
                 pid=0,               # Process id.
                 npid=10,             # Number of parallel island processes.
             SelMigrant="TopK",       # Selection method for emigrants.
@@ -2109,6 +2117,10 @@ bitsOnGene<-codons*CodonPrecision
 if (algorithm=="sgede")
 { CodonPrecision<-100*xegaGeGene::mLCMG(grammar$PT$LHS)}
 
+### migrate 
+if (migrate=="OnImprovement")
+{selMigrant<-"TopK"} else {selMigrant<-SelMigrant}
+
 # Build local configuration (local functions) 
 lF<-list(
 penv=penv,
@@ -2200,9 +2212,12 @@ GPn=xegaSelectGene::parm(GPn),
 GPk=xegaSelectGene::parm(GPk),
 torusX=xegaSelectGene::parm(torusX),
 torusY=xegaSelectGene::parm(torusY),
+torusZ=xegaSelectGene::parm(torusZ),
 pid=xegaSelectGene::parm(pid),
+slowestPid=xegaSelectGene::parm(pid),
 npid=xegaSelectGene::parm(npid),
-SelMigrant=xegaSelectGene::SelectGeneFactory(method=SelMigrant),
+improved=xegaSelectGene::parm(TRUE),
+SelMigrant=xegaSelectGene::SelectGeneFactory(method=selMigrant),
 SelReplace=xegaSelectGene::SelectGeneFactory(method=SelReplace),
 CommunicationTopology=xegaMigration::xegaCommunicationTopologyFactory(method=CommunicationTopology),
 adaptGenerationLimit=xegaMigration::xegaAdaptGenerationLimitFactory(method=AdaptLimit),
@@ -2233,7 +2248,7 @@ if (evalrep==1)
 else
 {evalpopfn<-xegaPopulation::xegaEvalPopulationFactory(method="RepEvalPopulation")}
 
-if ((profile==TRUE) || (migrate==TRUE))
+if ((profile==TRUE) || (migrate %in% c("Yes", "OnImprovement")))
 {
 InitPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaInitPopulation, initPopulationTimer)
 EvalPopulation<-xegaSelectGene::Timed(evalpopfn, evalPopulationTimer)
@@ -2243,7 +2258,7 @@ NextPopulation<-xegaSelectGene::Timed(xegaPopulation::xegaNextPopulation, nextPo
 Migrate<-xegaSelectGene::Timed(xegaMigration::xegaMigrate, migrateTimer)
 }
 
-if ((profile==FALSE) && (migrate==FALSE))
+if ((profile==FALSE) && (migrate=="No"))
 {
 InitPopulation<-xegaPopulation::xegaInitPopulation
 EvalPopulation<-evalpopfn
@@ -2378,6 +2393,7 @@ xegaDebug(debug, msg="xegaDebug: Main Loop [EvalPopulation]")
 xegaDebug(debug, msg="xegaDebug: Main Loop [ObservePopulation]")
 
 	popStat<-ObservePopulation(fit, popStat)
+
 if (logevals==TRUE)
 {evallog<-xegaLogEvalsPopulation(pop=pop, evallog=evallog, generation=currentGeneration, lF=lF)} # nocov  
 
@@ -2397,12 +2413,12 @@ if (logevals==TRUE)
 # set local termination predicate.
 LTP<-Terminate(xegaBestInPopulation(pop, fit, lF, FALSE), lF) 
 
-if ((migrate==TRUE) && (LTP))
+if ((migrate %in% c("Yes", "OnImprovement")) && (LTP))
    {# cat("xegaRun: Broadcasting.\n")
     lF$LTP<-xegaSelectGene::parm(LTP) 
     lF$BroadcastTerm(lF)}
 
-if ((migrate==TRUE) && (0 == currentGeneration %% migrateEvery))
+if ((migrate %in% c("Yes")) && (0 == currentGeneration %% migrateEvery))
     {
      tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer()
      timeUsed<-mainLoopTimer("TimeUsed")
@@ -2418,6 +2434,24 @@ if ((migrate==TRUE) && (0 == currentGeneration %% migrateEvery))
      lF$slowestPid<-xegaSelectGene::parm(mig$rucksack$slowestPid) 
     }
 
+if (migrate %in% c("OnImprovement")) 
+    {
+     tUsed<-mainLoopTimer(); tUsed<-mainLoopTimer()
+     timeUsed<-mainLoopTimer("TimeUsed")
+     lF$LTP<-xegaSelectGene::parm(LTP)
+     lF$avgTime<-xegaSelectGene::parm(force(timeUsed/currentGeneration))
+     lF$improved<-xegaSelectGene::parm(force(xegaImproved(popStat)))
+     mig<-Migrate(pop, fit, lF) 
+     pop<-mig$pop
+     fit<-unlist(lapply(pop, function(x) { x$fit })) 
+     DTP<-mig$rucksack$DTP
+     generationLimit<-mig$rucksack$generationLimit
+     # cat("xegaRun: generationLimit:", generationLimit, "\n")
+     lF$slowestTime<-xegaSelectGene::parm(mig$rucksack$slowestTime) 
+     lF$slowestPid<-xegaSelectGene::parm(mig$rucksack$slowestPid) 
+    }
+
+
 # 1st and 2nd condition: Local or distributed termination condition true.
 if (LTP || DTP) 
 		{
@@ -2429,7 +2463,7 @@ if (LTP || DTP)
 currentGeneration<-currentGeneration+1
 
 # Slowest process shuts down 
-if ((migrate==TRUE) && 
+if ((migrate %in% c("Yes", "OnImprovement")) && 
    (currentGeneration>=lF$Generations()) && 
    (lF$pid()==lF$slowestPid()))
    {

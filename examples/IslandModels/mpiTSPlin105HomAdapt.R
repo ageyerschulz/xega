@@ -1,7 +1,7 @@
 
 source("rmpiProfile.R")
 
-library(xega) 
+suppressPackageStartupMessages(library(xega))
 
 Config<-readRDS(file="TSPlin105HomConfig.rds" ) 
 

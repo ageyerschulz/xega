@@ -12,3 +12,4 @@ do
    $R_CMD $1 $I $NPIDS &   
 done
 
+wait
