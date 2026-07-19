@@ -8,12 +8,27 @@
 #'   \item \strong{Top-level main programs}
 #'         (Package \code{xega} <https://CRAN.R-project.org/package=xega>): 
 #'         \code{xegaRun()}, \code{xegaReRun()}
-#'   \item \strong{Population-level operations - independent of representation}
+#'   \item \strong{Population-level operations and gene migration - independent of representation}
+#'         \enumerate{
+#'         \item \strong{Population-level operations - independent of representation}
 #'         (Package \code{xegaPopulation}
 #'          <https://CRAN.R-project.org/package=xegaPopulation>):
-#'         The population layer consists of functions for initializing,
+#'         Population-level operations are functions for initializing,
 #'         logging, observing, evaluating a population of genes,
 #'         as well as computing the next population.
+#'         Parallelization of the gene life cycle is implemented by the master/worker pattern
+#'         for several middleware options.
+#'         \item \strong{Gene migration for island models - independent of the representation}
+#'         (Package \code{xegaMigration}:
+#'          <https://CRAN.R-project.org/package=xegaMigration>):
+#'         Island models are implemented by point-to-point message passing between loosely coupled 
+#'         asynchronous processes for two communication variants:
+#'         \enumerate{
+#'         \item \strong{rds} (Communication via a shared file system).
+#'         \item \strong{mpi} (Communication via mpi messages). 
+#'          }
+#'         Loose synchronization is achieved by barrier synchronization.  
+#'         }
 #'   \item \strong{Gene-level operations - representation-dependent}.
 #'         \enumerate{
 #'         \item 
@@ -134,6 +149,7 @@
 #'         \item \code{RmpiFNS$mpi.any.source()}
 #'         \item \code{RmpiFNS$mpi.iprobe()} and \code{RmpiFNS$mpi.iprobe()}
 #'         \item \code{RmpiFNS$mpi.recv.Robj()} and \code{RmpiFNS$mpi.send.Robj()}
+#'         \item \code{RmpiFNS$mpi.barrier()} (for loose synchronization).
 #'         \item \code{RmpiFNS$mpi.parLapply()} (for master-slave parallelization only).
 #'         } 
 #'
@@ -162,7 +178,8 @@
 #' ) contains
 #' population-related functionality as well as support for 
 #' population statistics dependent adaptive mechanisms and 
-#' for parallelization.
+#' for parallelization by the master-worker pattern or by 
+#' message-passing between loosely-coupled asynchronous processes.
 #'
 #' \item 
 #' The gene layer is split into a representation-independent and 

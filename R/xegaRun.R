@@ -603,9 +603,9 @@
 #' are evaluated sequentially, whereas the fitness evaluation can be 
 #' parallelized. For some algorithms, as e.g. 
 #' differential evolution, fitness evaluation must be performed as 
-#' part of the genetic machinery. Differential evoluation uses an accpetance 
+#' part of the genetic machinery. Differential evolution uses an accpetance 
 #' rule which compares the modified gene with its parent and returns the better 
-#' one.However, this implies that for such algorithms the sequential part dominates 
+#' one. However, this implies that for such algorithms the sequential part dominates 
 #' the execution time and the benefits from parallelization remain marginal.
 #' Other examples are the integration of randomized numerical gradients as genetic operators 
 #' or the integration of local search heuristics like the Kernighan-Lin heuristic for traveling-salesman
@@ -665,14 +665,25 @@
 #' \enumerate{
 #' \item Configure and start the distributed or parallel infrastructure.
 #' \item Distribute processing and collect results. 
+#'       \code{xega} provides two main variants:
+#'    \enumerate{
+#'       \item \strong{Global General Parallelization.}    
+#'             The evaluation of genes of a population is parallelized by replacing the 
+#'             the sequential evaluation loop (\code{lapply()}) by one of its parallel versions. 
+#'       \item \strong{Island Models.}     
+#'             Island models are implemented by gene migration. A set of genes migrates between 
+#'             a set of concurrent processes of evolutionary or genetic algorithms. 
+#'              }
+#' \item Stop the distributed or parallel infrastructure.
+#' }
+#' 
+#' @section Distributed and Parallel Processing (Global General Parallelization):
+#'
 #'       In an evolutionary or genetic algorithm, the architectural pattern used for the implementation 
 #'       of coarse-grained parallelism by parallel evaluation of the fitness of the genes of a population
 #'       is the master/worker pattern. In principle, the \code{lapply()}-function for evaluating a population 
 #'       of genes is replaced by a parallel version. 
-#' \item Stop the distributed or parallel infrastructure.
-#' }
-#' 
-#' For evolutionary and genetic algorithms, the second step is controlled by two parameters, 
+#' This step is controlled by two parameters, 
 #' namely \code{executionModel} and \code{uParApply}:
 #' \enumerate{
 #' \item If \code{uParApply=NULL}, then \code{executionModel} provides four ways of evaluating the 
@@ -705,6 +716,14 @@
 #'
 #' See package \code{xegaPopulation}  <https://CRAN.R-project.org/package=xegaPopulation> 
 #' 
+#' @section Distributed and Parallel Processing (Island Models):
+#'
+#' We distinguish between 
+#' \enumerate{
+#' \item \strong{homogeneous island models} and
+#' \item \strong{heterogeneous island models}.
+#' }
+#'
 #' \strong{Acknowledgment.}The author acknowledges support by the state of Baden-Württemberg through bwHPC.
 #'
 #' @section Reporting:
@@ -1600,7 +1619,7 @@
 #'
 #' @param torusX        Number of processors in X-axes of torus. Default: 5.
 #' @param torusY        Number of processors in Y-axes of torus. Default: 2.
-#' @param torusZ        Number of processors in Y-axes of torus. Default: 1.
+#' @param torusZ        Number of processors in Z-axes of torus. Default: 1.
 #' @param pid           Process identifier. (pid in 0:(npid-1)).
 #'                      Default: 0.
 #' 
@@ -1617,11 +1636,15 @@
 #'                      \item "ring2": Ring of processors. 
 #'                        Messages sent from \code{i} to \code{i+1} and to \code{i-1}. 
 #'                      \item "torus2D": 2D torus of processors. 
+#'                            Dimensions set by \code{torusX} and \code{torusY}. 
 #'                      \item "torus3D": 3D torus of processors. 
+#'                            Dimensions set by \code{torusX}, \code{torusY}, and \code{torusZ}. 
 #'                      \item "random": Select one or more receivers randomly. 
 #'                            Number of receivers set by \code{nrecv} (Default: 1).  
 #'                      \item "gPetersen": A generalized Petersen graph. 
-#'                            The default is the classic Petersen graph GP(5, 2) for 10 processes.
+#'                            Variant set by \code{GPn} and \code{GPk}.
+#'                            The default is the classic Petersen graph 
+#'                            GP(n=5, k=2) for 10 processes.
 #'                      }
 #'
 #' 
