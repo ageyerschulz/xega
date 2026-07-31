@@ -142,9 +142,11 @@
 #' @section Island Models:
 #'
 #' Island models based on message send/receive protocols between 
-#' processes are supported. Currently, mpi and rds-files are supported.  
+#' processes are supported. Currently, MPI communication and communication by  
+#' rds-files are supported.  
 #' The R-package \code{xega} is detached from the R-package \code{Rmpi} 
 #' by injecting the function list \code{RmpiFNS} with the following elements:
+#'
 #' \itemize{
 #'         \item \code{RmpiFNS$mpi.any.source()}
 #'         \item \code{RmpiFNS$mpi.iprobe()} and \code{RmpiFNS$mpi.iprobe()}
@@ -152,6 +154,10 @@
 #'         \item \code{RmpiFNS$mpi.barrier()} (for loose synchronization).
 #'         \item \code{RmpiFNS$mpi.parLapply()} (for master-slave parallelization only).
 #'         } 
+#'
+#' Homogeneous island models use run each island with the same parameter set, 
+#' whereas heterogeneous island models may use a different parameter set in each 
+#' island. 
 #'
 #' @section The Architecture of the xegaX-Packages:
 #' 
@@ -175,10 +181,13 @@
 #' \item
 #' The population layer (package \code{xegaPopulation}
 #' <https://CRAN.R-project.org/package=xegaPopulation> 
+#' package \code{xegaMigration} 
+#' <https://CRAN.R-project.org/package=xegaMigration> 
 #' ) contains
 #' population-related functionality as well as support for 
 #' population statistics dependent adaptive mechanisms and 
 #' for parallelization by the master-worker pattern or by 
+#' island models with
 #' message-passing between loosely-coupled asynchronous processes.
 #'
 #' \item 

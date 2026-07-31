@@ -1,6 +1,6 @@
 Package: xega 
 Title: Extended Evolutionary and Genetic Algorithms
-Version: 0.9.0.30
+Version: 0.9.1.0
 Authors@R: 
     person(given = "Andreas",
            family = "Geyer-Schulz",
@@ -29,8 +29,8 @@ Description:
         <https://github.com/ageyerschulz/xega/tree/main/examples/executionModel>.
         Homogeneous and heterogeneous island models with asynchronous and synchronous 
         communication and configurable communication topology as well as 
-        migration strategy are supported. 
-        See<https://github.com/ageyerschulz/xega/tree/main/examples/IslandModels>.
+        migration strategy are supported. See 
+        <https://github.com/ageyerschulz/xega/tree/main/examples/IslandModels>.
 License: MIT + file LICENSE
 URL: https://github.com/ageyerschulz/xega
 Encoding: UTF-8

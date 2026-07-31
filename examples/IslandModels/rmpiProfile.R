@@ -25,12 +25,6 @@ RmpiFNS$mpi.barrier<-Rmpi::mpi.barrier
 invisible(mpi.barrier())
 invisible(mpi.comm.dup(0,1))
 
-# Only by master. And sync of slaves.
-# Random stream
-# invisible(RNGkind("L'Ecuyer-CMRG"))
-# myRank<-mpi.comm.rank()
-# if (0==myRank)  {mpi.setup.rngstream(iseed=NULL, comm=1)}
-
 rmpi_finalize<-function() {
 	if(is.loaded("mpi_initialize")) {
 		mpi.finalize()
