@@ -122,7 +122,16 @@ p1<-substring(nz, 1, i1)
 p2<-"uParApply=iSolution$GAenv$uParApply"
 p3<-substring(nz, i2, nchar(nz))
 nz<-paste0(p1, p2, p3)
+}
 
+if (!identical(iSolution$GAenv$RmpiFNS, "Unused")) 
+{warning("Warning: Re-run of configuration in a parallel setting may not work.") 
+i1<-gregexpr(",RmpiFNS=", nz)
+i2<-gregexpr(",Send=", nz)
+p1<-substring(nz, 1, i1)
+p2<-"RmpiFNS=iSolution$GAenv$RmpiFNS"
+p3<-substring(nz, i2, nchar(nz))
+nz<-paste0(p1, p2, p3)
 }
 
 if (!(iSolution$GAenv$executionModel %in% c("Sequential", "MultiCore", "MultiCoreHet"))) 

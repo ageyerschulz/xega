@@ -1,0 +1,30 @@
+
+Examples for the talk 
+Adventures in the Parallelization of Evolutionary and Genetic Algorithms,
+ECDA 2026, September 9 - 11, 2026, Stralsund Germany.
+
+1. Build xega configuration with TSP data:
+
+Rscript buildTSPlin105.R
+
+2. rds on notebook:
+
+./cleanDirectories.sh
+./rdsRun.sh rdsTSPlin105Hom.R 
+
+./cleanDirectories.sh
+./rdsTerminals.sh rdsTSPlin105Hom.R 
+
+3. mpi on notebook:
+
+./cleanDirectories.sh
+./mpiRun.sh mpiTSPlin105Hom.R 
+
+./cleanDirectories.sh
+./mpiTerminals.sh mpiTSPlin105Hom.R 
+
+4. Slurm on HPC:
+
+./cleanDirectories.sh
+sbatch <slurmscript>
+

@@ -30,8 +30,9 @@ xegaAnyTimeResult<-function(mlT,
    timer$tMainLoop<-mlT("TimeUsed")   
    rc<-xegaBestInPopulation(pp, ft, lF, allsolutions)
 
-   popS<-matrix(popStat, byrow=TRUE, ncol=8)
-   colnames(popS)<-c("mean", "min", "Q1", "median", "Q3", "max", "var", "mad")
+   popS<-matrix(popStat, byrow=TRUE, ncol=9)
+   colnames(popS)<-c("mean", "min", "Q1", "median", "Q3", "max", "var", "mad",
+                     "numberOfGenesWithSameFitness")
 
    result<-list(popStat=popS,
                     fit=ft,

@@ -489,7 +489,7 @@
 #' \code{replicate="Kid1Pipeline"}, 
 #' \code{replicate="Kid1PipelineG"},
 #' \code{replicate="Kid2Pipeline"}, 
-#' \code{replicate="DE"}.
+#' \code{replicate="DE"},
 #' \code{replicate="DEPipeline"},
 #' or \code{replicate="DEPipelineG"}.
 #' 
@@ -1219,7 +1219,7 @@
 #'                    } 
 #'
 #' @param replication "Kid1", "Kid1Pipeline", "Kid1PipelineG", "Kid2", "Kid2Pipeline" or 
-#'                    "Kid2PipelineG". Default: "Kid1".
+#'                    "Kid2PipelineG". Default: "Kid2".
 #'                    For algorithms "sga", "sgPerm", "sgp", and "sge":
 #'                    "Kid1" means a crossover operator with one kid.
 #'                    "Kid1Pipeline" means a function closure 

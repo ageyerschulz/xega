@@ -6,11 +6,13 @@ NPIDS=4
 # R command and profile for mpi
 R_CMD="Rscript --no-save --quiet"
 #R_PROFILE_USER="rmpiProfile.R"
-TERMINAL_CMD="gnome-terminal --geometry='70x15'"
 
+#if test -n "$R_PROFILE_USER" ; then
+#        export R_PROFILE_USER
+#fi
 
-for ((I=0; I<NPIDS; I++))
-do
-  $TERMINAL_CMD -- $R_CMD $1 $I $NPIDS 
-done
+# load modules
+module load mpi/openmpi-x86_64
+
+mpirun -n $NPIDS $R_CMD $@
 

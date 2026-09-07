@@ -39,6 +39,7 @@ The script cleanDirectories.sh deletes all files in this directories.
 2Aa. For homogeneous islands:
 
     ./mpiRun.sh mpiTSPlin105Hom.R
+    ./mpiRun.sh mpiTSPlin105HomGreedy.R
 
     ./mpiRun.sh mpiTSPlin105HomAdapt.R
 
