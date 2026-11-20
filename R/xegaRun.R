@@ -1718,7 +1718,7 @@
 #' @param RmpiFNS       Named list of rmpi-Functions used in send/receive 
 #'                      functions: RmpiFNS$mpi.send.Robj(), RmpiFNS$mpi.iprobe(), 
 #'                      RmpiFNS$mpi.probe(),
-#'                      RmpiFNS$mpi.any.source(), 
+#'                      RmpiFNS$mpi.any.source(), RmpiFNS$mpi.barrier(), 
 #'                      and RmpiFNS$mpi.recv.Robj() as well as RmpiFNS$mpi.parLapply() for parallel apply.
 #'                      The functions of this list must be bound with the functions of package Rmpi 
 #'                      if MPI should be used for parallelization.
@@ -1816,6 +1816,9 @@
 #'         \item 
 #'         \code{$resfn}: File name of RDS-file with \code{result}. 
 #'                       Default: \code{NA}.
+#'         \item{$unusedMsgCount}: Number of mpi-messages ignored 
+#'                                 (for island-models only).
+#'                        Default: \code{NA}.
 #'         \item
 #'         \code{$xegaVersion}: xega version used.
 #'         }
@@ -1924,6 +1927,7 @@
 #' @importFrom xegaMigration  xegaProbeTermFactory
 #' @importFrom xegaMigration  xegaMigrate
 #' @importFrom xegaMigration  xegaCollectFactory
+#' @importFrom xegaMigration  mpiCleanup
 #' @importFrom stats qnorm
 #' @importFrom stats var
 ##### TODO
@@ -2567,6 +2571,13 @@ if (currentGeneration>=generationLimit)
 # end of skip
 }
 
+# consume all unused messages 
+unusedMsgCount<-NA
+if ((migrate %in% c("Yes", "OnImprovement")) && (Send=="mpi"))
+{
+unusedMsgCount<-xegaMigration::mpiCleanup(lF)
+}
+
 # set up return values.
 
 	rc<-SummaryPopulation(pop, fit, lF, currentGeneration)
@@ -2615,6 +2626,7 @@ tUsed<-mainLoopTimer()
                     timer=timer, 
                     logfn=NA,
                     resfn=NA, 
+                    unusedMsgCount=unusedMsgCount,
                     xegaVersion=xegaVersion(verbose=FALSE))
 
 if (lF$Verbose()==1)  {cat("\n")}

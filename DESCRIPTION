@@ -1,6 +1,6 @@
 Package: xega 
 Title: Extended Evolutionary and Genetic Algorithms
-Version: 0.9.1.0
+Version: 0.9.1.3
 Authors@R: 
     person(given = "Andreas",
            family = "Geyer-Schulz",
@@ -35,7 +35,6 @@ License: MIT + file LICENSE
 URL: https://github.com/ageyerschulz/xega
 Encoding: UTF-8
 LazyData: false
-RoxygenNote: 7.3.3
 Depends: R (>= 3.5.0), parallelly, filelock
 Imports:
 	xegaSelectGene (>= 1.0.0.4),
@@ -47,6 +46,7 @@ Imports:
 	xegaDfGene,
 	xegaPermGene,
         xegaPopulation (>= 1.0.0.15),
-        xegaMigration  (>= 0.5.0.3)
+        xegaMigration  (>= 0.5.0.5)
 Suggests: 
         testthat (>= 3.0.0)
+Config/roxygen2/version: 8.0.0

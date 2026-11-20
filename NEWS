@@ -206,3 +206,15 @@ Version 0.9.1.0 (2026-08-05)
 
 - xegaReRun() Bug fix. The argument RmpiFNS (a function list) is now properly handled. 
 
+Version 0.9.1.1 (2026-08-05)
+
+- xegaRun() Bug fix for RmpiFNS. 
+
+Version 0.9.1.2 (2026-10-07)
+
+- xegaRun() After main, mpiCleanup() added for consuming unused messages.
+
+Version 0.9.1.3 (2026-11-17)
+
+- xegaAnyTimeResult() Add pid to filename to allow multiple observers.
+

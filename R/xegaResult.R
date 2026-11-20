@@ -44,8 +44,8 @@ xegaAnyTimeResult<-function(mlT,
                     logfn=NA,
                     resfn=NA)
 
-   fn1<-"tmp0AnyTimeResult.rds"
-   fn2<-"xegaAnyTimeResult.rds"
+   fn1<-paste0("tmp0AnyTimeResult", lF$pid(), ".rds")
+   fn2<-paste0("xegaAnyTimeResult", lF$pid(), ".rds")
    pfn1<-file.path(path, fn1)    
    pfn2<-file.path(path, fn2)    
    saveRDS(object=result, file=pfn1)

@@ -15,7 +15,14 @@ Rscript buildTSPlin105.R
 ./cleanDirectories.sh
 ./rdsTerminals.sh rdsTSPlin105Hom.R 
 
-3. mpi on notebook:
+3. mpi on notebook.
+
+Requirements: 
+open-mpi,  
+R, 
+R-Packages:
+Rmpi (installed and compiled with the open-mpi version you use)
+xega
 
 ./cleanDirectories.sh
 ./mpiRun.sh mpiTSPlin105Hom.R 
