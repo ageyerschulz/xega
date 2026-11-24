@@ -80,11 +80,17 @@
 #' @export
 xegaReRun<-function(solution, script=FALSE, fn="xegaRunScript", ...)
 { 
+if (is.null(solution))
+{stop("First argument of xegaReRun must be a configuration")}
+
 iSolution<-solution
 
+# cat("solution:\n")
+# print(solution)
 #### solution is a configuration list.
-if (is.null(names(solution))) 
+if (is.null(names(solution$GAenv))) 
 {
+# cat("if is.null ...\n")
 newArgList<-eval(substitute(alist(...)))
 #### we pick the solution for the pid.
 iSolution<-solution[[1+newArgList$pid]]
@@ -94,8 +100,12 @@ z<-iSolution$GAconfig[[1]]
 #i1<-gregexpr("penv=", z)
 #e1<-i1[[1]]+attr(i1[[1]], "match.length")-1
 #nz<-substring(z, 1, e1)
-nz<-paste0("xegaRun(iSolution$GAenv$penv,grammar=iSolution$GAenv$grammar")
-i1<-gregexpr(",max=", z)
+nz<-paste0("xegaRun(penv=iSolution$GAenv$penv, grammar=iSolution$GAenv$grammar,")
+i1<-gregexpr("max=", z)
+# cat("z\n")
+# print(z)
+# cat("i1:\n")
+# print(i1)
 s1<-i1[[1]]
 rest<-substring(z, s1, nchar(z))
 nz<-paste0(nz, rest)
@@ -146,16 +156,28 @@ if (!nargs==0) {
 xegaArgs<-names(iSolution$GAenv)
 newArgList<-eval(substitute(alist(...)))
 newArgs<-names(newArgList)
-# cat(rep("=", 19), "\n")
-# print(newArgs)
-# cat(rep("=", 19), "\n")
-# print(newArgList)
-# cat(rep("=", 19), "\n")
+#cat(rep("=", 19), "\n")
+#print(newArgs)
+#cat(rep("=", 19), "\n")
+#print(newArgList)
+#cat(rep("=", 19), "\n")
 for (i in (1:nargs)) 
 { ind<-(1:length(xegaArgs))[xegaArgs %in% newArgs[i]]
 #   cat(i, "xega arg:", xegaArgs[ind], "\n")
   if (!0==length(ind))
   {
+  if ("penv"==newArgs[i]) 
+   { iSolution$GAenv$penv<-eval(newArgList$penv); next }
+  if ("grammar"==newArgs[i]) 
+   { iSolution$GAenv$grammar<-eval(newArgList$grammar); next }
+  if ("RmpiFNS"==newArgs[i]) 
+   { iSolution$GAenv$RmpiFNS<-eval(newArgList$RmpiFNS); next }
+  if ("uParApply"==newArgs[i]) 
+   { iSolution$GAenv$uParApply<-eval(newArgList$uParApply); next }
+  if ("Cluster"==newArgs[i]) 
+   { iSolution$GAenv$Cluster<-eval(newArgList$Cluster); next }
+
+   # all other arguments
     pat1<-paste0(",",newArgs[i],"=")
     pat2<-paste0(",",xegaArgs[ind+1],"=")
     
@@ -180,6 +202,10 @@ for (i in (1:nargs))
 #return(nz)
 }
 
+# cat("The command\n")
+# print(nz)
+
+# cat("Eval:\n")
 eval(parse(text=nz)) 
 }
 

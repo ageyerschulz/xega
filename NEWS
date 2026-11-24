@@ -218,3 +218,6 @@ Version 0.9.1.3 (2026-11-17)
 
 - xegaAnyTimeResult() Add pid to filename to allow multiple observers.
 
+Version 0.9.1.3 (2026-11-22)
+
+- xegaReRun() Consistent treatment of complex arguments.
