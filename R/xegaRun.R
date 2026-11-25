@@ -1557,7 +1557,7 @@
 #' @param fSpace    Function space of fitness function. Default: "Hilbert". 
 #'
 #' @param cores   Number of cores used for multi-core parallel execution.
-#'                (Default: \code{NA}. \code{NA} means that the number of cores 
+#'                (Default: \code{0}. \code{0} means that the number of cores 
 #'                is set by \code{parallelly:availableCores()} 
 #'                if the execution model is "MultiCore" or "MultiCoreHet".
 #'                  
@@ -2074,7 +2074,7 @@ xegaRun<-function(
                  worstFitness=0.0,    # for setting bad fitness for invalid genes    
                 PACdelta=0.01,        # For PAC termination condition
                 fSpace="Hilbert",     # For PAC Termination condition
-                cores=NA,             # Number of cores.
+                cores=0,             # Number of cores.
                 pipeline="NoPipe",    # Shift evaluation of extended genetic operator pipelines. 
 		executionModel="Sequential", 
 		                     # Execution models are:
@@ -2160,7 +2160,7 @@ if ((executionModel=="MultiCore") ||
    (executionModel=="MultiCoreHet"))
 { if (parallelly::supportsMulticore()==FALSE) 
      {stop("Execution model MultiCore not supported")} 
-if (is.na(cores))  {cores<-parallelly::availableCores()} }
+if (cores==0)  {cores<-parallelly::availableCores()} }
 
 ### Tentative code!
 if 
@@ -2311,7 +2311,8 @@ maxDelay=xegaSelectGene::parm(maxDelay),
 ProbeTerm=xegaMigration::xegaProbeTermFactory(method=Send),
 BroadcastTerm=xegaMigration::xegaBroadcastTermFactory(method=Send),
 migrationDebug=xegaSelectGene::parm(migrationDebug),
-path=xegaSelectGene::parm(path)
+path=xegaSelectGene::parm(path),
+debug=xegaSelectGene::parm(debug)
 )
 
 # Configure timing.

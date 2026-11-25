@@ -221,3 +221,4 @@ Version 0.9.1.3 (2026-11-17)
 Version 0.9.1.3 (2026-11-22)
 
 - xegaReRun() Consistent treatment of complex arguments.
+- xegaRun()   Option cores gets default 0 instead of NA.
